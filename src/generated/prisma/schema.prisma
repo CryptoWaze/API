@@ -1,0 +1,130 @@
+generator client {
+  provider     = "prisma-client-js"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Blockchain {
+  BSC
+  ETH
+}
+
+enum FlowEndpointReason {
+  EXCHANGE_HOT_WALLET
+  MAX_HOPS_REACHED
+  NO_OUTGOING_ABOVE_THRESHOLD
+  CYCLE_DETECTED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cases Case[]
+}
+
+model Exchange {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  hotWallets HotWallet[]
+}
+
+model HotWallet {
+  id         String     @id @default(cuid())
+  exchangeId String
+  exchange   Exchange   @relation(fields: [exchangeId], references: [id])
+  address    String
+  blockchain Blockchain
+  label      String?
+  isActive   Boolean    @default(true)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  flowsAsEndpoint Flow[]
+}
+
+model Case {
+  id                     String   @id @default(cuid())
+  externalId             String?  @unique
+  name                   String
+  createdByUserId        String
+  createdByUser          User     @relation(fields: [createdByUserId], references: [id])
+  totalAmountLostRaw     String
+  totalAmountLostDecimal String
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  seeds CaseSeedTransaction[]
+  flows Flow[]
+}
+
+model CaseSeedTransaction {
+  id            String     @id @default(cuid())
+  caseId        String
+  case          Case       @relation(fields: [caseId], references: [id])
+  txHash        String
+  blockchain    Blockchain
+  tokenAddress  String?
+  tokenSymbol   String?
+  amountRaw     String
+  amountDecimal String
+  timestamp     DateTime
+  createdAt     DateTime   @default(now())
+
+  flows Flow[]
+}
+
+model Flow {
+  id                  String              @id @default(cuid())
+  caseId              String
+  case                Case                @relation(fields: [caseId], references: [id])
+  seedId              String
+  seed                CaseSeedTransaction @relation(fields: [seedId], references: [id])
+  blockchain          Blockchain
+  tokenAddress        String?
+  tokenSymbol         String?
+  totalAmountRaw      String
+  totalAmountDecimal  String
+  hopsCount           Int
+  endpointAddress     String
+  endpointReason      FlowEndpointReason
+  endpointHotWalletId String?
+  endpointHotWallet   HotWallet?          @relation(fields: [endpointHotWalletId], references: [id])
+  isEndpointExchange  Boolean             @default(false)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  transactions FlowTransaction[]
+}
+
+model FlowTransaction {
+  id            String     @id @default(cuid())
+  flowId        String
+  flow          Flow       @relation(fields: [flowId], references: [id])
+  hopIndex      Int
+  txHash        String
+  blockchain    Blockchain
+  fromAddress   String
+  toAddress     String
+  tokenAddress  String?
+  tokenSymbol   String?
+  amountRaw     String
+  amountDecimal String
+  timestamp     DateTime
+  isEndpointHop Boolean    @default(false)
+  createdAt     DateTime   @default(now())
+
+  @@unique([flowId, hopIndex])
+}

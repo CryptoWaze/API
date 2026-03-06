@@ -2,7 +2,7 @@
 # Antes do primeiro deploy: fly secrets set DATABASE_URL="..." GOLDRUSH_API_KEY="..."
 # Opcional: fly postgres create e fly postgres attach <nome> para banco no Fly
 
-app = "crypto-api"
+app = "api-crypto-forense"
 
 [build]
 

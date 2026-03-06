@@ -4,15 +4,20 @@ import type {
   ITransactionFetcher,
   TransactionWithTransfers,
 } from '../../application/ports/transaction-fetcher.port';
+import type { IAddressTransfersFetcher } from '../../application/ports/address-transfers-fetcher.port';
+import type { WalletTransfer } from '../../application/types';
 import {
   mapCovalentResponseToTransfers,
+  mapCovalentAddressTransactionsToWalletTransfers,
   type CovalentItem,
 } from './covalent-mapper';
 
 const API_BASE = 'https://api.covalenthq.com/v1';
 
 @Injectable()
-export class CovalentApiService implements ITransactionFetcher {
+export class CovalentApiService
+  implements ITransactionFetcher, IAddressTransfersFetcher
+{
   private readonly apiKey: string;
 
   constructor(private readonly configService: ConfigService) {
@@ -43,6 +48,22 @@ export class CovalentApiService implements ITransactionFetcher {
       blockSignedAt: first.block_signed_at ?? '',
       transfers,
     };
+  }
+
+  async getAddressTransfers(
+    chain: string,
+    address: string,
+  ): Promise<WalletTransfer[]> {
+    const path = `${chain}/address/${address}/transactions_v3`;
+    const data = (await this.fetchJson(path, {
+      'block-signed-at-asc': 'false',
+    })) as { data?: { items?: CovalentItem[] } };
+    const items = data.data?.items ?? [];
+    return mapCovalentAddressTransactionsToWalletTransfers(
+      items,
+      chain,
+      address,
+    );
   }
 
   private async fetchJson(

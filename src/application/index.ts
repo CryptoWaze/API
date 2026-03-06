@@ -10,4 +10,13 @@ export {
   resolveTransactionSchema,
   type ResolveTransactionInput,
 } from './schemas/resolve-transaction.schema';
-export type { Transfer, ResolveTransactionResult } from './types';
+export {
+  getAddressTopTransfersSchema,
+  type GetAddressTopTransfersInput,
+} from './schemas/get-address-top-transfers.schema';
+export type {
+  Transfer,
+  ResolveTransactionResult,
+  WalletTransfer,
+  GetAddressTopTransfersResult,
+} from './types';

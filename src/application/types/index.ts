@@ -1,1 +1,6 @@
-export type { Transfer, ResolveTransactionResult } from './transfer.types';
+export type {
+  Transfer,
+  ResolveTransactionResult,
+  WalletTransfer,
+  GetAddressTopTransfersResult,
+} from './transfer.types';

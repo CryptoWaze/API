@@ -66,6 +66,25 @@ export class CovalentApiService
     );
   }
 
+  async getAddressTransfersPage(
+    chain: string,
+    address: string,
+    page: number,
+  ): Promise<WalletTransfer[]> {
+    const path = `${chain}/address/${address}/transactions_v3/page/${page}`;
+    const data = (await this.fetchJson(path)) as {
+      items?: CovalentItem[];
+      data?: { items?: CovalentItem[] };
+    };
+    const items =
+      Array.isArray(data.items) ? data.items : data.data?.items ?? [];
+    return mapCovalentAddressTransactionsToWalletTransfers(
+      items,
+      chain,
+      address,
+    );
+  }
+
   private async fetchJson(
     path: string,
     params: Record<string, string | number | undefined> = {},

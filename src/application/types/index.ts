@@ -3,4 +3,8 @@ export type {
   ResolveTransactionResult,
   WalletTransfer,
   GetAddressTopTransfersResult,
+  GetAddressTopTransfersPaginatedResult,
+  GetAddressTopTransfersHistoryResult,
+  FlowStep,
+  FollowFlowToExchangeResult,
 } from './transfer.types';

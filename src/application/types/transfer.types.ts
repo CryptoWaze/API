@@ -37,3 +37,26 @@ export type WalletTransfer = {
 export type GetAddressTopTransfersResult = {
   [chain: string]: { transfers: WalletTransfer[] };
 };
+
+export type GetAddressTopTransfersPaginatedResult = {
+  chain: string;
+  page: number;
+  transfers: WalletTransfer[];
+};
+
+export type GetAddressTopTransfersHistoryResult = {
+  chain: string;
+  transfers: WalletTransfer[];
+};
+
+export type FlowStep = {
+  fromAddress: string;
+  toAddress: string;
+  transfer: WalletTransfer;
+};
+
+export type FollowFlowToExchangeResult = {
+  chain: string;
+  steps: FlowStep[];
+  endpointAddress: string;
+};

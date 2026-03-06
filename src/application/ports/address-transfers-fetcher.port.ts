@@ -7,4 +7,9 @@ export type IAddressTransfersFetcher = {
     chain: string,
     address: string,
   ): Promise<WalletTransfer[]>;
+  getAddressTransfersPage(
+    chain: string,
+    address: string,
+    page: number,
+  ): Promise<WalletTransfer[]>;
 };

@@ -5,6 +5,13 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { getAddressTopTransfersSchema } from '../../application/schemas/get-address-top-transfers.schema';
 import { getAddressTopTransfersPaginatedSchema } from '../../application/schemas/get-address-top-transfers-paginated.schema';
 import { getAddressTopTransfersHistorySchema } from '../../application/schemas/get-address-top-transfers-history.schema';
@@ -20,6 +27,7 @@ import type {
   FollowFlowToExchangeResult,
 } from '../../application/types';
 
+@ApiTags('addresses')
 @Controller('addresses')
 export class AddressesController {
   constructor(
@@ -30,6 +38,14 @@ export class AddressesController {
   ) {}
 
   @Get(':address/top-transfers/paginated')
+  @ApiOperation({
+    summary: 'Top 3 saídas por página',
+    description: 'Retorna as 3 maiores transferências de saída de uma página específica (API paginada).',
+  })
+  @ApiParam({ name: 'address', description: 'Endereço da carteira' })
+  @ApiQuery({ name: 'chain', description: 'Slug da chain (ex: bsc, eth)', required: true })
+  @ApiQuery({ name: 'page', description: 'Número da página (0-based)', required: true })
+  @ApiResponse({ status: 200, description: 'Lista das 3 maiores saídas da página.' })
   async getTopTransfersPaginated(
     @Param('address') address: string,
     @Query('chain') chain: string,
@@ -50,6 +66,13 @@ export class AddressesController {
   }
 
   @Get(':address/top-transfers/history')
+  @ApiOperation({
+    summary: 'Top 3 saídas do histórico',
+    description: 'Percorre todas as páginas do histórico e retorna as 3 maiores transferências de saída da carteira.',
+  })
+  @ApiParam({ name: 'address', description: 'Endereço da carteira' })
+  @ApiQuery({ name: 'chain', description: 'Slug da chain (ex: bsc, eth)', required: true })
+  @ApiResponse({ status: 200, description: 'As 3 maiores saídas de todo o histórico.' })
   async getTopTransfersHistory(
     @Param('address') address: string,
     @Query('chain') chain: string,
@@ -68,6 +91,12 @@ export class AddressesController {
   }
 
   @Get(':address/top-transfers')
+  @ApiOperation({
+    summary: 'Top 3 saídas recentes',
+    description: 'Retorna as 3 maiores transferências de saída recentes (ETH e BSC).',
+  })
+  @ApiParam({ name: 'address', description: 'Endereço da carteira' })
+  @ApiResponse({ status: 200, description: 'Objeto com transfers por chain (eth-mainnet, bsc-mainnet).' })
   async getTopTransfers(
     @Param('address') address: string,
   ): Promise<GetAddressTopTransfersResult> {
@@ -82,6 +111,15 @@ export class AddressesController {
   }
 
   @Get(':address/flow-to-exchange')
+  @ApiOperation({
+    summary: 'Fluxo até exchange',
+    description:
+      'Segue a maior saída da carteira, depois a maior saída da próxima, até encontrar uma hot wallet cadastrada.',
+  })
+  @ApiParam({ name: 'address', description: 'Endereço da carteira de partida' })
+  @ApiQuery({ name: 'chain', description: 'Slug da chain (ex: bsc, eth)', required: true })
+  @ApiResponse({ status: 200, description: 'Passos do fluxo e endereço da hot wallet de destino.' })
+  @ApiResponse({ status: 404, description: 'Nenhum fluxo até exchange encontrado (máx. 10 saltos).' })
   async getFlowToExchange(
     @Param('address') address: string,
     @Query('chain') chain?: string,

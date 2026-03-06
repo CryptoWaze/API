@@ -11,8 +11,8 @@ COPY src ./src/
 
 RUN npx prisma generate
 RUN npm run build
-RUN cp -r src/generated dist/
-RUN test -f dist/main.js || (echo "ERROR: dist/main.js not found after build" && ls -la dist/ && exit 1)
+RUN cp -r src/generated dist/src/
+RUN test -f dist/src/main.js || (echo "ERROR: dist/src/main.js not found" && ls -la dist/ && ls -la dist/src/ 2>/dev/null; exit 1)
 
 FROM node:22-alpine AS runner
 
@@ -31,4 +31,4 @@ RUN npm install prisma --no-save
 
 USER node
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/main.js"]

@@ -120,6 +120,14 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.ChainScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -140,8 +148,8 @@ exports.Prisma.ExchangeScalarFieldEnum = {
 exports.Prisma.HotWalletScalarFieldEnum = {
   id: 'id',
   exchangeId: 'exchangeId',
+  chainId: 'chainId',
   address: 'address',
-  blockchain: 'blockchain',
   label: 'label',
   isActive: 'isActive',
   createdAt: 'createdAt',
@@ -162,8 +170,8 @@ exports.Prisma.CaseScalarFieldEnum = {
 exports.Prisma.CaseSeedTransactionScalarFieldEnum = {
   id: 'id',
   caseId: 'caseId',
+  chainId: 'chainId',
   txHash: 'txHash',
-  blockchain: 'blockchain',
   tokenAddress: 'tokenAddress',
   tokenSymbol: 'tokenSymbol',
   amountRaw: 'amountRaw',
@@ -176,7 +184,7 @@ exports.Prisma.FlowScalarFieldEnum = {
   id: 'id',
   caseId: 'caseId',
   seedId: 'seedId',
-  blockchain: 'blockchain',
+  chainId: 'chainId',
   tokenAddress: 'tokenAddress',
   tokenSymbol: 'tokenSymbol',
   totalAmountRaw: 'totalAmountRaw',
@@ -193,9 +201,9 @@ exports.Prisma.FlowScalarFieldEnum = {
 exports.Prisma.FlowTransactionScalarFieldEnum = {
   id: 'id',
   flowId: 'flowId',
+  chainId: 'chainId',
   hopIndex: 'hopIndex',
   txHash: 'txHash',
-  blockchain: 'blockchain',
   fromAddress: 'fromAddress',
   toAddress: 'toAddress',
   tokenAddress: 'tokenAddress',
@@ -221,11 +229,6 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.Blockchain = exports.$Enums.Blockchain = {
-  BSC: 'BSC',
-  ETH: 'ETH'
-};
-
 exports.FlowEndpointReason = exports.$Enums.FlowEndpointReason = {
   EXCHANGE_HOT_WALLET: 'EXCHANGE_HOT_WALLET',
   MAX_HOPS_REACHED: 'MAX_HOPS_REACHED',
@@ -234,6 +237,7 @@ exports.FlowEndpointReason = exports.$Enums.FlowEndpointReason = {
 };
 
 exports.Prisma.ModelName = {
+  Chain: 'Chain',
   User: 'User',
   Exchange: 'Exchange',
   HotWallet: 'HotWallet',

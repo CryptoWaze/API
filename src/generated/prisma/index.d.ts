@@ -14,6 +14,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
+ * Model Chain
+ * 
+ */
+export type Chain = $Result.DefaultSelection<Prisma.$ChainPayload>
+/**
  * Model User
  * 
  */
@@ -53,15 +58,7 @@ export type FlowTransaction = $Result.DefaultSelection<Prisma.$FlowTransactionPa
  * Enums
  */
 export namespace $Enums {
-  export const Blockchain: {
-  BSC: 'BSC',
-  ETH: 'ETH'
-};
-
-export type Blockchain = (typeof Blockchain)[keyof typeof Blockchain]
-
-
-export const FlowEndpointReason: {
+  export const FlowEndpointReason: {
   EXCHANGE_HOT_WALLET: 'EXCHANGE_HOT_WALLET',
   MAX_HOPS_REACHED: 'MAX_HOPS_REACHED',
   NO_OUTGOING_ABOVE_THRESHOLD: 'NO_OUTGOING_ABOVE_THRESHOLD',
@@ -71,10 +68,6 @@ export const FlowEndpointReason: {
 export type FlowEndpointReason = (typeof FlowEndpointReason)[keyof typeof FlowEndpointReason]
 
 }
-
-export type Blockchain = $Enums.Blockchain
-
-export const Blockchain: typeof $Enums.Blockchain
 
 export type FlowEndpointReason = $Enums.FlowEndpointReason
 
@@ -89,8 +82,8 @@ export const FlowEndpointReason: typeof $Enums.FlowEndpointReason
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Chains
+ * const chains = await prisma.chain.findMany()
  * ```
  *
  *
@@ -112,8 +105,8 @@ export class PrismaClient<
    * const prisma = new PrismaClient({
    *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
    * })
-   * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
+   * // Fetch zero or more Chains
+   * const chains = await prisma.chain.findMany()
    * ```
    *
    *
@@ -202,6 +195,16 @@ export class PrismaClient<
   }>>
 
       /**
+   * `prisma.chain`: Exposes CRUD operations for the **Chain** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Chains
+    * const chains = await prisma.chain.findMany()
+    * ```
+    */
+  get chain(): Prisma.ChainDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
@@ -704,6 +707,7 @@ export namespace Prisma {
 
 
   export const ModelName: {
+    Chain: 'Chain',
     User: 'User',
     Exchange: 'Exchange',
     HotWallet: 'HotWallet',
@@ -726,10 +730,84 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "exchange" | "hotWallet" | "case" | "caseSeedTransaction" | "flow" | "flowTransaction"
+      modelProps: "chain" | "user" | "exchange" | "hotWallet" | "case" | "caseSeedTransaction" | "flow" | "flowTransaction"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
+      Chain: {
+        payload: Prisma.$ChainPayload<ExtArgs>
+        fields: Prisma.ChainFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ChainFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChainPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ChainFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChainPayload>
+          }
+          findFirst: {
+            args: Prisma.ChainFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChainPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ChainFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChainPayload>
+          }
+          findMany: {
+            args: Prisma.ChainFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChainPayload>[]
+          }
+          create: {
+            args: Prisma.ChainCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChainPayload>
+          }
+          createMany: {
+            args: Prisma.ChainCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ChainCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChainPayload>[]
+          }
+          delete: {
+            args: Prisma.ChainDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChainPayload>
+          }
+          update: {
+            args: Prisma.ChainUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChainPayload>
+          }
+          deleteMany: {
+            args: Prisma.ChainDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ChainUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ChainUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChainPayload>[]
+          }
+          upsert: {
+            args: Prisma.ChainUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChainPayload>
+          }
+          aggregate: {
+            args: Prisma.ChainAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateChain>
+          }
+          groupBy: {
+            args: Prisma.ChainGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ChainGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ChainCountArgs<ExtArgs>
+            result: $Utils.Optional<ChainCountAggregateOutputType> | number
+          }
+        }
+      }
       User: {
         payload: Prisma.$UserPayload<ExtArgs>
         fields: Prisma.UserFieldRefs
@@ -1356,6 +1434,7 @@ export namespace Prisma {
     comments?: runtime.SqlCommenterPlugin[]
   }
   export type GlobalOmitConfig = {
+    chain?: ChainOmit
     user?: UserOmit
     exchange?: ExchangeOmit
     hotWallet?: HotWalletOmit
@@ -1436,6 +1515,64 @@ export namespace Prisma {
   /**
    * Count Types
    */
+
+
+  /**
+   * Count Type ChainCountOutputType
+   */
+
+  export type ChainCountOutputType = {
+    hotWallets: number
+    caseSeedTransactions: number
+    flows: number
+    flowTransactions: number
+  }
+
+  export type ChainCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    hotWallets?: boolean | ChainCountOutputTypeCountHotWalletsArgs
+    caseSeedTransactions?: boolean | ChainCountOutputTypeCountCaseSeedTransactionsArgs
+    flows?: boolean | ChainCountOutputTypeCountFlowsArgs
+    flowTransactions?: boolean | ChainCountOutputTypeCountFlowTransactionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ChainCountOutputType without action
+   */
+  export type ChainCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChainCountOutputType
+     */
+    select?: ChainCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ChainCountOutputType without action
+   */
+  export type ChainCountOutputTypeCountHotWalletsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HotWalletWhereInput
+  }
+
+  /**
+   * ChainCountOutputType without action
+   */
+  export type ChainCountOutputTypeCountCaseSeedTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CaseSeedTransactionWhereInput
+  }
+
+  /**
+   * ChainCountOutputType without action
+   */
+  export type ChainCountOutputTypeCountFlowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlowWhereInput
+  }
+
+  /**
+   * ChainCountOutputType without action
+   */
+  export type ChainCountOutputTypeCountFlowTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlowTransactionWhereInput
+  }
 
 
   /**
@@ -1636,6 +1773,1160 @@ export namespace Prisma {
   /**
    * Models
    */
+
+  /**
+   * Model Chain
+   */
+
+  export type AggregateChain = {
+    _count: ChainCountAggregateOutputType | null
+    _min: ChainMinAggregateOutputType | null
+    _max: ChainMaxAggregateOutputType | null
+  }
+
+  export type ChainMinAggregateOutputType = {
+    id: string | null
+    slug: string | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ChainMaxAggregateOutputType = {
+    id: string | null
+    slug: string | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ChainCountAggregateOutputType = {
+    id: number
+    slug: number
+    name: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ChainMinAggregateInputType = {
+    id?: true
+    slug?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ChainMaxAggregateInputType = {
+    id?: true
+    slug?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ChainCountAggregateInputType = {
+    id?: true
+    slug?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ChainAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Chain to aggregate.
+     */
+    where?: ChainWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Chains to fetch.
+     */
+    orderBy?: ChainOrderByWithRelationInput | ChainOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ChainWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Chains from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Chains.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Chains
+    **/
+    _count?: true | ChainCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ChainMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ChainMaxAggregateInputType
+  }
+
+  export type GetChainAggregateType<T extends ChainAggregateArgs> = {
+        [P in keyof T & keyof AggregateChain]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateChain[P]>
+      : GetScalarType<T[P], AggregateChain[P]>
+  }
+
+
+
+
+  export type ChainGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChainWhereInput
+    orderBy?: ChainOrderByWithAggregationInput | ChainOrderByWithAggregationInput[]
+    by: ChainScalarFieldEnum[] | ChainScalarFieldEnum
+    having?: ChainScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ChainCountAggregateInputType | true
+    _min?: ChainMinAggregateInputType
+    _max?: ChainMaxAggregateInputType
+  }
+
+  export type ChainGroupByOutputType = {
+    id: string
+    slug: string
+    name: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ChainCountAggregateOutputType | null
+    _min: ChainMinAggregateOutputType | null
+    _max: ChainMaxAggregateOutputType | null
+  }
+
+  type GetChainGroupByPayload<T extends ChainGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ChainGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ChainGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ChainGroupByOutputType[P]>
+            : GetScalarType<T[P], ChainGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ChainSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    hotWallets?: boolean | Chain$hotWalletsArgs<ExtArgs>
+    caseSeedTransactions?: boolean | Chain$caseSeedTransactionsArgs<ExtArgs>
+    flows?: boolean | Chain$flowsArgs<ExtArgs>
+    flowTransactions?: boolean | Chain$flowTransactionsArgs<ExtArgs>
+    _count?: boolean | ChainCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["chain"]>
+
+  export type ChainSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["chain"]>
+
+  export type ChainSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["chain"]>
+
+  export type ChainSelectScalar = {
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ChainOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["chain"]>
+  export type ChainInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    hotWallets?: boolean | Chain$hotWalletsArgs<ExtArgs>
+    caseSeedTransactions?: boolean | Chain$caseSeedTransactionsArgs<ExtArgs>
+    flows?: boolean | Chain$flowsArgs<ExtArgs>
+    flowTransactions?: boolean | Chain$flowTransactionsArgs<ExtArgs>
+    _count?: boolean | ChainCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ChainIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ChainIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ChainPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Chain"
+    objects: {
+      hotWallets: Prisma.$HotWalletPayload<ExtArgs>[]
+      caseSeedTransactions: Prisma.$CaseSeedTransactionPayload<ExtArgs>[]
+      flows: Prisma.$FlowPayload<ExtArgs>[]
+      flowTransactions: Prisma.$FlowTransactionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      slug: string
+      name: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["chain"]>
+    composites: {}
+  }
+
+  type ChainGetPayload<S extends boolean | null | undefined | ChainDefaultArgs> = $Result.GetResult<Prisma.$ChainPayload, S>
+
+  type ChainCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ChainFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ChainCountAggregateInputType | true
+    }
+
+  export interface ChainDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Chain'], meta: { name: 'Chain' } }
+    /**
+     * Find zero or one Chain that matches the filter.
+     * @param {ChainFindUniqueArgs} args - Arguments to find a Chain
+     * @example
+     * // Get one Chain
+     * const chain = await prisma.chain.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ChainFindUniqueArgs>(args: SelectSubset<T, ChainFindUniqueArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Chain that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ChainFindUniqueOrThrowArgs} args - Arguments to find a Chain
+     * @example
+     * // Get one Chain
+     * const chain = await prisma.chain.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ChainFindUniqueOrThrowArgs>(args: SelectSubset<T, ChainFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Chain that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChainFindFirstArgs} args - Arguments to find a Chain
+     * @example
+     * // Get one Chain
+     * const chain = await prisma.chain.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ChainFindFirstArgs>(args?: SelectSubset<T, ChainFindFirstArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Chain that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChainFindFirstOrThrowArgs} args - Arguments to find a Chain
+     * @example
+     * // Get one Chain
+     * const chain = await prisma.chain.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ChainFindFirstOrThrowArgs>(args?: SelectSubset<T, ChainFindFirstOrThrowArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Chains that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChainFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Chains
+     * const chains = await prisma.chain.findMany()
+     * 
+     * // Get first 10 Chains
+     * const chains = await prisma.chain.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const chainWithIdOnly = await prisma.chain.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ChainFindManyArgs>(args?: SelectSubset<T, ChainFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Chain.
+     * @param {ChainCreateArgs} args - Arguments to create a Chain.
+     * @example
+     * // Create one Chain
+     * const Chain = await prisma.chain.create({
+     *   data: {
+     *     // ... data to create a Chain
+     *   }
+     * })
+     * 
+     */
+    create<T extends ChainCreateArgs>(args: SelectSubset<T, ChainCreateArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Chains.
+     * @param {ChainCreateManyArgs} args - Arguments to create many Chains.
+     * @example
+     * // Create many Chains
+     * const chain = await prisma.chain.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ChainCreateManyArgs>(args?: SelectSubset<T, ChainCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Chains and returns the data saved in the database.
+     * @param {ChainCreateManyAndReturnArgs} args - Arguments to create many Chains.
+     * @example
+     * // Create many Chains
+     * const chain = await prisma.chain.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Chains and only return the `id`
+     * const chainWithIdOnly = await prisma.chain.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ChainCreateManyAndReturnArgs>(args?: SelectSubset<T, ChainCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Chain.
+     * @param {ChainDeleteArgs} args - Arguments to delete one Chain.
+     * @example
+     * // Delete one Chain
+     * const Chain = await prisma.chain.delete({
+     *   where: {
+     *     // ... filter to delete one Chain
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ChainDeleteArgs>(args: SelectSubset<T, ChainDeleteArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Chain.
+     * @param {ChainUpdateArgs} args - Arguments to update one Chain.
+     * @example
+     * // Update one Chain
+     * const chain = await prisma.chain.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ChainUpdateArgs>(args: SelectSubset<T, ChainUpdateArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Chains.
+     * @param {ChainDeleteManyArgs} args - Arguments to filter Chains to delete.
+     * @example
+     * // Delete a few Chains
+     * const { count } = await prisma.chain.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ChainDeleteManyArgs>(args?: SelectSubset<T, ChainDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Chains.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChainUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Chains
+     * const chain = await prisma.chain.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ChainUpdateManyArgs>(args: SelectSubset<T, ChainUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Chains and returns the data updated in the database.
+     * @param {ChainUpdateManyAndReturnArgs} args - Arguments to update many Chains.
+     * @example
+     * // Update many Chains
+     * const chain = await prisma.chain.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Chains and only return the `id`
+     * const chainWithIdOnly = await prisma.chain.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ChainUpdateManyAndReturnArgs>(args: SelectSubset<T, ChainUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Chain.
+     * @param {ChainUpsertArgs} args - Arguments to update or create a Chain.
+     * @example
+     * // Update or create a Chain
+     * const chain = await prisma.chain.upsert({
+     *   create: {
+     *     // ... data to create a Chain
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Chain we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ChainUpsertArgs>(args: SelectSubset<T, ChainUpsertArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Chains.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChainCountArgs} args - Arguments to filter Chains to count.
+     * @example
+     * // Count the number of Chains
+     * const count = await prisma.chain.count({
+     *   where: {
+     *     // ... the filter for the Chains we want to count
+     *   }
+     * })
+    **/
+    count<T extends ChainCountArgs>(
+      args?: Subset<T, ChainCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ChainCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Chain.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChainAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ChainAggregateArgs>(args: Subset<T, ChainAggregateArgs>): Prisma.PrismaPromise<GetChainAggregateType<T>>
+
+    /**
+     * Group by Chain.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChainGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ChainGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ChainGroupByArgs['orderBy'] }
+        : { orderBy?: ChainGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ChainGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetChainGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Chain model
+   */
+  readonly fields: ChainFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Chain.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ChainClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    hotWallets<T extends Chain$hotWalletsArgs<ExtArgs> = {}>(args?: Subset<T, Chain$hotWalletsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HotWalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    caseSeedTransactions<T extends Chain$caseSeedTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, Chain$caseSeedTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CaseSeedTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    flows<T extends Chain$flowsArgs<ExtArgs> = {}>(args?: Subset<T, Chain$flowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    flowTransactions<T extends Chain$flowTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, Chain$flowTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Chain model
+   */
+  interface ChainFieldRefs {
+    readonly id: FieldRef<"Chain", 'String'>
+    readonly slug: FieldRef<"Chain", 'String'>
+    readonly name: FieldRef<"Chain", 'String'>
+    readonly createdAt: FieldRef<"Chain", 'DateTime'>
+    readonly updatedAt: FieldRef<"Chain", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Chain findUnique
+   */
+  export type ChainFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChainInclude<ExtArgs> | null
+    /**
+     * Filter, which Chain to fetch.
+     */
+    where: ChainWhereUniqueInput
+  }
+
+  /**
+   * Chain findUniqueOrThrow
+   */
+  export type ChainFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChainInclude<ExtArgs> | null
+    /**
+     * Filter, which Chain to fetch.
+     */
+    where: ChainWhereUniqueInput
+  }
+
+  /**
+   * Chain findFirst
+   */
+  export type ChainFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChainInclude<ExtArgs> | null
+    /**
+     * Filter, which Chain to fetch.
+     */
+    where?: ChainWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Chains to fetch.
+     */
+    orderBy?: ChainOrderByWithRelationInput | ChainOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Chains.
+     */
+    cursor?: ChainWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Chains from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Chains.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Chains.
+     */
+    distinct?: ChainScalarFieldEnum | ChainScalarFieldEnum[]
+  }
+
+  /**
+   * Chain findFirstOrThrow
+   */
+  export type ChainFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChainInclude<ExtArgs> | null
+    /**
+     * Filter, which Chain to fetch.
+     */
+    where?: ChainWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Chains to fetch.
+     */
+    orderBy?: ChainOrderByWithRelationInput | ChainOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Chains.
+     */
+    cursor?: ChainWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Chains from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Chains.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Chains.
+     */
+    distinct?: ChainScalarFieldEnum | ChainScalarFieldEnum[]
+  }
+
+  /**
+   * Chain findMany
+   */
+  export type ChainFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChainInclude<ExtArgs> | null
+    /**
+     * Filter, which Chains to fetch.
+     */
+    where?: ChainWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Chains to fetch.
+     */
+    orderBy?: ChainOrderByWithRelationInput | ChainOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Chains.
+     */
+    cursor?: ChainWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Chains from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Chains.
+     */
+    skip?: number
+    distinct?: ChainScalarFieldEnum | ChainScalarFieldEnum[]
+  }
+
+  /**
+   * Chain create
+   */
+  export type ChainCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChainInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Chain.
+     */
+    data: XOR<ChainCreateInput, ChainUncheckedCreateInput>
+  }
+
+  /**
+   * Chain createMany
+   */
+  export type ChainCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Chains.
+     */
+    data: ChainCreateManyInput | ChainCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Chain createManyAndReturn
+   */
+  export type ChainCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * The data used to create many Chains.
+     */
+    data: ChainCreateManyInput | ChainCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Chain update
+   */
+  export type ChainUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChainInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Chain.
+     */
+    data: XOR<ChainUpdateInput, ChainUncheckedUpdateInput>
+    /**
+     * Choose, which Chain to update.
+     */
+    where: ChainWhereUniqueInput
+  }
+
+  /**
+   * Chain updateMany
+   */
+  export type ChainUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Chains.
+     */
+    data: XOR<ChainUpdateManyMutationInput, ChainUncheckedUpdateManyInput>
+    /**
+     * Filter which Chains to update
+     */
+    where?: ChainWhereInput
+    /**
+     * Limit how many Chains to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Chain updateManyAndReturn
+   */
+  export type ChainUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * The data used to update Chains.
+     */
+    data: XOR<ChainUpdateManyMutationInput, ChainUncheckedUpdateManyInput>
+    /**
+     * Filter which Chains to update
+     */
+    where?: ChainWhereInput
+    /**
+     * Limit how many Chains to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Chain upsert
+   */
+  export type ChainUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChainInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Chain to update in case it exists.
+     */
+    where: ChainWhereUniqueInput
+    /**
+     * In case the Chain found by the `where` argument doesn't exist, create a new Chain with this data.
+     */
+    create: XOR<ChainCreateInput, ChainUncheckedCreateInput>
+    /**
+     * In case the Chain was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ChainUpdateInput, ChainUncheckedUpdateInput>
+  }
+
+  /**
+   * Chain delete
+   */
+  export type ChainDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChainInclude<ExtArgs> | null
+    /**
+     * Filter which Chain to delete.
+     */
+    where: ChainWhereUniqueInput
+  }
+
+  /**
+   * Chain deleteMany
+   */
+  export type ChainDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Chains to delete
+     */
+    where?: ChainWhereInput
+    /**
+     * Limit how many Chains to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Chain.hotWallets
+   */
+  export type Chain$hotWalletsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HotWallet
+     */
+    select?: HotWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HotWallet
+     */
+    omit?: HotWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HotWalletInclude<ExtArgs> | null
+    where?: HotWalletWhereInput
+    orderBy?: HotWalletOrderByWithRelationInput | HotWalletOrderByWithRelationInput[]
+    cursor?: HotWalletWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HotWalletScalarFieldEnum | HotWalletScalarFieldEnum[]
+  }
+
+  /**
+   * Chain.caseSeedTransactions
+   */
+  export type Chain$caseSeedTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseSeedTransaction
+     */
+    select?: CaseSeedTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseSeedTransaction
+     */
+    omit?: CaseSeedTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseSeedTransactionInclude<ExtArgs> | null
+    where?: CaseSeedTransactionWhereInput
+    orderBy?: CaseSeedTransactionOrderByWithRelationInput | CaseSeedTransactionOrderByWithRelationInput[]
+    cursor?: CaseSeedTransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CaseSeedTransactionScalarFieldEnum | CaseSeedTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Chain.flows
+   */
+  export type Chain$flowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Flow
+     */
+    select?: FlowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Flow
+     */
+    omit?: FlowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowInclude<ExtArgs> | null
+    where?: FlowWhereInput
+    orderBy?: FlowOrderByWithRelationInput | FlowOrderByWithRelationInput[]
+    cursor?: FlowWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlowScalarFieldEnum | FlowScalarFieldEnum[]
+  }
+
+  /**
+   * Chain.flowTransactions
+   */
+  export type Chain$flowTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTransaction
+     */
+    select?: FlowTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTransaction
+     */
+    omit?: FlowTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTransactionInclude<ExtArgs> | null
+    where?: FlowTransactionWhereInput
+    orderBy?: FlowTransactionOrderByWithRelationInput | FlowTransactionOrderByWithRelationInput[]
+    cursor?: FlowTransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlowTransactionScalarFieldEnum | FlowTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Chain without action
+   */
+  export type ChainDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chain
+     */
+    select?: ChainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chain
+     */
+    omit?: ChainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChainInclude<ExtArgs> | null
+  }
+
 
   /**
    * Model User
@@ -3803,8 +5094,8 @@ export namespace Prisma {
   export type HotWalletMinAggregateOutputType = {
     id: string | null
     exchangeId: string | null
+    chainId: string | null
     address: string | null
-    blockchain: $Enums.Blockchain | null
     label: string | null
     isActive: boolean | null
     createdAt: Date | null
@@ -3814,8 +5105,8 @@ export namespace Prisma {
   export type HotWalletMaxAggregateOutputType = {
     id: string | null
     exchangeId: string | null
+    chainId: string | null
     address: string | null
-    blockchain: $Enums.Blockchain | null
     label: string | null
     isActive: boolean | null
     createdAt: Date | null
@@ -3825,8 +5116,8 @@ export namespace Prisma {
   export type HotWalletCountAggregateOutputType = {
     id: number
     exchangeId: number
+    chainId: number
     address: number
-    blockchain: number
     label: number
     isActive: number
     createdAt: number
@@ -3838,8 +5129,8 @@ export namespace Prisma {
   export type HotWalletMinAggregateInputType = {
     id?: true
     exchangeId?: true
+    chainId?: true
     address?: true
-    blockchain?: true
     label?: true
     isActive?: true
     createdAt?: true
@@ -3849,8 +5140,8 @@ export namespace Prisma {
   export type HotWalletMaxAggregateInputType = {
     id?: true
     exchangeId?: true
+    chainId?: true
     address?: true
-    blockchain?: true
     label?: true
     isActive?: true
     createdAt?: true
@@ -3860,8 +5151,8 @@ export namespace Prisma {
   export type HotWalletCountAggregateInputType = {
     id?: true
     exchangeId?: true
+    chainId?: true
     address?: true
-    blockchain?: true
     label?: true
     isActive?: true
     createdAt?: true
@@ -3944,8 +5235,8 @@ export namespace Prisma {
   export type HotWalletGroupByOutputType = {
     id: string
     exchangeId: string
+    chainId: string
     address: string
-    blockchain: $Enums.Blockchain
     label: string | null
     isActive: boolean
     createdAt: Date
@@ -3972,13 +5263,14 @@ export namespace Prisma {
   export type HotWalletSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     exchangeId?: boolean
+    chainId?: boolean
     address?: boolean
-    blockchain?: boolean
     label?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     exchange?: boolean | ExchangeDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
     flowsAsEndpoint?: boolean | HotWallet$flowsAsEndpointArgs<ExtArgs>
     _count?: boolean | HotWalletCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["hotWallet"]>
@@ -3986,62 +5278,68 @@ export namespace Prisma {
   export type HotWalletSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     exchangeId?: boolean
+    chainId?: boolean
     address?: boolean
-    blockchain?: boolean
     label?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     exchange?: boolean | ExchangeDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["hotWallet"]>
 
   export type HotWalletSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     exchangeId?: boolean
+    chainId?: boolean
     address?: boolean
-    blockchain?: boolean
     label?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     exchange?: boolean | ExchangeDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["hotWallet"]>
 
   export type HotWalletSelectScalar = {
     id?: boolean
     exchangeId?: boolean
+    chainId?: boolean
     address?: boolean
-    blockchain?: boolean
     label?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type HotWalletOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "exchangeId" | "address" | "blockchain" | "label" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["hotWallet"]>
+  export type HotWalletOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "exchangeId" | "chainId" | "address" | "label" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["hotWallet"]>
   export type HotWalletInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     exchange?: boolean | ExchangeDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
     flowsAsEndpoint?: boolean | HotWallet$flowsAsEndpointArgs<ExtArgs>
     _count?: boolean | HotWalletCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type HotWalletIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     exchange?: boolean | ExchangeDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }
   export type HotWalletIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     exchange?: boolean | ExchangeDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }
 
   export type $HotWalletPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "HotWallet"
     objects: {
       exchange: Prisma.$ExchangePayload<ExtArgs>
+      chain: Prisma.$ChainPayload<ExtArgs>
       flowsAsEndpoint: Prisma.$FlowPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       exchangeId: string
+      chainId: string
       address: string
-      blockchain: $Enums.Blockchain
       label: string | null
       isActive: boolean
       createdAt: Date
@@ -4441,6 +5739,7 @@ export namespace Prisma {
   export interface Prisma__HotWalletClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     exchange<T extends ExchangeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExchangeDefaultArgs<ExtArgs>>): Prisma__ExchangeClient<$Result.GetResult<Prisma.$ExchangePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chain<T extends ChainDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChainDefaultArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     flowsAsEndpoint<T extends HotWallet$flowsAsEndpointArgs<ExtArgs> = {}>(args?: Subset<T, HotWallet$flowsAsEndpointArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4473,8 +5772,8 @@ export namespace Prisma {
   interface HotWalletFieldRefs {
     readonly id: FieldRef<"HotWallet", 'String'>
     readonly exchangeId: FieldRef<"HotWallet", 'String'>
+    readonly chainId: FieldRef<"HotWallet", 'String'>
     readonly address: FieldRef<"HotWallet", 'String'>
-    readonly blockchain: FieldRef<"HotWallet", 'Blockchain'>
     readonly label: FieldRef<"HotWallet", 'String'>
     readonly isActive: FieldRef<"HotWallet", 'Boolean'>
     readonly createdAt: FieldRef<"HotWallet", 'DateTime'>
@@ -6085,8 +7384,8 @@ export namespace Prisma {
   export type CaseSeedTransactionMinAggregateOutputType = {
     id: string | null
     caseId: string | null
+    chainId: string | null
     txHash: string | null
-    blockchain: $Enums.Blockchain | null
     tokenAddress: string | null
     tokenSymbol: string | null
     amountRaw: string | null
@@ -6098,8 +7397,8 @@ export namespace Prisma {
   export type CaseSeedTransactionMaxAggregateOutputType = {
     id: string | null
     caseId: string | null
+    chainId: string | null
     txHash: string | null
-    blockchain: $Enums.Blockchain | null
     tokenAddress: string | null
     tokenSymbol: string | null
     amountRaw: string | null
@@ -6111,8 +7410,8 @@ export namespace Prisma {
   export type CaseSeedTransactionCountAggregateOutputType = {
     id: number
     caseId: number
+    chainId: number
     txHash: number
-    blockchain: number
     tokenAddress: number
     tokenSymbol: number
     amountRaw: number
@@ -6126,8 +7425,8 @@ export namespace Prisma {
   export type CaseSeedTransactionMinAggregateInputType = {
     id?: true
     caseId?: true
+    chainId?: true
     txHash?: true
-    blockchain?: true
     tokenAddress?: true
     tokenSymbol?: true
     amountRaw?: true
@@ -6139,8 +7438,8 @@ export namespace Prisma {
   export type CaseSeedTransactionMaxAggregateInputType = {
     id?: true
     caseId?: true
+    chainId?: true
     txHash?: true
-    blockchain?: true
     tokenAddress?: true
     tokenSymbol?: true
     amountRaw?: true
@@ -6152,8 +7451,8 @@ export namespace Prisma {
   export type CaseSeedTransactionCountAggregateInputType = {
     id?: true
     caseId?: true
+    chainId?: true
     txHash?: true
-    blockchain?: true
     tokenAddress?: true
     tokenSymbol?: true
     amountRaw?: true
@@ -6238,8 +7537,8 @@ export namespace Prisma {
   export type CaseSeedTransactionGroupByOutputType = {
     id: string
     caseId: string
+    chainId: string
     txHash: string
-    blockchain: $Enums.Blockchain
     tokenAddress: string | null
     tokenSymbol: string | null
     amountRaw: string
@@ -6268,8 +7567,8 @@ export namespace Prisma {
   export type CaseSeedTransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     caseId?: boolean
+    chainId?: boolean
     txHash?: boolean
-    blockchain?: boolean
     tokenAddress?: boolean
     tokenSymbol?: boolean
     amountRaw?: boolean
@@ -6277,6 +7576,7 @@ export namespace Prisma {
     timestamp?: boolean
     createdAt?: boolean
     case?: boolean | CaseDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
     flows?: boolean | CaseSeedTransaction$flowsArgs<ExtArgs>
     _count?: boolean | CaseSeedTransactionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["caseSeedTransaction"]>
@@ -6284,8 +7584,8 @@ export namespace Prisma {
   export type CaseSeedTransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     caseId?: boolean
+    chainId?: boolean
     txHash?: boolean
-    blockchain?: boolean
     tokenAddress?: boolean
     tokenSymbol?: boolean
     amountRaw?: boolean
@@ -6293,13 +7593,14 @@ export namespace Prisma {
     timestamp?: boolean
     createdAt?: boolean
     case?: boolean | CaseDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["caseSeedTransaction"]>
 
   export type CaseSeedTransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     caseId?: boolean
+    chainId?: boolean
     txHash?: boolean
-    blockchain?: boolean
     tokenAddress?: boolean
     tokenSymbol?: boolean
     amountRaw?: boolean
@@ -6307,13 +7608,14 @@ export namespace Prisma {
     timestamp?: boolean
     createdAt?: boolean
     case?: boolean | CaseDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["caseSeedTransaction"]>
 
   export type CaseSeedTransactionSelectScalar = {
     id?: boolean
     caseId?: boolean
+    chainId?: boolean
     txHash?: boolean
-    blockchain?: boolean
     tokenAddress?: boolean
     tokenSymbol?: boolean
     amountRaw?: boolean
@@ -6322,30 +7624,34 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type CaseSeedTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caseId" | "txHash" | "blockchain" | "tokenAddress" | "tokenSymbol" | "amountRaw" | "amountDecimal" | "timestamp" | "createdAt", ExtArgs["result"]["caseSeedTransaction"]>
+  export type CaseSeedTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caseId" | "chainId" | "txHash" | "tokenAddress" | "tokenSymbol" | "amountRaw" | "amountDecimal" | "timestamp" | "createdAt", ExtArgs["result"]["caseSeedTransaction"]>
   export type CaseSeedTransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     case?: boolean | CaseDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
     flows?: boolean | CaseSeedTransaction$flowsArgs<ExtArgs>
     _count?: boolean | CaseSeedTransactionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CaseSeedTransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     case?: boolean | CaseDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }
   export type CaseSeedTransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     case?: boolean | CaseDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }
 
   export type $CaseSeedTransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "CaseSeedTransaction"
     objects: {
       case: Prisma.$CasePayload<ExtArgs>
+      chain: Prisma.$ChainPayload<ExtArgs>
       flows: Prisma.$FlowPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       caseId: string
+      chainId: string
       txHash: string
-      blockchain: $Enums.Blockchain
       tokenAddress: string | null
       tokenSymbol: string | null
       amountRaw: string
@@ -6747,6 +8053,7 @@ export namespace Prisma {
   export interface Prisma__CaseSeedTransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     case<T extends CaseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CaseDefaultArgs<ExtArgs>>): Prisma__CaseClient<$Result.GetResult<Prisma.$CasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chain<T extends ChainDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChainDefaultArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     flows<T extends CaseSeedTransaction$flowsArgs<ExtArgs> = {}>(args?: Subset<T, CaseSeedTransaction$flowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6779,8 +8086,8 @@ export namespace Prisma {
   interface CaseSeedTransactionFieldRefs {
     readonly id: FieldRef<"CaseSeedTransaction", 'String'>
     readonly caseId: FieldRef<"CaseSeedTransaction", 'String'>
+    readonly chainId: FieldRef<"CaseSeedTransaction", 'String'>
     readonly txHash: FieldRef<"CaseSeedTransaction", 'String'>
-    readonly blockchain: FieldRef<"CaseSeedTransaction", 'Blockchain'>
     readonly tokenAddress: FieldRef<"CaseSeedTransaction", 'String'>
     readonly tokenSymbol: FieldRef<"CaseSeedTransaction", 'String'>
     readonly amountRaw: FieldRef<"CaseSeedTransaction", 'String'>
@@ -7249,7 +8556,7 @@ export namespace Prisma {
     id: string | null
     caseId: string | null
     seedId: string | null
-    blockchain: $Enums.Blockchain | null
+    chainId: string | null
     tokenAddress: string | null
     tokenSymbol: string | null
     totalAmountRaw: string | null
@@ -7267,7 +8574,7 @@ export namespace Prisma {
     id: string | null
     caseId: string | null
     seedId: string | null
-    blockchain: $Enums.Blockchain | null
+    chainId: string | null
     tokenAddress: string | null
     tokenSymbol: string | null
     totalAmountRaw: string | null
@@ -7285,7 +8592,7 @@ export namespace Prisma {
     id: number
     caseId: number
     seedId: number
-    blockchain: number
+    chainId: number
     tokenAddress: number
     tokenSymbol: number
     totalAmountRaw: number
@@ -7313,7 +8620,7 @@ export namespace Prisma {
     id?: true
     caseId?: true
     seedId?: true
-    blockchain?: true
+    chainId?: true
     tokenAddress?: true
     tokenSymbol?: true
     totalAmountRaw?: true
@@ -7331,7 +8638,7 @@ export namespace Prisma {
     id?: true
     caseId?: true
     seedId?: true
-    blockchain?: true
+    chainId?: true
     tokenAddress?: true
     tokenSymbol?: true
     totalAmountRaw?: true
@@ -7349,7 +8656,7 @@ export namespace Prisma {
     id?: true
     caseId?: true
     seedId?: true
-    blockchain?: true
+    chainId?: true
     tokenAddress?: true
     tokenSymbol?: true
     totalAmountRaw?: true
@@ -7454,7 +8761,7 @@ export namespace Prisma {
     id: string
     caseId: string
     seedId: string
-    blockchain: $Enums.Blockchain
+    chainId: string
     tokenAddress: string | null
     tokenSymbol: string | null
     totalAmountRaw: string
@@ -7491,7 +8798,7 @@ export namespace Prisma {
     id?: boolean
     caseId?: boolean
     seedId?: boolean
-    blockchain?: boolean
+    chainId?: boolean
     tokenAddress?: boolean
     tokenSymbol?: boolean
     totalAmountRaw?: boolean
@@ -7505,6 +8812,7 @@ export namespace Prisma {
     updatedAt?: boolean
     case?: boolean | CaseDefaultArgs<ExtArgs>
     seed?: boolean | CaseSeedTransactionDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
     endpointHotWallet?: boolean | Flow$endpointHotWalletArgs<ExtArgs>
     transactions?: boolean | Flow$transactionsArgs<ExtArgs>
     _count?: boolean | FlowCountOutputTypeDefaultArgs<ExtArgs>
@@ -7514,7 +8822,7 @@ export namespace Prisma {
     id?: boolean
     caseId?: boolean
     seedId?: boolean
-    blockchain?: boolean
+    chainId?: boolean
     tokenAddress?: boolean
     tokenSymbol?: boolean
     totalAmountRaw?: boolean
@@ -7528,6 +8836,7 @@ export namespace Prisma {
     updatedAt?: boolean
     case?: boolean | CaseDefaultArgs<ExtArgs>
     seed?: boolean | CaseSeedTransactionDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
     endpointHotWallet?: boolean | Flow$endpointHotWalletArgs<ExtArgs>
   }, ExtArgs["result"]["flow"]>
 
@@ -7535,7 +8844,7 @@ export namespace Prisma {
     id?: boolean
     caseId?: boolean
     seedId?: boolean
-    blockchain?: boolean
+    chainId?: boolean
     tokenAddress?: boolean
     tokenSymbol?: boolean
     totalAmountRaw?: boolean
@@ -7549,6 +8858,7 @@ export namespace Prisma {
     updatedAt?: boolean
     case?: boolean | CaseDefaultArgs<ExtArgs>
     seed?: boolean | CaseSeedTransactionDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
     endpointHotWallet?: boolean | Flow$endpointHotWalletArgs<ExtArgs>
   }, ExtArgs["result"]["flow"]>
 
@@ -7556,7 +8866,7 @@ export namespace Prisma {
     id?: boolean
     caseId?: boolean
     seedId?: boolean
-    blockchain?: boolean
+    chainId?: boolean
     tokenAddress?: boolean
     tokenSymbol?: boolean
     totalAmountRaw?: boolean
@@ -7570,10 +8880,11 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FlowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caseId" | "seedId" | "blockchain" | "tokenAddress" | "tokenSymbol" | "totalAmountRaw" | "totalAmountDecimal" | "hopsCount" | "endpointAddress" | "endpointReason" | "endpointHotWalletId" | "isEndpointExchange" | "createdAt" | "updatedAt", ExtArgs["result"]["flow"]>
+  export type FlowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caseId" | "seedId" | "chainId" | "tokenAddress" | "tokenSymbol" | "totalAmountRaw" | "totalAmountDecimal" | "hopsCount" | "endpointAddress" | "endpointReason" | "endpointHotWalletId" | "isEndpointExchange" | "createdAt" | "updatedAt", ExtArgs["result"]["flow"]>
   export type FlowInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     case?: boolean | CaseDefaultArgs<ExtArgs>
     seed?: boolean | CaseSeedTransactionDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
     endpointHotWallet?: boolean | Flow$endpointHotWalletArgs<ExtArgs>
     transactions?: boolean | Flow$transactionsArgs<ExtArgs>
     _count?: boolean | FlowCountOutputTypeDefaultArgs<ExtArgs>
@@ -7581,11 +8892,13 @@ export namespace Prisma {
   export type FlowIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     case?: boolean | CaseDefaultArgs<ExtArgs>
     seed?: boolean | CaseSeedTransactionDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
     endpointHotWallet?: boolean | Flow$endpointHotWalletArgs<ExtArgs>
   }
   export type FlowIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     case?: boolean | CaseDefaultArgs<ExtArgs>
     seed?: boolean | CaseSeedTransactionDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
     endpointHotWallet?: boolean | Flow$endpointHotWalletArgs<ExtArgs>
   }
 
@@ -7594,6 +8907,7 @@ export namespace Prisma {
     objects: {
       case: Prisma.$CasePayload<ExtArgs>
       seed: Prisma.$CaseSeedTransactionPayload<ExtArgs>
+      chain: Prisma.$ChainPayload<ExtArgs>
       endpointHotWallet: Prisma.$HotWalletPayload<ExtArgs> | null
       transactions: Prisma.$FlowTransactionPayload<ExtArgs>[]
     }
@@ -7601,7 +8915,7 @@ export namespace Prisma {
       id: string
       caseId: string
       seedId: string
-      blockchain: $Enums.Blockchain
+      chainId: string
       tokenAddress: string | null
       tokenSymbol: string | null
       totalAmountRaw: string
@@ -8009,6 +9323,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     case<T extends CaseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CaseDefaultArgs<ExtArgs>>): Prisma__CaseClient<$Result.GetResult<Prisma.$CasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     seed<T extends CaseSeedTransactionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CaseSeedTransactionDefaultArgs<ExtArgs>>): Prisma__CaseSeedTransactionClient<$Result.GetResult<Prisma.$CaseSeedTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chain<T extends ChainDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChainDefaultArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     endpointHotWallet<T extends Flow$endpointHotWalletArgs<ExtArgs> = {}>(args?: Subset<T, Flow$endpointHotWalletArgs<ExtArgs>>): Prisma__HotWalletClient<$Result.GetResult<Prisma.$HotWalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     transactions<T extends Flow$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Flow$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -8043,7 +9358,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Flow", 'String'>
     readonly caseId: FieldRef<"Flow", 'String'>
     readonly seedId: FieldRef<"Flow", 'String'>
-    readonly blockchain: FieldRef<"Flow", 'Blockchain'>
+    readonly chainId: FieldRef<"Flow", 'String'>
     readonly tokenAddress: FieldRef<"Flow", 'String'>
     readonly tokenSymbol: FieldRef<"Flow", 'String'>
     readonly totalAmountRaw: FieldRef<"Flow", 'String'>
@@ -8535,9 +9850,9 @@ export namespace Prisma {
   export type FlowTransactionMinAggregateOutputType = {
     id: string | null
     flowId: string | null
+    chainId: string | null
     hopIndex: number | null
     txHash: string | null
-    blockchain: $Enums.Blockchain | null
     fromAddress: string | null
     toAddress: string | null
     tokenAddress: string | null
@@ -8552,9 +9867,9 @@ export namespace Prisma {
   export type FlowTransactionMaxAggregateOutputType = {
     id: string | null
     flowId: string | null
+    chainId: string | null
     hopIndex: number | null
     txHash: string | null
-    blockchain: $Enums.Blockchain | null
     fromAddress: string | null
     toAddress: string | null
     tokenAddress: string | null
@@ -8569,9 +9884,9 @@ export namespace Prisma {
   export type FlowTransactionCountAggregateOutputType = {
     id: number
     flowId: number
+    chainId: number
     hopIndex: number
     txHash: number
-    blockchain: number
     fromAddress: number
     toAddress: number
     tokenAddress: number
@@ -8596,9 +9911,9 @@ export namespace Prisma {
   export type FlowTransactionMinAggregateInputType = {
     id?: true
     flowId?: true
+    chainId?: true
     hopIndex?: true
     txHash?: true
-    blockchain?: true
     fromAddress?: true
     toAddress?: true
     tokenAddress?: true
@@ -8613,9 +9928,9 @@ export namespace Prisma {
   export type FlowTransactionMaxAggregateInputType = {
     id?: true
     flowId?: true
+    chainId?: true
     hopIndex?: true
     txHash?: true
-    blockchain?: true
     fromAddress?: true
     toAddress?: true
     tokenAddress?: true
@@ -8630,9 +9945,9 @@ export namespace Prisma {
   export type FlowTransactionCountAggregateInputType = {
     id?: true
     flowId?: true
+    chainId?: true
     hopIndex?: true
     txHash?: true
-    blockchain?: true
     fromAddress?: true
     toAddress?: true
     tokenAddress?: true
@@ -8734,9 +10049,9 @@ export namespace Prisma {
   export type FlowTransactionGroupByOutputType = {
     id: string
     flowId: string
+    chainId: string
     hopIndex: number
     txHash: string
-    blockchain: $Enums.Blockchain
     fromAddress: string
     toAddress: string
     tokenAddress: string | null
@@ -8770,9 +10085,9 @@ export namespace Prisma {
   export type FlowTransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     flowId?: boolean
+    chainId?: boolean
     hopIndex?: boolean
     txHash?: boolean
-    blockchain?: boolean
     fromAddress?: boolean
     toAddress?: boolean
     tokenAddress?: boolean
@@ -8783,14 +10098,15 @@ export namespace Prisma {
     isEndpointHop?: boolean
     createdAt?: boolean
     flow?: boolean | FlowDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowTransaction"]>
 
   export type FlowTransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     flowId?: boolean
+    chainId?: boolean
     hopIndex?: boolean
     txHash?: boolean
-    blockchain?: boolean
     fromAddress?: boolean
     toAddress?: boolean
     tokenAddress?: boolean
@@ -8801,14 +10117,15 @@ export namespace Prisma {
     isEndpointHop?: boolean
     createdAt?: boolean
     flow?: boolean | FlowDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowTransaction"]>
 
   export type FlowTransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     flowId?: boolean
+    chainId?: boolean
     hopIndex?: boolean
     txHash?: boolean
-    blockchain?: boolean
     fromAddress?: boolean
     toAddress?: boolean
     tokenAddress?: boolean
@@ -8819,14 +10136,15 @@ export namespace Prisma {
     isEndpointHop?: boolean
     createdAt?: boolean
     flow?: boolean | FlowDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowTransaction"]>
 
   export type FlowTransactionSelectScalar = {
     id?: boolean
     flowId?: boolean
+    chainId?: boolean
     hopIndex?: boolean
     txHash?: boolean
-    blockchain?: boolean
     fromAddress?: boolean
     toAddress?: boolean
     tokenAddress?: boolean
@@ -8838,28 +10156,32 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type FlowTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flowId" | "hopIndex" | "txHash" | "blockchain" | "fromAddress" | "toAddress" | "tokenAddress" | "tokenSymbol" | "amountRaw" | "amountDecimal" | "timestamp" | "isEndpointHop" | "createdAt", ExtArgs["result"]["flowTransaction"]>
+  export type FlowTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flowId" | "chainId" | "hopIndex" | "txHash" | "fromAddress" | "toAddress" | "tokenAddress" | "tokenSymbol" | "amountRaw" | "amountDecimal" | "timestamp" | "isEndpointHop" | "createdAt", ExtArgs["result"]["flowTransaction"]>
   export type FlowTransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     flow?: boolean | FlowDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }
   export type FlowTransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     flow?: boolean | FlowDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }
   export type FlowTransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     flow?: boolean | FlowDefaultArgs<ExtArgs>
+    chain?: boolean | ChainDefaultArgs<ExtArgs>
   }
 
   export type $FlowTransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "FlowTransaction"
     objects: {
       flow: Prisma.$FlowPayload<ExtArgs>
+      chain: Prisma.$ChainPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       flowId: string
+      chainId: string
       hopIndex: number
       txHash: string
-      blockchain: $Enums.Blockchain
       fromAddress: string
       toAddress: string
       tokenAddress: string | null
@@ -9264,6 +10586,7 @@ export namespace Prisma {
   export interface Prisma__FlowTransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     flow<T extends FlowDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FlowDefaultArgs<ExtArgs>>): Prisma__FlowClient<$Result.GetResult<Prisma.$FlowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chain<T extends ChainDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChainDefaultArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9295,9 +10618,9 @@ export namespace Prisma {
   interface FlowTransactionFieldRefs {
     readonly id: FieldRef<"FlowTransaction", 'String'>
     readonly flowId: FieldRef<"FlowTransaction", 'String'>
+    readonly chainId: FieldRef<"FlowTransaction", 'String'>
     readonly hopIndex: FieldRef<"FlowTransaction", 'Int'>
     readonly txHash: FieldRef<"FlowTransaction", 'String'>
-    readonly blockchain: FieldRef<"FlowTransaction", 'Blockchain'>
     readonly fromAddress: FieldRef<"FlowTransaction", 'String'>
     readonly toAddress: FieldRef<"FlowTransaction", 'String'>
     readonly tokenAddress: FieldRef<"FlowTransaction", 'String'>
@@ -9735,6 +11058,17 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+  export const ChainScalarFieldEnum: {
+    id: 'id',
+    slug: 'slug',
+    name: 'name',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ChainScalarFieldEnum = (typeof ChainScalarFieldEnum)[keyof typeof ChainScalarFieldEnum]
+
+
   export const UserScalarFieldEnum: {
     id: 'id',
     email: 'email',
@@ -9761,8 +11095,8 @@ export namespace Prisma {
   export const HotWalletScalarFieldEnum: {
     id: 'id',
     exchangeId: 'exchangeId',
+    chainId: 'chainId',
     address: 'address',
-    blockchain: 'blockchain',
     label: 'label',
     isActive: 'isActive',
     createdAt: 'createdAt',
@@ -9789,8 +11123,8 @@ export namespace Prisma {
   export const CaseSeedTransactionScalarFieldEnum: {
     id: 'id',
     caseId: 'caseId',
+    chainId: 'chainId',
     txHash: 'txHash',
-    blockchain: 'blockchain',
     tokenAddress: 'tokenAddress',
     tokenSymbol: 'tokenSymbol',
     amountRaw: 'amountRaw',
@@ -9806,7 +11140,7 @@ export namespace Prisma {
     id: 'id',
     caseId: 'caseId',
     seedId: 'seedId',
-    blockchain: 'blockchain',
+    chainId: 'chainId',
     tokenAddress: 'tokenAddress',
     tokenSymbol: 'tokenSymbol',
     totalAmountRaw: 'totalAmountRaw',
@@ -9826,9 +11160,9 @@ export namespace Prisma {
   export const FlowTransactionScalarFieldEnum: {
     id: 'id',
     flowId: 'flowId',
+    chainId: 'chainId',
     hopIndex: 'hopIndex',
     txHash: 'txHash',
-    blockchain: 'blockchain',
     fromAddress: 'fromAddress',
     toAddress: 'toAddress',
     tokenAddress: 'tokenAddress',
@@ -9901,20 +11235,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Blockchain'
-   */
-  export type EnumBlockchainFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Blockchain'>
-    
-
-
-  /**
-   * Reference to a field of type 'Blockchain[]'
-   */
-  export type ListEnumBlockchainFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Blockchain[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -9965,6 +11285,70 @@ export namespace Prisma {
    * Deep Input Types
    */
 
+
+  export type ChainWhereInput = {
+    AND?: ChainWhereInput | ChainWhereInput[]
+    OR?: ChainWhereInput[]
+    NOT?: ChainWhereInput | ChainWhereInput[]
+    id?: StringFilter<"Chain"> | string
+    slug?: StringFilter<"Chain"> | string
+    name?: StringNullableFilter<"Chain"> | string | null
+    createdAt?: DateTimeFilter<"Chain"> | Date | string
+    updatedAt?: DateTimeFilter<"Chain"> | Date | string
+    hotWallets?: HotWalletListRelationFilter
+    caseSeedTransactions?: CaseSeedTransactionListRelationFilter
+    flows?: FlowListRelationFilter
+    flowTransactions?: FlowTransactionListRelationFilter
+  }
+
+  export type ChainOrderByWithRelationInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    hotWallets?: HotWalletOrderByRelationAggregateInput
+    caseSeedTransactions?: CaseSeedTransactionOrderByRelationAggregateInput
+    flows?: FlowOrderByRelationAggregateInput
+    flowTransactions?: FlowTransactionOrderByRelationAggregateInput
+  }
+
+  export type ChainWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    AND?: ChainWhereInput | ChainWhereInput[]
+    OR?: ChainWhereInput[]
+    NOT?: ChainWhereInput | ChainWhereInput[]
+    name?: StringNullableFilter<"Chain"> | string | null
+    createdAt?: DateTimeFilter<"Chain"> | Date | string
+    updatedAt?: DateTimeFilter<"Chain"> | Date | string
+    hotWallets?: HotWalletListRelationFilter
+    caseSeedTransactions?: CaseSeedTransactionListRelationFilter
+    flows?: FlowListRelationFilter
+    flowTransactions?: FlowTransactionListRelationFilter
+  }, "id" | "slug">
+
+  export type ChainOrderByWithAggregationInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ChainCountOrderByAggregateInput
+    _max?: ChainMaxOrderByAggregateInput
+    _min?: ChainMinOrderByAggregateInput
+  }
+
+  export type ChainScalarWhereWithAggregatesInput = {
+    AND?: ChainScalarWhereWithAggregatesInput | ChainScalarWhereWithAggregatesInput[]
+    OR?: ChainScalarWhereWithAggregatesInput[]
+    NOT?: ChainScalarWhereWithAggregatesInput | ChainScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Chain"> | string
+    slug?: StringWithAggregatesFilter<"Chain"> | string
+    name?: StringNullableWithAggregatesFilter<"Chain"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Chain"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Chain"> | Date | string
+  }
 
   export type UserWhereInput = {
     AND?: UserWhereInput | UserWhereInput[]
@@ -10087,50 +11471,54 @@ export namespace Prisma {
     NOT?: HotWalletWhereInput | HotWalletWhereInput[]
     id?: StringFilter<"HotWallet"> | string
     exchangeId?: StringFilter<"HotWallet"> | string
+    chainId?: StringFilter<"HotWallet"> | string
     address?: StringFilter<"HotWallet"> | string
-    blockchain?: EnumBlockchainFilter<"HotWallet"> | $Enums.Blockchain
     label?: StringNullableFilter<"HotWallet"> | string | null
     isActive?: BoolFilter<"HotWallet"> | boolean
     createdAt?: DateTimeFilter<"HotWallet"> | Date | string
     updatedAt?: DateTimeFilter<"HotWallet"> | Date | string
     exchange?: XOR<ExchangeScalarRelationFilter, ExchangeWhereInput>
+    chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
     flowsAsEndpoint?: FlowListRelationFilter
   }
 
   export type HotWalletOrderByWithRelationInput = {
     id?: SortOrder
     exchangeId?: SortOrder
+    chainId?: SortOrder
     address?: SortOrder
-    blockchain?: SortOrder
     label?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     exchange?: ExchangeOrderByWithRelationInput
+    chain?: ChainOrderByWithRelationInput
     flowsAsEndpoint?: FlowOrderByRelationAggregateInput
   }
 
   export type HotWalletWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    exchangeId_chainId_address?: HotWalletExchangeIdChainIdAddressCompoundUniqueInput
     AND?: HotWalletWhereInput | HotWalletWhereInput[]
     OR?: HotWalletWhereInput[]
     NOT?: HotWalletWhereInput | HotWalletWhereInput[]
     exchangeId?: StringFilter<"HotWallet"> | string
+    chainId?: StringFilter<"HotWallet"> | string
     address?: StringFilter<"HotWallet"> | string
-    blockchain?: EnumBlockchainFilter<"HotWallet"> | $Enums.Blockchain
     label?: StringNullableFilter<"HotWallet"> | string | null
     isActive?: BoolFilter<"HotWallet"> | boolean
     createdAt?: DateTimeFilter<"HotWallet"> | Date | string
     updatedAt?: DateTimeFilter<"HotWallet"> | Date | string
     exchange?: XOR<ExchangeScalarRelationFilter, ExchangeWhereInput>
+    chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
     flowsAsEndpoint?: FlowListRelationFilter
-  }, "id">
+  }, "id" | "exchangeId_chainId_address">
 
   export type HotWalletOrderByWithAggregationInput = {
     id?: SortOrder
     exchangeId?: SortOrder
+    chainId?: SortOrder
     address?: SortOrder
-    blockchain?: SortOrder
     label?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
@@ -10146,8 +11534,8 @@ export namespace Prisma {
     NOT?: HotWalletScalarWhereWithAggregatesInput | HotWalletScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"HotWallet"> | string
     exchangeId?: StringWithAggregatesFilter<"HotWallet"> | string
+    chainId?: StringWithAggregatesFilter<"HotWallet"> | string
     address?: StringWithAggregatesFilter<"HotWallet"> | string
-    blockchain?: EnumBlockchainWithAggregatesFilter<"HotWallet"> | $Enums.Blockchain
     label?: StringNullableWithAggregatesFilter<"HotWallet"> | string | null
     isActive?: BoolWithAggregatesFilter<"HotWallet"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"HotWallet"> | Date | string
@@ -10236,8 +11624,8 @@ export namespace Prisma {
     NOT?: CaseSeedTransactionWhereInput | CaseSeedTransactionWhereInput[]
     id?: StringFilter<"CaseSeedTransaction"> | string
     caseId?: StringFilter<"CaseSeedTransaction"> | string
+    chainId?: StringFilter<"CaseSeedTransaction"> | string
     txHash?: StringFilter<"CaseSeedTransaction"> | string
-    blockchain?: EnumBlockchainFilter<"CaseSeedTransaction"> | $Enums.Blockchain
     tokenAddress?: StringNullableFilter<"CaseSeedTransaction"> | string | null
     tokenSymbol?: StringNullableFilter<"CaseSeedTransaction"> | string | null
     amountRaw?: StringFilter<"CaseSeedTransaction"> | string
@@ -10245,14 +11633,15 @@ export namespace Prisma {
     timestamp?: DateTimeFilter<"CaseSeedTransaction"> | Date | string
     createdAt?: DateTimeFilter<"CaseSeedTransaction"> | Date | string
     case?: XOR<CaseScalarRelationFilter, CaseWhereInput>
+    chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
     flows?: FlowListRelationFilter
   }
 
   export type CaseSeedTransactionOrderByWithRelationInput = {
     id?: SortOrder
     caseId?: SortOrder
+    chainId?: SortOrder
     txHash?: SortOrder
-    blockchain?: SortOrder
     tokenAddress?: SortOrderInput | SortOrder
     tokenSymbol?: SortOrderInput | SortOrder
     amountRaw?: SortOrder
@@ -10260,6 +11649,7 @@ export namespace Prisma {
     timestamp?: SortOrder
     createdAt?: SortOrder
     case?: CaseOrderByWithRelationInput
+    chain?: ChainOrderByWithRelationInput
     flows?: FlowOrderByRelationAggregateInput
   }
 
@@ -10269,8 +11659,8 @@ export namespace Prisma {
     OR?: CaseSeedTransactionWhereInput[]
     NOT?: CaseSeedTransactionWhereInput | CaseSeedTransactionWhereInput[]
     caseId?: StringFilter<"CaseSeedTransaction"> | string
+    chainId?: StringFilter<"CaseSeedTransaction"> | string
     txHash?: StringFilter<"CaseSeedTransaction"> | string
-    blockchain?: EnumBlockchainFilter<"CaseSeedTransaction"> | $Enums.Blockchain
     tokenAddress?: StringNullableFilter<"CaseSeedTransaction"> | string | null
     tokenSymbol?: StringNullableFilter<"CaseSeedTransaction"> | string | null
     amountRaw?: StringFilter<"CaseSeedTransaction"> | string
@@ -10278,14 +11668,15 @@ export namespace Prisma {
     timestamp?: DateTimeFilter<"CaseSeedTransaction"> | Date | string
     createdAt?: DateTimeFilter<"CaseSeedTransaction"> | Date | string
     case?: XOR<CaseScalarRelationFilter, CaseWhereInput>
+    chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
     flows?: FlowListRelationFilter
   }, "id">
 
   export type CaseSeedTransactionOrderByWithAggregationInput = {
     id?: SortOrder
     caseId?: SortOrder
+    chainId?: SortOrder
     txHash?: SortOrder
-    blockchain?: SortOrder
     tokenAddress?: SortOrderInput | SortOrder
     tokenSymbol?: SortOrderInput | SortOrder
     amountRaw?: SortOrder
@@ -10303,8 +11694,8 @@ export namespace Prisma {
     NOT?: CaseSeedTransactionScalarWhereWithAggregatesInput | CaseSeedTransactionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"CaseSeedTransaction"> | string
     caseId?: StringWithAggregatesFilter<"CaseSeedTransaction"> | string
+    chainId?: StringWithAggregatesFilter<"CaseSeedTransaction"> | string
     txHash?: StringWithAggregatesFilter<"CaseSeedTransaction"> | string
-    blockchain?: EnumBlockchainWithAggregatesFilter<"CaseSeedTransaction"> | $Enums.Blockchain
     tokenAddress?: StringNullableWithAggregatesFilter<"CaseSeedTransaction"> | string | null
     tokenSymbol?: StringNullableWithAggregatesFilter<"CaseSeedTransaction"> | string | null
     amountRaw?: StringWithAggregatesFilter<"CaseSeedTransaction"> | string
@@ -10320,7 +11711,7 @@ export namespace Prisma {
     id?: StringFilter<"Flow"> | string
     caseId?: StringFilter<"Flow"> | string
     seedId?: StringFilter<"Flow"> | string
-    blockchain?: EnumBlockchainFilter<"Flow"> | $Enums.Blockchain
+    chainId?: StringFilter<"Flow"> | string
     tokenAddress?: StringNullableFilter<"Flow"> | string | null
     tokenSymbol?: StringNullableFilter<"Flow"> | string | null
     totalAmountRaw?: StringFilter<"Flow"> | string
@@ -10334,6 +11725,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Flow"> | Date | string
     case?: XOR<CaseScalarRelationFilter, CaseWhereInput>
     seed?: XOR<CaseSeedTransactionScalarRelationFilter, CaseSeedTransactionWhereInput>
+    chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
     endpointHotWallet?: XOR<HotWalletNullableScalarRelationFilter, HotWalletWhereInput> | null
     transactions?: FlowTransactionListRelationFilter
   }
@@ -10342,7 +11734,7 @@ export namespace Prisma {
     id?: SortOrder
     caseId?: SortOrder
     seedId?: SortOrder
-    blockchain?: SortOrder
+    chainId?: SortOrder
     tokenAddress?: SortOrderInput | SortOrder
     tokenSymbol?: SortOrderInput | SortOrder
     totalAmountRaw?: SortOrder
@@ -10356,6 +11748,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     case?: CaseOrderByWithRelationInput
     seed?: CaseSeedTransactionOrderByWithRelationInput
+    chain?: ChainOrderByWithRelationInput
     endpointHotWallet?: HotWalletOrderByWithRelationInput
     transactions?: FlowTransactionOrderByRelationAggregateInput
   }
@@ -10367,7 +11760,7 @@ export namespace Prisma {
     NOT?: FlowWhereInput | FlowWhereInput[]
     caseId?: StringFilter<"Flow"> | string
     seedId?: StringFilter<"Flow"> | string
-    blockchain?: EnumBlockchainFilter<"Flow"> | $Enums.Blockchain
+    chainId?: StringFilter<"Flow"> | string
     tokenAddress?: StringNullableFilter<"Flow"> | string | null
     tokenSymbol?: StringNullableFilter<"Flow"> | string | null
     totalAmountRaw?: StringFilter<"Flow"> | string
@@ -10381,6 +11774,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Flow"> | Date | string
     case?: XOR<CaseScalarRelationFilter, CaseWhereInput>
     seed?: XOR<CaseSeedTransactionScalarRelationFilter, CaseSeedTransactionWhereInput>
+    chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
     endpointHotWallet?: XOR<HotWalletNullableScalarRelationFilter, HotWalletWhereInput> | null
     transactions?: FlowTransactionListRelationFilter
   }, "id">
@@ -10389,7 +11783,7 @@ export namespace Prisma {
     id?: SortOrder
     caseId?: SortOrder
     seedId?: SortOrder
-    blockchain?: SortOrder
+    chainId?: SortOrder
     tokenAddress?: SortOrderInput | SortOrder
     tokenSymbol?: SortOrderInput | SortOrder
     totalAmountRaw?: SortOrder
@@ -10415,7 +11809,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Flow"> | string
     caseId?: StringWithAggregatesFilter<"Flow"> | string
     seedId?: StringWithAggregatesFilter<"Flow"> | string
-    blockchain?: EnumBlockchainWithAggregatesFilter<"Flow"> | $Enums.Blockchain
+    chainId?: StringWithAggregatesFilter<"Flow"> | string
     tokenAddress?: StringNullableWithAggregatesFilter<"Flow"> | string | null
     tokenSymbol?: StringNullableWithAggregatesFilter<"Flow"> | string | null
     totalAmountRaw?: StringWithAggregatesFilter<"Flow"> | string
@@ -10435,9 +11829,9 @@ export namespace Prisma {
     NOT?: FlowTransactionWhereInput | FlowTransactionWhereInput[]
     id?: StringFilter<"FlowTransaction"> | string
     flowId?: StringFilter<"FlowTransaction"> | string
+    chainId?: StringFilter<"FlowTransaction"> | string
     hopIndex?: IntFilter<"FlowTransaction"> | number
     txHash?: StringFilter<"FlowTransaction"> | string
-    blockchain?: EnumBlockchainFilter<"FlowTransaction"> | $Enums.Blockchain
     fromAddress?: StringFilter<"FlowTransaction"> | string
     toAddress?: StringFilter<"FlowTransaction"> | string
     tokenAddress?: StringNullableFilter<"FlowTransaction"> | string | null
@@ -10448,14 +11842,15 @@ export namespace Prisma {
     isEndpointHop?: BoolFilter<"FlowTransaction"> | boolean
     createdAt?: DateTimeFilter<"FlowTransaction"> | Date | string
     flow?: XOR<FlowScalarRelationFilter, FlowWhereInput>
+    chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
   }
 
   export type FlowTransactionOrderByWithRelationInput = {
     id?: SortOrder
     flowId?: SortOrder
+    chainId?: SortOrder
     hopIndex?: SortOrder
     txHash?: SortOrder
-    blockchain?: SortOrder
     fromAddress?: SortOrder
     toAddress?: SortOrder
     tokenAddress?: SortOrderInput | SortOrder
@@ -10466,6 +11861,7 @@ export namespace Prisma {
     isEndpointHop?: SortOrder
     createdAt?: SortOrder
     flow?: FlowOrderByWithRelationInput
+    chain?: ChainOrderByWithRelationInput
   }
 
   export type FlowTransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -10475,9 +11871,9 @@ export namespace Prisma {
     OR?: FlowTransactionWhereInput[]
     NOT?: FlowTransactionWhereInput | FlowTransactionWhereInput[]
     flowId?: StringFilter<"FlowTransaction"> | string
+    chainId?: StringFilter<"FlowTransaction"> | string
     hopIndex?: IntFilter<"FlowTransaction"> | number
     txHash?: StringFilter<"FlowTransaction"> | string
-    blockchain?: EnumBlockchainFilter<"FlowTransaction"> | $Enums.Blockchain
     fromAddress?: StringFilter<"FlowTransaction"> | string
     toAddress?: StringFilter<"FlowTransaction"> | string
     tokenAddress?: StringNullableFilter<"FlowTransaction"> | string | null
@@ -10488,14 +11884,15 @@ export namespace Prisma {
     isEndpointHop?: BoolFilter<"FlowTransaction"> | boolean
     createdAt?: DateTimeFilter<"FlowTransaction"> | Date | string
     flow?: XOR<FlowScalarRelationFilter, FlowWhereInput>
+    chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
   }, "id" | "flowId_hopIndex">
 
   export type FlowTransactionOrderByWithAggregationInput = {
     id?: SortOrder
     flowId?: SortOrder
+    chainId?: SortOrder
     hopIndex?: SortOrder
     txHash?: SortOrder
-    blockchain?: SortOrder
     fromAddress?: SortOrder
     toAddress?: SortOrder
     tokenAddress?: SortOrderInput | SortOrder
@@ -10518,9 +11915,9 @@ export namespace Prisma {
     NOT?: FlowTransactionScalarWhereWithAggregatesInput | FlowTransactionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"FlowTransaction"> | string
     flowId?: StringWithAggregatesFilter<"FlowTransaction"> | string
+    chainId?: StringWithAggregatesFilter<"FlowTransaction"> | string
     hopIndex?: IntWithAggregatesFilter<"FlowTransaction"> | number
     txHash?: StringWithAggregatesFilter<"FlowTransaction"> | string
-    blockchain?: EnumBlockchainWithAggregatesFilter<"FlowTransaction"> | $Enums.Blockchain
     fromAddress?: StringWithAggregatesFilter<"FlowTransaction"> | string
     toAddress?: StringWithAggregatesFilter<"FlowTransaction"> | string
     tokenAddress?: StringNullableWithAggregatesFilter<"FlowTransaction"> | string | null
@@ -10530,6 +11927,78 @@ export namespace Prisma {
     timestamp?: DateTimeWithAggregatesFilter<"FlowTransaction"> | Date | string
     isEndpointHop?: BoolWithAggregatesFilter<"FlowTransaction"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"FlowTransaction"> | Date | string
+  }
+
+  export type ChainCreateInput = {
+    id?: string
+    slug: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hotWallets?: HotWalletCreateNestedManyWithoutChainInput
+    caseSeedTransactions?: CaseSeedTransactionCreateNestedManyWithoutChainInput
+    flows?: FlowCreateNestedManyWithoutChainInput
+    flowTransactions?: FlowTransactionCreateNestedManyWithoutChainInput
+  }
+
+  export type ChainUncheckedCreateInput = {
+    id?: string
+    slug: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hotWallets?: HotWalletUncheckedCreateNestedManyWithoutChainInput
+    caseSeedTransactions?: CaseSeedTransactionUncheckedCreateNestedManyWithoutChainInput
+    flows?: FlowUncheckedCreateNestedManyWithoutChainInput
+    flowTransactions?: FlowTransactionUncheckedCreateNestedManyWithoutChainInput
+  }
+
+  export type ChainUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hotWallets?: HotWalletUpdateManyWithoutChainNestedInput
+    caseSeedTransactions?: CaseSeedTransactionUpdateManyWithoutChainNestedInput
+    flows?: FlowUpdateManyWithoutChainNestedInput
+    flowTransactions?: FlowTransactionUpdateManyWithoutChainNestedInput
+  }
+
+  export type ChainUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hotWallets?: HotWalletUncheckedUpdateManyWithoutChainNestedInput
+    caseSeedTransactions?: CaseSeedTransactionUncheckedUpdateManyWithoutChainNestedInput
+    flows?: FlowUncheckedUpdateManyWithoutChainNestedInput
+    flowTransactions?: FlowTransactionUncheckedUpdateManyWithoutChainNestedInput
+  }
+
+  export type ChainCreateManyInput = {
+    id?: string
+    slug: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChainUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChainUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateInput = {
@@ -10662,20 +12131,20 @@ export namespace Prisma {
   export type HotWalletCreateInput = {
     id?: string
     address: string
-    blockchain: $Enums.Blockchain
     label?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     exchange: ExchangeCreateNestedOneWithoutHotWalletsInput
+    chain: ChainCreateNestedOneWithoutHotWalletsInput
     flowsAsEndpoint?: FlowCreateNestedManyWithoutEndpointHotWalletInput
   }
 
   export type HotWalletUncheckedCreateInput = {
     id?: string
     exchangeId: string
+    chainId: string
     address: string
-    blockchain: $Enums.Blockchain
     label?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -10686,20 +12155,20 @@ export namespace Prisma {
   export type HotWalletUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     label?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     exchange?: ExchangeUpdateOneRequiredWithoutHotWalletsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutHotWalletsNestedInput
     flowsAsEndpoint?: FlowUpdateManyWithoutEndpointHotWalletNestedInput
   }
 
   export type HotWalletUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     exchangeId?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     label?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10710,8 +12179,8 @@ export namespace Prisma {
   export type HotWalletCreateManyInput = {
     id?: string
     exchangeId: string
+    chainId: string
     address: string
-    blockchain: $Enums.Blockchain
     label?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -10721,7 +12190,6 @@ export namespace Prisma {
   export type HotWalletUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     label?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10731,8 +12199,8 @@ export namespace Prisma {
   export type HotWalletUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     exchangeId?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     label?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10826,7 +12294,6 @@ export namespace Prisma {
   export type CaseSeedTransactionCreateInput = {
     id?: string
     txHash: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     amountRaw: string
@@ -10834,14 +12301,15 @@ export namespace Prisma {
     timestamp: Date | string
     createdAt?: Date | string
     case: CaseCreateNestedOneWithoutSeedsInput
+    chain: ChainCreateNestedOneWithoutCaseSeedTransactionsInput
     flows?: FlowCreateNestedManyWithoutSeedInput
   }
 
   export type CaseSeedTransactionUncheckedCreateInput = {
     id?: string
     caseId: string
+    chainId: string
     txHash: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     amountRaw: string
@@ -10854,7 +12322,6 @@ export namespace Prisma {
   export type CaseSeedTransactionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     amountRaw?: StringFieldUpdateOperationsInput | string
@@ -10862,14 +12329,15 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     case?: CaseUpdateOneRequiredWithoutSeedsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutCaseSeedTransactionsNestedInput
     flows?: FlowUpdateManyWithoutSeedNestedInput
   }
 
   export type CaseSeedTransactionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     caseId?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     amountRaw?: StringFieldUpdateOperationsInput | string
@@ -10882,8 +12350,8 @@ export namespace Prisma {
   export type CaseSeedTransactionCreateManyInput = {
     id?: string
     caseId: string
+    chainId: string
     txHash: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     amountRaw: string
@@ -10895,7 +12363,6 @@ export namespace Prisma {
   export type CaseSeedTransactionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     amountRaw?: StringFieldUpdateOperationsInput | string
@@ -10907,8 +12374,8 @@ export namespace Prisma {
   export type CaseSeedTransactionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     caseId?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     amountRaw?: StringFieldUpdateOperationsInput | string
@@ -10919,7 +12386,6 @@ export namespace Prisma {
 
   export type FlowCreateInput = {
     id?: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -10932,6 +12398,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     case: CaseCreateNestedOneWithoutFlowsInput
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
+    chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
   }
@@ -10940,7 +12407,7 @@ export namespace Prisma {
     id?: string
     caseId: string
     seedId: string
-    blockchain: $Enums.Blockchain
+    chainId: string
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -10957,7 +12424,6 @@ export namespace Prisma {
 
   export type FlowUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -10970,6 +12436,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
   }
@@ -10978,7 +12445,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     caseId?: StringFieldUpdateOperationsInput | string
     seedId?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
+    chainId?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -10997,7 +12464,7 @@ export namespace Prisma {
     id?: string
     caseId: string
     seedId: string
-    blockchain: $Enums.Blockchain
+    chainId: string
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -11013,7 +12480,6 @@ export namespace Prisma {
 
   export type FlowUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -11030,7 +12496,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     caseId?: StringFieldUpdateOperationsInput | string
     seedId?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
+    chainId?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -11048,7 +12514,6 @@ export namespace Prisma {
     id?: string
     hopIndex: number
     txHash: string
-    blockchain: $Enums.Blockchain
     fromAddress: string
     toAddress: string
     tokenAddress?: string | null
@@ -11059,14 +12524,15 @@ export namespace Prisma {
     isEndpointHop?: boolean
     createdAt?: Date | string
     flow: FlowCreateNestedOneWithoutTransactionsInput
+    chain: ChainCreateNestedOneWithoutFlowTransactionsInput
   }
 
   export type FlowTransactionUncheckedCreateInput = {
     id?: string
     flowId: string
+    chainId: string
     hopIndex: number
     txHash: string
-    blockchain: $Enums.Blockchain
     fromAddress: string
     toAddress: string
     tokenAddress?: string | null
@@ -11082,7 +12548,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     hopIndex?: IntFieldUpdateOperationsInput | number
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     fromAddress?: StringFieldUpdateOperationsInput | string
     toAddress?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11093,14 +12558,15 @@ export namespace Prisma {
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flow?: FlowUpdateOneRequiredWithoutTransactionsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutFlowTransactionsNestedInput
   }
 
   export type FlowTransactionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     flowId?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     hopIndex?: IntFieldUpdateOperationsInput | number
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     fromAddress?: StringFieldUpdateOperationsInput | string
     toAddress?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11115,9 +12581,9 @@ export namespace Prisma {
   export type FlowTransactionCreateManyInput = {
     id?: string
     flowId: string
+    chainId: string
     hopIndex: number
     txHash: string
-    blockchain: $Enums.Blockchain
     fromAddress: string
     toAddress: string
     tokenAddress?: string | null
@@ -11133,7 +12599,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     hopIndex?: IntFieldUpdateOperationsInput | number
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     fromAddress?: StringFieldUpdateOperationsInput | string
     toAddress?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11148,9 +12613,9 @@ export namespace Prisma {
   export type FlowTransactionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     flowId?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     hopIndex?: IntFieldUpdateOperationsInput | number
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     fromAddress?: StringFieldUpdateOperationsInput | string
     toAddress?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11203,10 +12668,28 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type CaseListRelationFilter = {
-    every?: CaseWhereInput
-    some?: CaseWhereInput
-    none?: CaseWhereInput
+  export type HotWalletListRelationFilter = {
+    every?: HotWalletWhereInput
+    some?: HotWalletWhereInput
+    none?: HotWalletWhereInput
+  }
+
+  export type CaseSeedTransactionListRelationFilter = {
+    every?: CaseSeedTransactionWhereInput
+    some?: CaseSeedTransactionWhereInput
+    none?: CaseSeedTransactionWhereInput
+  }
+
+  export type FlowListRelationFilter = {
+    every?: FlowWhereInput
+    some?: FlowWhereInput
+    none?: FlowWhereInput
+  }
+
+  export type FlowTransactionListRelationFilter = {
+    every?: FlowTransactionWhereInput
+    some?: FlowTransactionWhereInput
+    none?: FlowTransactionWhereInput
   }
 
   export type SortOrderInput = {
@@ -11214,33 +12697,42 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type CaseOrderByRelationAggregateInput = {
+  export type HotWalletOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type UserCountOrderByAggregateInput = {
+  export type CaseSeedTransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FlowOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FlowTransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ChainCountOrderByAggregateInput = {
     id?: SortOrder
-    email?: SortOrder
+    slug?: SortOrder
     name?: SortOrder
-    password?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type UserMaxOrderByAggregateInput = {
+  export type ChainMaxOrderByAggregateInput = {
     id?: SortOrder
-    email?: SortOrder
+    slug?: SortOrder
     name?: SortOrder
-    password?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type UserMinOrderByAggregateInput = {
+  export type ChainMinOrderByAggregateInput = {
     id?: SortOrder
-    email?: SortOrder
+    slug?: SortOrder
     name?: SortOrder
-    password?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11295,14 +12787,41 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type HotWalletListRelationFilter = {
-    every?: HotWalletWhereInput
-    some?: HotWalletWhereInput
-    none?: HotWalletWhereInput
+  export type CaseListRelationFilter = {
+    every?: CaseWhereInput
+    some?: CaseWhereInput
+    none?: CaseWhereInput
   }
 
-  export type HotWalletOrderByRelationAggregateInput = {
+  export type CaseOrderByRelationAggregateInput = {
     _count?: SortOrder
+  }
+
+  export type UserCountOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    name?: SortOrder
+    password?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserMaxOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    name?: SortOrder
+    password?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserMinOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    name?: SortOrder
+    password?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ExchangeCountOrderByAggregateInput = {
@@ -11329,13 +12848,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type EnumBlockchainFilter<$PrismaModel = never> = {
-    equals?: $Enums.Blockchain | EnumBlockchainFieldRefInput<$PrismaModel>
-    in?: $Enums.Blockchain[] | ListEnumBlockchainFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Blockchain[] | ListEnumBlockchainFieldRefInput<$PrismaModel>
-    not?: NestedEnumBlockchainFilter<$PrismaModel> | $Enums.Blockchain
-  }
-
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -11346,21 +12858,22 @@ export namespace Prisma {
     isNot?: ExchangeWhereInput
   }
 
-  export type FlowListRelationFilter = {
-    every?: FlowWhereInput
-    some?: FlowWhereInput
-    none?: FlowWhereInput
+  export type ChainScalarRelationFilter = {
+    is?: ChainWhereInput
+    isNot?: ChainWhereInput
   }
 
-  export type FlowOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type HotWalletExchangeIdChainIdAddressCompoundUniqueInput = {
+    exchangeId: string
+    chainId: string
+    address: string
   }
 
   export type HotWalletCountOrderByAggregateInput = {
     id?: SortOrder
     exchangeId?: SortOrder
+    chainId?: SortOrder
     address?: SortOrder
-    blockchain?: SortOrder
     label?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
@@ -11370,8 +12883,8 @@ export namespace Prisma {
   export type HotWalletMaxOrderByAggregateInput = {
     id?: SortOrder
     exchangeId?: SortOrder
+    chainId?: SortOrder
     address?: SortOrder
-    blockchain?: SortOrder
     label?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
@@ -11381,22 +12894,12 @@ export namespace Prisma {
   export type HotWalletMinOrderByAggregateInput = {
     id?: SortOrder
     exchangeId?: SortOrder
+    chainId?: SortOrder
     address?: SortOrder
-    blockchain?: SortOrder
     label?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type EnumBlockchainWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Blockchain | EnumBlockchainFieldRefInput<$PrismaModel>
-    in?: $Enums.Blockchain[] | ListEnumBlockchainFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Blockchain[] | ListEnumBlockchainFieldRefInput<$PrismaModel>
-    not?: NestedEnumBlockchainWithAggregatesFilter<$PrismaModel> | $Enums.Blockchain
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumBlockchainFilter<$PrismaModel>
-    _max?: NestedEnumBlockchainFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -11410,16 +12913,6 @@ export namespace Prisma {
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
-  }
-
-  export type CaseSeedTransactionListRelationFilter = {
-    every?: CaseSeedTransactionWhereInput
-    some?: CaseSeedTransactionWhereInput
-    none?: CaseSeedTransactionWhereInput
-  }
-
-  export type CaseSeedTransactionOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type CaseCountOrderByAggregateInput = {
@@ -11463,8 +12956,8 @@ export namespace Prisma {
   export type CaseSeedTransactionCountOrderByAggregateInput = {
     id?: SortOrder
     caseId?: SortOrder
+    chainId?: SortOrder
     txHash?: SortOrder
-    blockchain?: SortOrder
     tokenAddress?: SortOrder
     tokenSymbol?: SortOrder
     amountRaw?: SortOrder
@@ -11476,8 +12969,8 @@ export namespace Prisma {
   export type CaseSeedTransactionMaxOrderByAggregateInput = {
     id?: SortOrder
     caseId?: SortOrder
+    chainId?: SortOrder
     txHash?: SortOrder
-    blockchain?: SortOrder
     tokenAddress?: SortOrder
     tokenSymbol?: SortOrder
     amountRaw?: SortOrder
@@ -11489,8 +12982,8 @@ export namespace Prisma {
   export type CaseSeedTransactionMinOrderByAggregateInput = {
     id?: SortOrder
     caseId?: SortOrder
+    chainId?: SortOrder
     txHash?: SortOrder
-    blockchain?: SortOrder
     tokenAddress?: SortOrder
     tokenSymbol?: SortOrder
     amountRaw?: SortOrder
@@ -11527,21 +13020,11 @@ export namespace Prisma {
     isNot?: HotWalletWhereInput | null
   }
 
-  export type FlowTransactionListRelationFilter = {
-    every?: FlowTransactionWhereInput
-    some?: FlowTransactionWhereInput
-    none?: FlowTransactionWhereInput
-  }
-
-  export type FlowTransactionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type FlowCountOrderByAggregateInput = {
     id?: SortOrder
     caseId?: SortOrder
     seedId?: SortOrder
-    blockchain?: SortOrder
+    chainId?: SortOrder
     tokenAddress?: SortOrder
     tokenSymbol?: SortOrder
     totalAmountRaw?: SortOrder
@@ -11563,7 +13046,7 @@ export namespace Prisma {
     id?: SortOrder
     caseId?: SortOrder
     seedId?: SortOrder
-    blockchain?: SortOrder
+    chainId?: SortOrder
     tokenAddress?: SortOrder
     tokenSymbol?: SortOrder
     totalAmountRaw?: SortOrder
@@ -11581,7 +13064,7 @@ export namespace Prisma {
     id?: SortOrder
     caseId?: SortOrder
     seedId?: SortOrder
-    blockchain?: SortOrder
+    chainId?: SortOrder
     tokenAddress?: SortOrder
     tokenSymbol?: SortOrder
     totalAmountRaw?: SortOrder
@@ -11638,9 +13121,9 @@ export namespace Prisma {
   export type FlowTransactionCountOrderByAggregateInput = {
     id?: SortOrder
     flowId?: SortOrder
+    chainId?: SortOrder
     hopIndex?: SortOrder
     txHash?: SortOrder
-    blockchain?: SortOrder
     fromAddress?: SortOrder
     toAddress?: SortOrder
     tokenAddress?: SortOrder
@@ -11659,9 +13142,9 @@ export namespace Prisma {
   export type FlowTransactionMaxOrderByAggregateInput = {
     id?: SortOrder
     flowId?: SortOrder
+    chainId?: SortOrder
     hopIndex?: SortOrder
     txHash?: SortOrder
-    blockchain?: SortOrder
     fromAddress?: SortOrder
     toAddress?: SortOrder
     tokenAddress?: SortOrder
@@ -11676,9 +13159,9 @@ export namespace Prisma {
   export type FlowTransactionMinOrderByAggregateInput = {
     id?: SortOrder
     flowId?: SortOrder
+    chainId?: SortOrder
     hopIndex?: SortOrder
     txHash?: SortOrder
-    blockchain?: SortOrder
     fromAddress?: SortOrder
     toAddress?: SortOrder
     tokenAddress?: SortOrder
@@ -11694,18 +13177,60 @@ export namespace Prisma {
     hopIndex?: SortOrder
   }
 
-  export type CaseCreateNestedManyWithoutCreatedByUserInput = {
-    create?: XOR<CaseCreateWithoutCreatedByUserInput, CaseUncheckedCreateWithoutCreatedByUserInput> | CaseCreateWithoutCreatedByUserInput[] | CaseUncheckedCreateWithoutCreatedByUserInput[]
-    connectOrCreate?: CaseCreateOrConnectWithoutCreatedByUserInput | CaseCreateOrConnectWithoutCreatedByUserInput[]
-    createMany?: CaseCreateManyCreatedByUserInputEnvelope
-    connect?: CaseWhereUniqueInput | CaseWhereUniqueInput[]
+  export type HotWalletCreateNestedManyWithoutChainInput = {
+    create?: XOR<HotWalletCreateWithoutChainInput, HotWalletUncheckedCreateWithoutChainInput> | HotWalletCreateWithoutChainInput[] | HotWalletUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: HotWalletCreateOrConnectWithoutChainInput | HotWalletCreateOrConnectWithoutChainInput[]
+    createMany?: HotWalletCreateManyChainInputEnvelope
+    connect?: HotWalletWhereUniqueInput | HotWalletWhereUniqueInput[]
   }
 
-  export type CaseUncheckedCreateNestedManyWithoutCreatedByUserInput = {
-    create?: XOR<CaseCreateWithoutCreatedByUserInput, CaseUncheckedCreateWithoutCreatedByUserInput> | CaseCreateWithoutCreatedByUserInput[] | CaseUncheckedCreateWithoutCreatedByUserInput[]
-    connectOrCreate?: CaseCreateOrConnectWithoutCreatedByUserInput | CaseCreateOrConnectWithoutCreatedByUserInput[]
-    createMany?: CaseCreateManyCreatedByUserInputEnvelope
-    connect?: CaseWhereUniqueInput | CaseWhereUniqueInput[]
+  export type CaseSeedTransactionCreateNestedManyWithoutChainInput = {
+    create?: XOR<CaseSeedTransactionCreateWithoutChainInput, CaseSeedTransactionUncheckedCreateWithoutChainInput> | CaseSeedTransactionCreateWithoutChainInput[] | CaseSeedTransactionUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: CaseSeedTransactionCreateOrConnectWithoutChainInput | CaseSeedTransactionCreateOrConnectWithoutChainInput[]
+    createMany?: CaseSeedTransactionCreateManyChainInputEnvelope
+    connect?: CaseSeedTransactionWhereUniqueInput | CaseSeedTransactionWhereUniqueInput[]
+  }
+
+  export type FlowCreateNestedManyWithoutChainInput = {
+    create?: XOR<FlowCreateWithoutChainInput, FlowUncheckedCreateWithoutChainInput> | FlowCreateWithoutChainInput[] | FlowUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: FlowCreateOrConnectWithoutChainInput | FlowCreateOrConnectWithoutChainInput[]
+    createMany?: FlowCreateManyChainInputEnvelope
+    connect?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
+  }
+
+  export type FlowTransactionCreateNestedManyWithoutChainInput = {
+    create?: XOR<FlowTransactionCreateWithoutChainInput, FlowTransactionUncheckedCreateWithoutChainInput> | FlowTransactionCreateWithoutChainInput[] | FlowTransactionUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: FlowTransactionCreateOrConnectWithoutChainInput | FlowTransactionCreateOrConnectWithoutChainInput[]
+    createMany?: FlowTransactionCreateManyChainInputEnvelope
+    connect?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
+  }
+
+  export type HotWalletUncheckedCreateNestedManyWithoutChainInput = {
+    create?: XOR<HotWalletCreateWithoutChainInput, HotWalletUncheckedCreateWithoutChainInput> | HotWalletCreateWithoutChainInput[] | HotWalletUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: HotWalletCreateOrConnectWithoutChainInput | HotWalletCreateOrConnectWithoutChainInput[]
+    createMany?: HotWalletCreateManyChainInputEnvelope
+    connect?: HotWalletWhereUniqueInput | HotWalletWhereUniqueInput[]
+  }
+
+  export type CaseSeedTransactionUncheckedCreateNestedManyWithoutChainInput = {
+    create?: XOR<CaseSeedTransactionCreateWithoutChainInput, CaseSeedTransactionUncheckedCreateWithoutChainInput> | CaseSeedTransactionCreateWithoutChainInput[] | CaseSeedTransactionUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: CaseSeedTransactionCreateOrConnectWithoutChainInput | CaseSeedTransactionCreateOrConnectWithoutChainInput[]
+    createMany?: CaseSeedTransactionCreateManyChainInputEnvelope
+    connect?: CaseSeedTransactionWhereUniqueInput | CaseSeedTransactionWhereUniqueInput[]
+  }
+
+  export type FlowUncheckedCreateNestedManyWithoutChainInput = {
+    create?: XOR<FlowCreateWithoutChainInput, FlowUncheckedCreateWithoutChainInput> | FlowCreateWithoutChainInput[] | FlowUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: FlowCreateOrConnectWithoutChainInput | FlowCreateOrConnectWithoutChainInput[]
+    createMany?: FlowCreateManyChainInputEnvelope
+    connect?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
+  }
+
+  export type FlowTransactionUncheckedCreateNestedManyWithoutChainInput = {
+    create?: XOR<FlowTransactionCreateWithoutChainInput, FlowTransactionUncheckedCreateWithoutChainInput> | FlowTransactionCreateWithoutChainInput[] | FlowTransactionUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: FlowTransactionCreateOrConnectWithoutChainInput | FlowTransactionCreateOrConnectWithoutChainInput[]
+    createMany?: FlowTransactionCreateManyChainInputEnvelope
+    connect?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -11718,6 +13243,132 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type HotWalletUpdateManyWithoutChainNestedInput = {
+    create?: XOR<HotWalletCreateWithoutChainInput, HotWalletUncheckedCreateWithoutChainInput> | HotWalletCreateWithoutChainInput[] | HotWalletUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: HotWalletCreateOrConnectWithoutChainInput | HotWalletCreateOrConnectWithoutChainInput[]
+    upsert?: HotWalletUpsertWithWhereUniqueWithoutChainInput | HotWalletUpsertWithWhereUniqueWithoutChainInput[]
+    createMany?: HotWalletCreateManyChainInputEnvelope
+    set?: HotWalletWhereUniqueInput | HotWalletWhereUniqueInput[]
+    disconnect?: HotWalletWhereUniqueInput | HotWalletWhereUniqueInput[]
+    delete?: HotWalletWhereUniqueInput | HotWalletWhereUniqueInput[]
+    connect?: HotWalletWhereUniqueInput | HotWalletWhereUniqueInput[]
+    update?: HotWalletUpdateWithWhereUniqueWithoutChainInput | HotWalletUpdateWithWhereUniqueWithoutChainInput[]
+    updateMany?: HotWalletUpdateManyWithWhereWithoutChainInput | HotWalletUpdateManyWithWhereWithoutChainInput[]
+    deleteMany?: HotWalletScalarWhereInput | HotWalletScalarWhereInput[]
+  }
+
+  export type CaseSeedTransactionUpdateManyWithoutChainNestedInput = {
+    create?: XOR<CaseSeedTransactionCreateWithoutChainInput, CaseSeedTransactionUncheckedCreateWithoutChainInput> | CaseSeedTransactionCreateWithoutChainInput[] | CaseSeedTransactionUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: CaseSeedTransactionCreateOrConnectWithoutChainInput | CaseSeedTransactionCreateOrConnectWithoutChainInput[]
+    upsert?: CaseSeedTransactionUpsertWithWhereUniqueWithoutChainInput | CaseSeedTransactionUpsertWithWhereUniqueWithoutChainInput[]
+    createMany?: CaseSeedTransactionCreateManyChainInputEnvelope
+    set?: CaseSeedTransactionWhereUniqueInput | CaseSeedTransactionWhereUniqueInput[]
+    disconnect?: CaseSeedTransactionWhereUniqueInput | CaseSeedTransactionWhereUniqueInput[]
+    delete?: CaseSeedTransactionWhereUniqueInput | CaseSeedTransactionWhereUniqueInput[]
+    connect?: CaseSeedTransactionWhereUniqueInput | CaseSeedTransactionWhereUniqueInput[]
+    update?: CaseSeedTransactionUpdateWithWhereUniqueWithoutChainInput | CaseSeedTransactionUpdateWithWhereUniqueWithoutChainInput[]
+    updateMany?: CaseSeedTransactionUpdateManyWithWhereWithoutChainInput | CaseSeedTransactionUpdateManyWithWhereWithoutChainInput[]
+    deleteMany?: CaseSeedTransactionScalarWhereInput | CaseSeedTransactionScalarWhereInput[]
+  }
+
+  export type FlowUpdateManyWithoutChainNestedInput = {
+    create?: XOR<FlowCreateWithoutChainInput, FlowUncheckedCreateWithoutChainInput> | FlowCreateWithoutChainInput[] | FlowUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: FlowCreateOrConnectWithoutChainInput | FlowCreateOrConnectWithoutChainInput[]
+    upsert?: FlowUpsertWithWhereUniqueWithoutChainInput | FlowUpsertWithWhereUniqueWithoutChainInput[]
+    createMany?: FlowCreateManyChainInputEnvelope
+    set?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
+    disconnect?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
+    delete?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
+    connect?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
+    update?: FlowUpdateWithWhereUniqueWithoutChainInput | FlowUpdateWithWhereUniqueWithoutChainInput[]
+    updateMany?: FlowUpdateManyWithWhereWithoutChainInput | FlowUpdateManyWithWhereWithoutChainInput[]
+    deleteMany?: FlowScalarWhereInput | FlowScalarWhereInput[]
+  }
+
+  export type FlowTransactionUpdateManyWithoutChainNestedInput = {
+    create?: XOR<FlowTransactionCreateWithoutChainInput, FlowTransactionUncheckedCreateWithoutChainInput> | FlowTransactionCreateWithoutChainInput[] | FlowTransactionUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: FlowTransactionCreateOrConnectWithoutChainInput | FlowTransactionCreateOrConnectWithoutChainInput[]
+    upsert?: FlowTransactionUpsertWithWhereUniqueWithoutChainInput | FlowTransactionUpsertWithWhereUniqueWithoutChainInput[]
+    createMany?: FlowTransactionCreateManyChainInputEnvelope
+    set?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
+    disconnect?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
+    delete?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
+    connect?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
+    update?: FlowTransactionUpdateWithWhereUniqueWithoutChainInput | FlowTransactionUpdateWithWhereUniqueWithoutChainInput[]
+    updateMany?: FlowTransactionUpdateManyWithWhereWithoutChainInput | FlowTransactionUpdateManyWithWhereWithoutChainInput[]
+    deleteMany?: FlowTransactionScalarWhereInput | FlowTransactionScalarWhereInput[]
+  }
+
+  export type HotWalletUncheckedUpdateManyWithoutChainNestedInput = {
+    create?: XOR<HotWalletCreateWithoutChainInput, HotWalletUncheckedCreateWithoutChainInput> | HotWalletCreateWithoutChainInput[] | HotWalletUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: HotWalletCreateOrConnectWithoutChainInput | HotWalletCreateOrConnectWithoutChainInput[]
+    upsert?: HotWalletUpsertWithWhereUniqueWithoutChainInput | HotWalletUpsertWithWhereUniqueWithoutChainInput[]
+    createMany?: HotWalletCreateManyChainInputEnvelope
+    set?: HotWalletWhereUniqueInput | HotWalletWhereUniqueInput[]
+    disconnect?: HotWalletWhereUniqueInput | HotWalletWhereUniqueInput[]
+    delete?: HotWalletWhereUniqueInput | HotWalletWhereUniqueInput[]
+    connect?: HotWalletWhereUniqueInput | HotWalletWhereUniqueInput[]
+    update?: HotWalletUpdateWithWhereUniqueWithoutChainInput | HotWalletUpdateWithWhereUniqueWithoutChainInput[]
+    updateMany?: HotWalletUpdateManyWithWhereWithoutChainInput | HotWalletUpdateManyWithWhereWithoutChainInput[]
+    deleteMany?: HotWalletScalarWhereInput | HotWalletScalarWhereInput[]
+  }
+
+  export type CaseSeedTransactionUncheckedUpdateManyWithoutChainNestedInput = {
+    create?: XOR<CaseSeedTransactionCreateWithoutChainInput, CaseSeedTransactionUncheckedCreateWithoutChainInput> | CaseSeedTransactionCreateWithoutChainInput[] | CaseSeedTransactionUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: CaseSeedTransactionCreateOrConnectWithoutChainInput | CaseSeedTransactionCreateOrConnectWithoutChainInput[]
+    upsert?: CaseSeedTransactionUpsertWithWhereUniqueWithoutChainInput | CaseSeedTransactionUpsertWithWhereUniqueWithoutChainInput[]
+    createMany?: CaseSeedTransactionCreateManyChainInputEnvelope
+    set?: CaseSeedTransactionWhereUniqueInput | CaseSeedTransactionWhereUniqueInput[]
+    disconnect?: CaseSeedTransactionWhereUniqueInput | CaseSeedTransactionWhereUniqueInput[]
+    delete?: CaseSeedTransactionWhereUniqueInput | CaseSeedTransactionWhereUniqueInput[]
+    connect?: CaseSeedTransactionWhereUniqueInput | CaseSeedTransactionWhereUniqueInput[]
+    update?: CaseSeedTransactionUpdateWithWhereUniqueWithoutChainInput | CaseSeedTransactionUpdateWithWhereUniqueWithoutChainInput[]
+    updateMany?: CaseSeedTransactionUpdateManyWithWhereWithoutChainInput | CaseSeedTransactionUpdateManyWithWhereWithoutChainInput[]
+    deleteMany?: CaseSeedTransactionScalarWhereInput | CaseSeedTransactionScalarWhereInput[]
+  }
+
+  export type FlowUncheckedUpdateManyWithoutChainNestedInput = {
+    create?: XOR<FlowCreateWithoutChainInput, FlowUncheckedCreateWithoutChainInput> | FlowCreateWithoutChainInput[] | FlowUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: FlowCreateOrConnectWithoutChainInput | FlowCreateOrConnectWithoutChainInput[]
+    upsert?: FlowUpsertWithWhereUniqueWithoutChainInput | FlowUpsertWithWhereUniqueWithoutChainInput[]
+    createMany?: FlowCreateManyChainInputEnvelope
+    set?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
+    disconnect?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
+    delete?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
+    connect?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
+    update?: FlowUpdateWithWhereUniqueWithoutChainInput | FlowUpdateWithWhereUniqueWithoutChainInput[]
+    updateMany?: FlowUpdateManyWithWhereWithoutChainInput | FlowUpdateManyWithWhereWithoutChainInput[]
+    deleteMany?: FlowScalarWhereInput | FlowScalarWhereInput[]
+  }
+
+  export type FlowTransactionUncheckedUpdateManyWithoutChainNestedInput = {
+    create?: XOR<FlowTransactionCreateWithoutChainInput, FlowTransactionUncheckedCreateWithoutChainInput> | FlowTransactionCreateWithoutChainInput[] | FlowTransactionUncheckedCreateWithoutChainInput[]
+    connectOrCreate?: FlowTransactionCreateOrConnectWithoutChainInput | FlowTransactionCreateOrConnectWithoutChainInput[]
+    upsert?: FlowTransactionUpsertWithWhereUniqueWithoutChainInput | FlowTransactionUpsertWithWhereUniqueWithoutChainInput[]
+    createMany?: FlowTransactionCreateManyChainInputEnvelope
+    set?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
+    disconnect?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
+    delete?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
+    connect?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
+    update?: FlowTransactionUpdateWithWhereUniqueWithoutChainInput | FlowTransactionUpdateWithWhereUniqueWithoutChainInput[]
+    updateMany?: FlowTransactionUpdateManyWithWhereWithoutChainInput | FlowTransactionUpdateManyWithWhereWithoutChainInput[]
+    deleteMany?: FlowTransactionScalarWhereInput | FlowTransactionScalarWhereInput[]
+  }
+
+  export type CaseCreateNestedManyWithoutCreatedByUserInput = {
+    create?: XOR<CaseCreateWithoutCreatedByUserInput, CaseUncheckedCreateWithoutCreatedByUserInput> | CaseCreateWithoutCreatedByUserInput[] | CaseUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: CaseCreateOrConnectWithoutCreatedByUserInput | CaseCreateOrConnectWithoutCreatedByUserInput[]
+    createMany?: CaseCreateManyCreatedByUserInputEnvelope
+    connect?: CaseWhereUniqueInput | CaseWhereUniqueInput[]
+  }
+
+  export type CaseUncheckedCreateNestedManyWithoutCreatedByUserInput = {
+    create?: XOR<CaseCreateWithoutCreatedByUserInput, CaseUncheckedCreateWithoutCreatedByUserInput> | CaseCreateWithoutCreatedByUserInput[] | CaseUncheckedCreateWithoutCreatedByUserInput[]
+    connectOrCreate?: CaseCreateOrConnectWithoutCreatedByUserInput | CaseCreateOrConnectWithoutCreatedByUserInput[]
+    createMany?: CaseCreateManyCreatedByUserInputEnvelope
+    connect?: CaseWhereUniqueInput | CaseWhereUniqueInput[]
   }
 
   export type CaseUpdateManyWithoutCreatedByUserNestedInput = {
@@ -11796,6 +13447,12 @@ export namespace Prisma {
     connect?: ExchangeWhereUniqueInput
   }
 
+  export type ChainCreateNestedOneWithoutHotWalletsInput = {
+    create?: XOR<ChainCreateWithoutHotWalletsInput, ChainUncheckedCreateWithoutHotWalletsInput>
+    connectOrCreate?: ChainCreateOrConnectWithoutHotWalletsInput
+    connect?: ChainWhereUniqueInput
+  }
+
   export type FlowCreateNestedManyWithoutEndpointHotWalletInput = {
     create?: XOR<FlowCreateWithoutEndpointHotWalletInput, FlowUncheckedCreateWithoutEndpointHotWalletInput> | FlowCreateWithoutEndpointHotWalletInput[] | FlowUncheckedCreateWithoutEndpointHotWalletInput[]
     connectOrCreate?: FlowCreateOrConnectWithoutEndpointHotWalletInput | FlowCreateOrConnectWithoutEndpointHotWalletInput[]
@@ -11810,10 +13467,6 @@ export namespace Prisma {
     connect?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
   }
 
-  export type EnumBlockchainFieldUpdateOperationsInput = {
-    set?: $Enums.Blockchain
-  }
-
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
@@ -11824,6 +13477,14 @@ export namespace Prisma {
     upsert?: ExchangeUpsertWithoutHotWalletsInput
     connect?: ExchangeWhereUniqueInput
     update?: XOR<XOR<ExchangeUpdateToOneWithWhereWithoutHotWalletsInput, ExchangeUpdateWithoutHotWalletsInput>, ExchangeUncheckedUpdateWithoutHotWalletsInput>
+  }
+
+  export type ChainUpdateOneRequiredWithoutHotWalletsNestedInput = {
+    create?: XOR<ChainCreateWithoutHotWalletsInput, ChainUncheckedCreateWithoutHotWalletsInput>
+    connectOrCreate?: ChainCreateOrConnectWithoutHotWalletsInput
+    upsert?: ChainUpsertWithoutHotWalletsInput
+    connect?: ChainWhereUniqueInput
+    update?: XOR<XOR<ChainUpdateToOneWithWhereWithoutHotWalletsInput, ChainUpdateWithoutHotWalletsInput>, ChainUncheckedUpdateWithoutHotWalletsInput>
   }
 
   export type FlowUpdateManyWithoutEndpointHotWalletNestedInput = {
@@ -11958,6 +13619,12 @@ export namespace Prisma {
     connect?: CaseWhereUniqueInput
   }
 
+  export type ChainCreateNestedOneWithoutCaseSeedTransactionsInput = {
+    create?: XOR<ChainCreateWithoutCaseSeedTransactionsInput, ChainUncheckedCreateWithoutCaseSeedTransactionsInput>
+    connectOrCreate?: ChainCreateOrConnectWithoutCaseSeedTransactionsInput
+    connect?: ChainWhereUniqueInput
+  }
+
   export type FlowCreateNestedManyWithoutSeedInput = {
     create?: XOR<FlowCreateWithoutSeedInput, FlowUncheckedCreateWithoutSeedInput> | FlowCreateWithoutSeedInput[] | FlowUncheckedCreateWithoutSeedInput[]
     connectOrCreate?: FlowCreateOrConnectWithoutSeedInput | FlowCreateOrConnectWithoutSeedInput[]
@@ -11978,6 +13645,14 @@ export namespace Prisma {
     upsert?: CaseUpsertWithoutSeedsInput
     connect?: CaseWhereUniqueInput
     update?: XOR<XOR<CaseUpdateToOneWithWhereWithoutSeedsInput, CaseUpdateWithoutSeedsInput>, CaseUncheckedUpdateWithoutSeedsInput>
+  }
+
+  export type ChainUpdateOneRequiredWithoutCaseSeedTransactionsNestedInput = {
+    create?: XOR<ChainCreateWithoutCaseSeedTransactionsInput, ChainUncheckedCreateWithoutCaseSeedTransactionsInput>
+    connectOrCreate?: ChainCreateOrConnectWithoutCaseSeedTransactionsInput
+    upsert?: ChainUpsertWithoutCaseSeedTransactionsInput
+    connect?: ChainWhereUniqueInput
+    update?: XOR<XOR<ChainUpdateToOneWithWhereWithoutCaseSeedTransactionsInput, ChainUpdateWithoutCaseSeedTransactionsInput>, ChainUncheckedUpdateWithoutCaseSeedTransactionsInput>
   }
 
   export type FlowUpdateManyWithoutSeedNestedInput = {
@@ -12018,6 +13693,12 @@ export namespace Prisma {
     create?: XOR<CaseSeedTransactionCreateWithoutFlowsInput, CaseSeedTransactionUncheckedCreateWithoutFlowsInput>
     connectOrCreate?: CaseSeedTransactionCreateOrConnectWithoutFlowsInput
     connect?: CaseSeedTransactionWhereUniqueInput
+  }
+
+  export type ChainCreateNestedOneWithoutFlowsInput = {
+    create?: XOR<ChainCreateWithoutFlowsInput, ChainUncheckedCreateWithoutFlowsInput>
+    connectOrCreate?: ChainCreateOrConnectWithoutFlowsInput
+    connect?: ChainWhereUniqueInput
   }
 
   export type HotWalletCreateNestedOneWithoutFlowsAsEndpointInput = {
@@ -12068,6 +13749,14 @@ export namespace Prisma {
     update?: XOR<XOR<CaseSeedTransactionUpdateToOneWithWhereWithoutFlowsInput, CaseSeedTransactionUpdateWithoutFlowsInput>, CaseSeedTransactionUncheckedUpdateWithoutFlowsInput>
   }
 
+  export type ChainUpdateOneRequiredWithoutFlowsNestedInput = {
+    create?: XOR<ChainCreateWithoutFlowsInput, ChainUncheckedCreateWithoutFlowsInput>
+    connectOrCreate?: ChainCreateOrConnectWithoutFlowsInput
+    upsert?: ChainUpsertWithoutFlowsInput
+    connect?: ChainWhereUniqueInput
+    update?: XOR<XOR<ChainUpdateToOneWithWhereWithoutFlowsInput, ChainUpdateWithoutFlowsInput>, ChainUncheckedUpdateWithoutFlowsInput>
+  }
+
   export type HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput = {
     create?: XOR<HotWalletCreateWithoutFlowsAsEndpointInput, HotWalletUncheckedCreateWithoutFlowsAsEndpointInput>
     connectOrCreate?: HotWalletCreateOrConnectWithoutFlowsAsEndpointInput
@@ -12112,12 +13801,26 @@ export namespace Prisma {
     connect?: FlowWhereUniqueInput
   }
 
+  export type ChainCreateNestedOneWithoutFlowTransactionsInput = {
+    create?: XOR<ChainCreateWithoutFlowTransactionsInput, ChainUncheckedCreateWithoutFlowTransactionsInput>
+    connectOrCreate?: ChainCreateOrConnectWithoutFlowTransactionsInput
+    connect?: ChainWhereUniqueInput
+  }
+
   export type FlowUpdateOneRequiredWithoutTransactionsNestedInput = {
     create?: XOR<FlowCreateWithoutTransactionsInput, FlowUncheckedCreateWithoutTransactionsInput>
     connectOrCreate?: FlowCreateOrConnectWithoutTransactionsInput
     upsert?: FlowUpsertWithoutTransactionsInput
     connect?: FlowWhereUniqueInput
     update?: XOR<XOR<FlowUpdateToOneWithWhereWithoutTransactionsInput, FlowUpdateWithoutTransactionsInput>, FlowUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type ChainUpdateOneRequiredWithoutFlowTransactionsNestedInput = {
+    create?: XOR<ChainCreateWithoutFlowTransactionsInput, ChainUncheckedCreateWithoutFlowTransactionsInput>
+    connectOrCreate?: ChainCreateOrConnectWithoutFlowTransactionsInput
+    upsert?: ChainUpsertWithoutFlowTransactionsInput
+    connect?: ChainWhereUniqueInput
+    update?: XOR<XOR<ChainUpdateToOneWithWhereWithoutFlowTransactionsInput, ChainUpdateWithoutFlowTransactionsInput>, ChainUncheckedUpdateWithoutFlowTransactionsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -12229,26 +13932,9 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedEnumBlockchainFilter<$PrismaModel = never> = {
-    equals?: $Enums.Blockchain | EnumBlockchainFieldRefInput<$PrismaModel>
-    in?: $Enums.Blockchain[] | ListEnumBlockchainFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Blockchain[] | ListEnumBlockchainFieldRefInput<$PrismaModel>
-    not?: NestedEnumBlockchainFilter<$PrismaModel> | $Enums.Blockchain
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedEnumBlockchainWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Blockchain | EnumBlockchainFieldRefInput<$PrismaModel>
-    in?: $Enums.Blockchain[] | ListEnumBlockchainFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Blockchain[] | ListEnumBlockchainFieldRefInput<$PrismaModel>
-    not?: NestedEnumBlockchainWithAggregatesFilter<$PrismaModel> | $Enums.Blockchain
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumBlockchainFilter<$PrismaModel>
-    _max?: NestedEnumBlockchainFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -12301,6 +13987,297 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumFlowEndpointReasonFilter<$PrismaModel>
     _max?: NestedEnumFlowEndpointReasonFilter<$PrismaModel>
+  }
+
+  export type HotWalletCreateWithoutChainInput = {
+    id?: string
+    address: string
+    label?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    exchange: ExchangeCreateNestedOneWithoutHotWalletsInput
+    flowsAsEndpoint?: FlowCreateNestedManyWithoutEndpointHotWalletInput
+  }
+
+  export type HotWalletUncheckedCreateWithoutChainInput = {
+    id?: string
+    exchangeId: string
+    address: string
+    label?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    flowsAsEndpoint?: FlowUncheckedCreateNestedManyWithoutEndpointHotWalletInput
+  }
+
+  export type HotWalletCreateOrConnectWithoutChainInput = {
+    where: HotWalletWhereUniqueInput
+    create: XOR<HotWalletCreateWithoutChainInput, HotWalletUncheckedCreateWithoutChainInput>
+  }
+
+  export type HotWalletCreateManyChainInputEnvelope = {
+    data: HotWalletCreateManyChainInput | HotWalletCreateManyChainInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CaseSeedTransactionCreateWithoutChainInput = {
+    id?: string
+    txHash: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    amountRaw: string
+    amountDecimal: string
+    timestamp: Date | string
+    createdAt?: Date | string
+    case: CaseCreateNestedOneWithoutSeedsInput
+    flows?: FlowCreateNestedManyWithoutSeedInput
+  }
+
+  export type CaseSeedTransactionUncheckedCreateWithoutChainInput = {
+    id?: string
+    caseId: string
+    txHash: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    amountRaw: string
+    amountDecimal: string
+    timestamp: Date | string
+    createdAt?: Date | string
+    flows?: FlowUncheckedCreateNestedManyWithoutSeedInput
+  }
+
+  export type CaseSeedTransactionCreateOrConnectWithoutChainInput = {
+    where: CaseSeedTransactionWhereUniqueInput
+    create: XOR<CaseSeedTransactionCreateWithoutChainInput, CaseSeedTransactionUncheckedCreateWithoutChainInput>
+  }
+
+  export type CaseSeedTransactionCreateManyChainInputEnvelope = {
+    data: CaseSeedTransactionCreateManyChainInput | CaseSeedTransactionCreateManyChainInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FlowCreateWithoutChainInput = {
+    id?: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    totalAmountRaw: string
+    totalAmountDecimal: string
+    hopsCount: number
+    endpointAddress: string
+    endpointReason: $Enums.FlowEndpointReason
+    isEndpointExchange?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    case: CaseCreateNestedOneWithoutFlowsInput
+    seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
+    endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
+    transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
+  }
+
+  export type FlowUncheckedCreateWithoutChainInput = {
+    id?: string
+    caseId: string
+    seedId: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    totalAmountRaw: string
+    totalAmountDecimal: string
+    hopsCount: number
+    endpointAddress: string
+    endpointReason: $Enums.FlowEndpointReason
+    endpointHotWalletId?: string | null
+    isEndpointExchange?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
+  }
+
+  export type FlowCreateOrConnectWithoutChainInput = {
+    where: FlowWhereUniqueInput
+    create: XOR<FlowCreateWithoutChainInput, FlowUncheckedCreateWithoutChainInput>
+  }
+
+  export type FlowCreateManyChainInputEnvelope = {
+    data: FlowCreateManyChainInput | FlowCreateManyChainInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FlowTransactionCreateWithoutChainInput = {
+    id?: string
+    hopIndex: number
+    txHash: string
+    fromAddress: string
+    toAddress: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    amountRaw: string
+    amountDecimal: string
+    timestamp: Date | string
+    isEndpointHop?: boolean
+    createdAt?: Date | string
+    flow: FlowCreateNestedOneWithoutTransactionsInput
+  }
+
+  export type FlowTransactionUncheckedCreateWithoutChainInput = {
+    id?: string
+    flowId: string
+    hopIndex: number
+    txHash: string
+    fromAddress: string
+    toAddress: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    amountRaw: string
+    amountDecimal: string
+    timestamp: Date | string
+    isEndpointHop?: boolean
+    createdAt?: Date | string
+  }
+
+  export type FlowTransactionCreateOrConnectWithoutChainInput = {
+    where: FlowTransactionWhereUniqueInput
+    create: XOR<FlowTransactionCreateWithoutChainInput, FlowTransactionUncheckedCreateWithoutChainInput>
+  }
+
+  export type FlowTransactionCreateManyChainInputEnvelope = {
+    data: FlowTransactionCreateManyChainInput | FlowTransactionCreateManyChainInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type HotWalletUpsertWithWhereUniqueWithoutChainInput = {
+    where: HotWalletWhereUniqueInput
+    update: XOR<HotWalletUpdateWithoutChainInput, HotWalletUncheckedUpdateWithoutChainInput>
+    create: XOR<HotWalletCreateWithoutChainInput, HotWalletUncheckedCreateWithoutChainInput>
+  }
+
+  export type HotWalletUpdateWithWhereUniqueWithoutChainInput = {
+    where: HotWalletWhereUniqueInput
+    data: XOR<HotWalletUpdateWithoutChainInput, HotWalletUncheckedUpdateWithoutChainInput>
+  }
+
+  export type HotWalletUpdateManyWithWhereWithoutChainInput = {
+    where: HotWalletScalarWhereInput
+    data: XOR<HotWalletUpdateManyMutationInput, HotWalletUncheckedUpdateManyWithoutChainInput>
+  }
+
+  export type HotWalletScalarWhereInput = {
+    AND?: HotWalletScalarWhereInput | HotWalletScalarWhereInput[]
+    OR?: HotWalletScalarWhereInput[]
+    NOT?: HotWalletScalarWhereInput | HotWalletScalarWhereInput[]
+    id?: StringFilter<"HotWallet"> | string
+    exchangeId?: StringFilter<"HotWallet"> | string
+    chainId?: StringFilter<"HotWallet"> | string
+    address?: StringFilter<"HotWallet"> | string
+    label?: StringNullableFilter<"HotWallet"> | string | null
+    isActive?: BoolFilter<"HotWallet"> | boolean
+    createdAt?: DateTimeFilter<"HotWallet"> | Date | string
+    updatedAt?: DateTimeFilter<"HotWallet"> | Date | string
+  }
+
+  export type CaseSeedTransactionUpsertWithWhereUniqueWithoutChainInput = {
+    where: CaseSeedTransactionWhereUniqueInput
+    update: XOR<CaseSeedTransactionUpdateWithoutChainInput, CaseSeedTransactionUncheckedUpdateWithoutChainInput>
+    create: XOR<CaseSeedTransactionCreateWithoutChainInput, CaseSeedTransactionUncheckedCreateWithoutChainInput>
+  }
+
+  export type CaseSeedTransactionUpdateWithWhereUniqueWithoutChainInput = {
+    where: CaseSeedTransactionWhereUniqueInput
+    data: XOR<CaseSeedTransactionUpdateWithoutChainInput, CaseSeedTransactionUncheckedUpdateWithoutChainInput>
+  }
+
+  export type CaseSeedTransactionUpdateManyWithWhereWithoutChainInput = {
+    where: CaseSeedTransactionScalarWhereInput
+    data: XOR<CaseSeedTransactionUpdateManyMutationInput, CaseSeedTransactionUncheckedUpdateManyWithoutChainInput>
+  }
+
+  export type CaseSeedTransactionScalarWhereInput = {
+    AND?: CaseSeedTransactionScalarWhereInput | CaseSeedTransactionScalarWhereInput[]
+    OR?: CaseSeedTransactionScalarWhereInput[]
+    NOT?: CaseSeedTransactionScalarWhereInput | CaseSeedTransactionScalarWhereInput[]
+    id?: StringFilter<"CaseSeedTransaction"> | string
+    caseId?: StringFilter<"CaseSeedTransaction"> | string
+    chainId?: StringFilter<"CaseSeedTransaction"> | string
+    txHash?: StringFilter<"CaseSeedTransaction"> | string
+    tokenAddress?: StringNullableFilter<"CaseSeedTransaction"> | string | null
+    tokenSymbol?: StringNullableFilter<"CaseSeedTransaction"> | string | null
+    amountRaw?: StringFilter<"CaseSeedTransaction"> | string
+    amountDecimal?: StringFilter<"CaseSeedTransaction"> | string
+    timestamp?: DateTimeFilter<"CaseSeedTransaction"> | Date | string
+    createdAt?: DateTimeFilter<"CaseSeedTransaction"> | Date | string
+  }
+
+  export type FlowUpsertWithWhereUniqueWithoutChainInput = {
+    where: FlowWhereUniqueInput
+    update: XOR<FlowUpdateWithoutChainInput, FlowUncheckedUpdateWithoutChainInput>
+    create: XOR<FlowCreateWithoutChainInput, FlowUncheckedCreateWithoutChainInput>
+  }
+
+  export type FlowUpdateWithWhereUniqueWithoutChainInput = {
+    where: FlowWhereUniqueInput
+    data: XOR<FlowUpdateWithoutChainInput, FlowUncheckedUpdateWithoutChainInput>
+  }
+
+  export type FlowUpdateManyWithWhereWithoutChainInput = {
+    where: FlowScalarWhereInput
+    data: XOR<FlowUpdateManyMutationInput, FlowUncheckedUpdateManyWithoutChainInput>
+  }
+
+  export type FlowScalarWhereInput = {
+    AND?: FlowScalarWhereInput | FlowScalarWhereInput[]
+    OR?: FlowScalarWhereInput[]
+    NOT?: FlowScalarWhereInput | FlowScalarWhereInput[]
+    id?: StringFilter<"Flow"> | string
+    caseId?: StringFilter<"Flow"> | string
+    seedId?: StringFilter<"Flow"> | string
+    chainId?: StringFilter<"Flow"> | string
+    tokenAddress?: StringNullableFilter<"Flow"> | string | null
+    tokenSymbol?: StringNullableFilter<"Flow"> | string | null
+    totalAmountRaw?: StringFilter<"Flow"> | string
+    totalAmountDecimal?: StringFilter<"Flow"> | string
+    hopsCount?: IntFilter<"Flow"> | number
+    endpointAddress?: StringFilter<"Flow"> | string
+    endpointReason?: EnumFlowEndpointReasonFilter<"Flow"> | $Enums.FlowEndpointReason
+    endpointHotWalletId?: StringNullableFilter<"Flow"> | string | null
+    isEndpointExchange?: BoolFilter<"Flow"> | boolean
+    createdAt?: DateTimeFilter<"Flow"> | Date | string
+    updatedAt?: DateTimeFilter<"Flow"> | Date | string
+  }
+
+  export type FlowTransactionUpsertWithWhereUniqueWithoutChainInput = {
+    where: FlowTransactionWhereUniqueInput
+    update: XOR<FlowTransactionUpdateWithoutChainInput, FlowTransactionUncheckedUpdateWithoutChainInput>
+    create: XOR<FlowTransactionCreateWithoutChainInput, FlowTransactionUncheckedCreateWithoutChainInput>
+  }
+
+  export type FlowTransactionUpdateWithWhereUniqueWithoutChainInput = {
+    where: FlowTransactionWhereUniqueInput
+    data: XOR<FlowTransactionUpdateWithoutChainInput, FlowTransactionUncheckedUpdateWithoutChainInput>
+  }
+
+  export type FlowTransactionUpdateManyWithWhereWithoutChainInput = {
+    where: FlowTransactionScalarWhereInput
+    data: XOR<FlowTransactionUpdateManyMutationInput, FlowTransactionUncheckedUpdateManyWithoutChainInput>
+  }
+
+  export type FlowTransactionScalarWhereInput = {
+    AND?: FlowTransactionScalarWhereInput | FlowTransactionScalarWhereInput[]
+    OR?: FlowTransactionScalarWhereInput[]
+    NOT?: FlowTransactionScalarWhereInput | FlowTransactionScalarWhereInput[]
+    id?: StringFilter<"FlowTransaction"> | string
+    flowId?: StringFilter<"FlowTransaction"> | string
+    chainId?: StringFilter<"FlowTransaction"> | string
+    hopIndex?: IntFilter<"FlowTransaction"> | number
+    txHash?: StringFilter<"FlowTransaction"> | string
+    fromAddress?: StringFilter<"FlowTransaction"> | string
+    toAddress?: StringFilter<"FlowTransaction"> | string
+    tokenAddress?: StringNullableFilter<"FlowTransaction"> | string | null
+    tokenSymbol?: StringNullableFilter<"FlowTransaction"> | string | null
+    amountRaw?: StringFilter<"FlowTransaction"> | string
+    amountDecimal?: StringFilter<"FlowTransaction"> | string
+    timestamp?: DateTimeFilter<"FlowTransaction"> | Date | string
+    isEndpointHop?: BoolFilter<"FlowTransaction"> | boolean
+    createdAt?: DateTimeFilter<"FlowTransaction"> | Date | string
   }
 
   export type CaseCreateWithoutCreatedByUserInput = {
@@ -12370,18 +14347,18 @@ export namespace Prisma {
   export type HotWalletCreateWithoutExchangeInput = {
     id?: string
     address: string
-    blockchain: $Enums.Blockchain
     label?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    chain: ChainCreateNestedOneWithoutHotWalletsInput
     flowsAsEndpoint?: FlowCreateNestedManyWithoutEndpointHotWalletInput
   }
 
   export type HotWalletUncheckedCreateWithoutExchangeInput = {
     id?: string
+    chainId: string
     address: string
-    blockchain: $Enums.Blockchain
     label?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -12415,20 +14392,6 @@ export namespace Prisma {
     data: XOR<HotWalletUpdateManyMutationInput, HotWalletUncheckedUpdateManyWithoutExchangeInput>
   }
 
-  export type HotWalletScalarWhereInput = {
-    AND?: HotWalletScalarWhereInput | HotWalletScalarWhereInput[]
-    OR?: HotWalletScalarWhereInput[]
-    NOT?: HotWalletScalarWhereInput | HotWalletScalarWhereInput[]
-    id?: StringFilter<"HotWallet"> | string
-    exchangeId?: StringFilter<"HotWallet"> | string
-    address?: StringFilter<"HotWallet"> | string
-    blockchain?: EnumBlockchainFilter<"HotWallet"> | $Enums.Blockchain
-    label?: StringNullableFilter<"HotWallet"> | string | null
-    isActive?: BoolFilter<"HotWallet"> | boolean
-    createdAt?: DateTimeFilter<"HotWallet"> | Date | string
-    updatedAt?: DateTimeFilter<"HotWallet"> | Date | string
-  }
-
   export type ExchangeCreateWithoutHotWalletsInput = {
     id?: string
     name: string
@@ -12450,9 +14413,35 @@ export namespace Prisma {
     create: XOR<ExchangeCreateWithoutHotWalletsInput, ExchangeUncheckedCreateWithoutHotWalletsInput>
   }
 
+  export type ChainCreateWithoutHotWalletsInput = {
+    id?: string
+    slug: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    caseSeedTransactions?: CaseSeedTransactionCreateNestedManyWithoutChainInput
+    flows?: FlowCreateNestedManyWithoutChainInput
+    flowTransactions?: FlowTransactionCreateNestedManyWithoutChainInput
+  }
+
+  export type ChainUncheckedCreateWithoutHotWalletsInput = {
+    id?: string
+    slug: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    caseSeedTransactions?: CaseSeedTransactionUncheckedCreateNestedManyWithoutChainInput
+    flows?: FlowUncheckedCreateNestedManyWithoutChainInput
+    flowTransactions?: FlowTransactionUncheckedCreateNestedManyWithoutChainInput
+  }
+
+  export type ChainCreateOrConnectWithoutHotWalletsInput = {
+    where: ChainWhereUniqueInput
+    create: XOR<ChainCreateWithoutHotWalletsInput, ChainUncheckedCreateWithoutHotWalletsInput>
+  }
+
   export type FlowCreateWithoutEndpointHotWalletInput = {
     id?: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -12465,6 +14454,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     case: CaseCreateNestedOneWithoutFlowsInput
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
+    chain: ChainCreateNestedOneWithoutFlowsInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
   }
 
@@ -12472,7 +14462,7 @@ export namespace Prisma {
     id?: string
     caseId: string
     seedId: string
-    blockchain: $Enums.Blockchain
+    chainId: string
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -12523,6 +14513,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ChainUpsertWithoutHotWalletsInput = {
+    update: XOR<ChainUpdateWithoutHotWalletsInput, ChainUncheckedUpdateWithoutHotWalletsInput>
+    create: XOR<ChainCreateWithoutHotWalletsInput, ChainUncheckedCreateWithoutHotWalletsInput>
+    where?: ChainWhereInput
+  }
+
+  export type ChainUpdateToOneWithWhereWithoutHotWalletsInput = {
+    where?: ChainWhereInput
+    data: XOR<ChainUpdateWithoutHotWalletsInput, ChainUncheckedUpdateWithoutHotWalletsInput>
+  }
+
+  export type ChainUpdateWithoutHotWalletsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    caseSeedTransactions?: CaseSeedTransactionUpdateManyWithoutChainNestedInput
+    flows?: FlowUpdateManyWithoutChainNestedInput
+    flowTransactions?: FlowTransactionUpdateManyWithoutChainNestedInput
+  }
+
+  export type ChainUncheckedUpdateWithoutHotWalletsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    caseSeedTransactions?: CaseSeedTransactionUncheckedUpdateManyWithoutChainNestedInput
+    flows?: FlowUncheckedUpdateManyWithoutChainNestedInput
+    flowTransactions?: FlowTransactionUncheckedUpdateManyWithoutChainNestedInput
+  }
+
   export type FlowUpsertWithWhereUniqueWithoutEndpointHotWalletInput = {
     where: FlowWhereUniqueInput
     update: XOR<FlowUpdateWithoutEndpointHotWalletInput, FlowUncheckedUpdateWithoutEndpointHotWalletInput>
@@ -12537,27 +14560,6 @@ export namespace Prisma {
   export type FlowUpdateManyWithWhereWithoutEndpointHotWalletInput = {
     where: FlowScalarWhereInput
     data: XOR<FlowUpdateManyMutationInput, FlowUncheckedUpdateManyWithoutEndpointHotWalletInput>
-  }
-
-  export type FlowScalarWhereInput = {
-    AND?: FlowScalarWhereInput | FlowScalarWhereInput[]
-    OR?: FlowScalarWhereInput[]
-    NOT?: FlowScalarWhereInput | FlowScalarWhereInput[]
-    id?: StringFilter<"Flow"> | string
-    caseId?: StringFilter<"Flow"> | string
-    seedId?: StringFilter<"Flow"> | string
-    blockchain?: EnumBlockchainFilter<"Flow"> | $Enums.Blockchain
-    tokenAddress?: StringNullableFilter<"Flow"> | string | null
-    tokenSymbol?: StringNullableFilter<"Flow"> | string | null
-    totalAmountRaw?: StringFilter<"Flow"> | string
-    totalAmountDecimal?: StringFilter<"Flow"> | string
-    hopsCount?: IntFilter<"Flow"> | number
-    endpointAddress?: StringFilter<"Flow"> | string
-    endpointReason?: EnumFlowEndpointReasonFilter<"Flow"> | $Enums.FlowEndpointReason
-    endpointHotWalletId?: StringNullableFilter<"Flow"> | string | null
-    isEndpointExchange?: BoolFilter<"Flow"> | boolean
-    createdAt?: DateTimeFilter<"Flow"> | Date | string
-    updatedAt?: DateTimeFilter<"Flow"> | Date | string
   }
 
   export type UserCreateWithoutCasesInput = {
@@ -12586,20 +14588,20 @@ export namespace Prisma {
   export type CaseSeedTransactionCreateWithoutCaseInput = {
     id?: string
     txHash: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     amountRaw: string
     amountDecimal: string
     timestamp: Date | string
     createdAt?: Date | string
+    chain: ChainCreateNestedOneWithoutCaseSeedTransactionsInput
     flows?: FlowCreateNestedManyWithoutSeedInput
   }
 
   export type CaseSeedTransactionUncheckedCreateWithoutCaseInput = {
     id?: string
+    chainId: string
     txHash: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     amountRaw: string
@@ -12621,7 +14623,6 @@ export namespace Prisma {
 
   export type FlowCreateWithoutCaseInput = {
     id?: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -12633,6 +14634,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
+    chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
   }
@@ -12640,7 +14642,7 @@ export namespace Prisma {
   export type FlowUncheckedCreateWithoutCaseInput = {
     id?: string
     seedId: string
-    blockchain: $Enums.Blockchain
+    chainId: string
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -12710,22 +14712,6 @@ export namespace Prisma {
     data: XOR<CaseSeedTransactionUpdateManyMutationInput, CaseSeedTransactionUncheckedUpdateManyWithoutCaseInput>
   }
 
-  export type CaseSeedTransactionScalarWhereInput = {
-    AND?: CaseSeedTransactionScalarWhereInput | CaseSeedTransactionScalarWhereInput[]
-    OR?: CaseSeedTransactionScalarWhereInput[]
-    NOT?: CaseSeedTransactionScalarWhereInput | CaseSeedTransactionScalarWhereInput[]
-    id?: StringFilter<"CaseSeedTransaction"> | string
-    caseId?: StringFilter<"CaseSeedTransaction"> | string
-    txHash?: StringFilter<"CaseSeedTransaction"> | string
-    blockchain?: EnumBlockchainFilter<"CaseSeedTransaction"> | $Enums.Blockchain
-    tokenAddress?: StringNullableFilter<"CaseSeedTransaction"> | string | null
-    tokenSymbol?: StringNullableFilter<"CaseSeedTransaction"> | string | null
-    amountRaw?: StringFilter<"CaseSeedTransaction"> | string
-    amountDecimal?: StringFilter<"CaseSeedTransaction"> | string
-    timestamp?: DateTimeFilter<"CaseSeedTransaction"> | Date | string
-    createdAt?: DateTimeFilter<"CaseSeedTransaction"> | Date | string
-  }
-
   export type FlowUpsertWithWhereUniqueWithoutCaseInput = {
     where: FlowWhereUniqueInput
     update: XOR<FlowUpdateWithoutCaseInput, FlowUncheckedUpdateWithoutCaseInput>
@@ -12771,9 +14757,35 @@ export namespace Prisma {
     create: XOR<CaseCreateWithoutSeedsInput, CaseUncheckedCreateWithoutSeedsInput>
   }
 
+  export type ChainCreateWithoutCaseSeedTransactionsInput = {
+    id?: string
+    slug: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hotWallets?: HotWalletCreateNestedManyWithoutChainInput
+    flows?: FlowCreateNestedManyWithoutChainInput
+    flowTransactions?: FlowTransactionCreateNestedManyWithoutChainInput
+  }
+
+  export type ChainUncheckedCreateWithoutCaseSeedTransactionsInput = {
+    id?: string
+    slug: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hotWallets?: HotWalletUncheckedCreateNestedManyWithoutChainInput
+    flows?: FlowUncheckedCreateNestedManyWithoutChainInput
+    flowTransactions?: FlowTransactionUncheckedCreateNestedManyWithoutChainInput
+  }
+
+  export type ChainCreateOrConnectWithoutCaseSeedTransactionsInput = {
+    where: ChainWhereUniqueInput
+    create: XOR<ChainCreateWithoutCaseSeedTransactionsInput, ChainUncheckedCreateWithoutCaseSeedTransactionsInput>
+  }
+
   export type FlowCreateWithoutSeedInput = {
     id?: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -12785,6 +14797,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     case: CaseCreateNestedOneWithoutFlowsInput
+    chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
   }
@@ -12792,7 +14805,7 @@ export namespace Prisma {
   export type FlowUncheckedCreateWithoutSeedInput = {
     id?: string
     caseId: string
-    blockchain: $Enums.Blockchain
+    chainId: string
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -12852,6 +14865,39 @@ export namespace Prisma {
     flows?: FlowUncheckedUpdateManyWithoutCaseNestedInput
   }
 
+  export type ChainUpsertWithoutCaseSeedTransactionsInput = {
+    update: XOR<ChainUpdateWithoutCaseSeedTransactionsInput, ChainUncheckedUpdateWithoutCaseSeedTransactionsInput>
+    create: XOR<ChainCreateWithoutCaseSeedTransactionsInput, ChainUncheckedCreateWithoutCaseSeedTransactionsInput>
+    where?: ChainWhereInput
+  }
+
+  export type ChainUpdateToOneWithWhereWithoutCaseSeedTransactionsInput = {
+    where?: ChainWhereInput
+    data: XOR<ChainUpdateWithoutCaseSeedTransactionsInput, ChainUncheckedUpdateWithoutCaseSeedTransactionsInput>
+  }
+
+  export type ChainUpdateWithoutCaseSeedTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hotWallets?: HotWalletUpdateManyWithoutChainNestedInput
+    flows?: FlowUpdateManyWithoutChainNestedInput
+    flowTransactions?: FlowTransactionUpdateManyWithoutChainNestedInput
+  }
+
+  export type ChainUncheckedUpdateWithoutCaseSeedTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hotWallets?: HotWalletUncheckedUpdateManyWithoutChainNestedInput
+    flows?: FlowUncheckedUpdateManyWithoutChainNestedInput
+    flowTransactions?: FlowTransactionUncheckedUpdateManyWithoutChainNestedInput
+  }
+
   export type FlowUpsertWithWhereUniqueWithoutSeedInput = {
     where: FlowWhereUniqueInput
     update: XOR<FlowUpdateWithoutSeedInput, FlowUncheckedUpdateWithoutSeedInput>
@@ -12900,7 +14946,6 @@ export namespace Prisma {
   export type CaseSeedTransactionCreateWithoutFlowsInput = {
     id?: string
     txHash: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     amountRaw: string
@@ -12908,13 +14953,14 @@ export namespace Prisma {
     timestamp: Date | string
     createdAt?: Date | string
     case: CaseCreateNestedOneWithoutSeedsInput
+    chain: ChainCreateNestedOneWithoutCaseSeedTransactionsInput
   }
 
   export type CaseSeedTransactionUncheckedCreateWithoutFlowsInput = {
     id?: string
     caseId: string
+    chainId: string
     txHash: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     amountRaw: string
@@ -12928,22 +14974,49 @@ export namespace Prisma {
     create: XOR<CaseSeedTransactionCreateWithoutFlowsInput, CaseSeedTransactionUncheckedCreateWithoutFlowsInput>
   }
 
+  export type ChainCreateWithoutFlowsInput = {
+    id?: string
+    slug: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hotWallets?: HotWalletCreateNestedManyWithoutChainInput
+    caseSeedTransactions?: CaseSeedTransactionCreateNestedManyWithoutChainInput
+    flowTransactions?: FlowTransactionCreateNestedManyWithoutChainInput
+  }
+
+  export type ChainUncheckedCreateWithoutFlowsInput = {
+    id?: string
+    slug: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hotWallets?: HotWalletUncheckedCreateNestedManyWithoutChainInput
+    caseSeedTransactions?: CaseSeedTransactionUncheckedCreateNestedManyWithoutChainInput
+    flowTransactions?: FlowTransactionUncheckedCreateNestedManyWithoutChainInput
+  }
+
+  export type ChainCreateOrConnectWithoutFlowsInput = {
+    where: ChainWhereUniqueInput
+    create: XOR<ChainCreateWithoutFlowsInput, ChainUncheckedCreateWithoutFlowsInput>
+  }
+
   export type HotWalletCreateWithoutFlowsAsEndpointInput = {
     id?: string
     address: string
-    blockchain: $Enums.Blockchain
     label?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     exchange: ExchangeCreateNestedOneWithoutHotWalletsInput
+    chain: ChainCreateNestedOneWithoutHotWalletsInput
   }
 
   export type HotWalletUncheckedCreateWithoutFlowsAsEndpointInput = {
     id?: string
     exchangeId: string
+    chainId: string
     address: string
-    blockchain: $Enums.Blockchain
     label?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -12959,7 +15032,6 @@ export namespace Prisma {
     id?: string
     hopIndex: number
     txHash: string
-    blockchain: $Enums.Blockchain
     fromAddress: string
     toAddress: string
     tokenAddress?: string | null
@@ -12969,13 +15041,14 @@ export namespace Prisma {
     timestamp: Date | string
     isEndpointHop?: boolean
     createdAt?: Date | string
+    chain: ChainCreateNestedOneWithoutFlowTransactionsInput
   }
 
   export type FlowTransactionUncheckedCreateWithoutFlowInput = {
     id?: string
+    chainId: string
     hopIndex: number
     txHash: string
-    blockchain: $Enums.Blockchain
     fromAddress: string
     toAddress: string
     tokenAddress?: string | null
@@ -13046,7 +15119,6 @@ export namespace Prisma {
   export type CaseSeedTransactionUpdateWithoutFlowsInput = {
     id?: StringFieldUpdateOperationsInput | string
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     amountRaw?: StringFieldUpdateOperationsInput | string
@@ -13054,19 +15126,53 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     case?: CaseUpdateOneRequiredWithoutSeedsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutCaseSeedTransactionsNestedInput
   }
 
   export type CaseSeedTransactionUncheckedUpdateWithoutFlowsInput = {
     id?: StringFieldUpdateOperationsInput | string
     caseId?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     amountRaw?: StringFieldUpdateOperationsInput | string
     amountDecimal?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChainUpsertWithoutFlowsInput = {
+    update: XOR<ChainUpdateWithoutFlowsInput, ChainUncheckedUpdateWithoutFlowsInput>
+    create: XOR<ChainCreateWithoutFlowsInput, ChainUncheckedCreateWithoutFlowsInput>
+    where?: ChainWhereInput
+  }
+
+  export type ChainUpdateToOneWithWhereWithoutFlowsInput = {
+    where?: ChainWhereInput
+    data: XOR<ChainUpdateWithoutFlowsInput, ChainUncheckedUpdateWithoutFlowsInput>
+  }
+
+  export type ChainUpdateWithoutFlowsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hotWallets?: HotWalletUpdateManyWithoutChainNestedInput
+    caseSeedTransactions?: CaseSeedTransactionUpdateManyWithoutChainNestedInput
+    flowTransactions?: FlowTransactionUpdateManyWithoutChainNestedInput
+  }
+
+  export type ChainUncheckedUpdateWithoutFlowsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hotWallets?: HotWalletUncheckedUpdateManyWithoutChainNestedInput
+    caseSeedTransactions?: CaseSeedTransactionUncheckedUpdateManyWithoutChainNestedInput
+    flowTransactions?: FlowTransactionUncheckedUpdateManyWithoutChainNestedInput
   }
 
   export type HotWalletUpsertWithoutFlowsAsEndpointInput = {
@@ -13083,19 +15189,19 @@ export namespace Prisma {
   export type HotWalletUpdateWithoutFlowsAsEndpointInput = {
     id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     label?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     exchange?: ExchangeUpdateOneRequiredWithoutHotWalletsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutHotWalletsNestedInput
   }
 
   export type HotWalletUncheckedUpdateWithoutFlowsAsEndpointInput = {
     id?: StringFieldUpdateOperationsInput | string
     exchangeId?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     label?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13118,29 +15224,8 @@ export namespace Prisma {
     data: XOR<FlowTransactionUpdateManyMutationInput, FlowTransactionUncheckedUpdateManyWithoutFlowInput>
   }
 
-  export type FlowTransactionScalarWhereInput = {
-    AND?: FlowTransactionScalarWhereInput | FlowTransactionScalarWhereInput[]
-    OR?: FlowTransactionScalarWhereInput[]
-    NOT?: FlowTransactionScalarWhereInput | FlowTransactionScalarWhereInput[]
-    id?: StringFilter<"FlowTransaction"> | string
-    flowId?: StringFilter<"FlowTransaction"> | string
-    hopIndex?: IntFilter<"FlowTransaction"> | number
-    txHash?: StringFilter<"FlowTransaction"> | string
-    blockchain?: EnumBlockchainFilter<"FlowTransaction"> | $Enums.Blockchain
-    fromAddress?: StringFilter<"FlowTransaction"> | string
-    toAddress?: StringFilter<"FlowTransaction"> | string
-    tokenAddress?: StringNullableFilter<"FlowTransaction"> | string | null
-    tokenSymbol?: StringNullableFilter<"FlowTransaction"> | string | null
-    amountRaw?: StringFilter<"FlowTransaction"> | string
-    amountDecimal?: StringFilter<"FlowTransaction"> | string
-    timestamp?: DateTimeFilter<"FlowTransaction"> | Date | string
-    isEndpointHop?: BoolFilter<"FlowTransaction"> | boolean
-    createdAt?: DateTimeFilter<"FlowTransaction"> | Date | string
-  }
-
   export type FlowCreateWithoutTransactionsInput = {
     id?: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -13153,6 +15238,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     case: CaseCreateNestedOneWithoutFlowsInput
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
+    chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
   }
 
@@ -13160,7 +15246,7 @@ export namespace Prisma {
     id?: string
     caseId: string
     seedId: string
-    blockchain: $Enums.Blockchain
+    chainId: string
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -13179,6 +15265,33 @@ export namespace Prisma {
     create: XOR<FlowCreateWithoutTransactionsInput, FlowUncheckedCreateWithoutTransactionsInput>
   }
 
+  export type ChainCreateWithoutFlowTransactionsInput = {
+    id?: string
+    slug: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hotWallets?: HotWalletCreateNestedManyWithoutChainInput
+    caseSeedTransactions?: CaseSeedTransactionCreateNestedManyWithoutChainInput
+    flows?: FlowCreateNestedManyWithoutChainInput
+  }
+
+  export type ChainUncheckedCreateWithoutFlowTransactionsInput = {
+    id?: string
+    slug: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    hotWallets?: HotWalletUncheckedCreateNestedManyWithoutChainInput
+    caseSeedTransactions?: CaseSeedTransactionUncheckedCreateNestedManyWithoutChainInput
+    flows?: FlowUncheckedCreateNestedManyWithoutChainInput
+  }
+
+  export type ChainCreateOrConnectWithoutFlowTransactionsInput = {
+    where: ChainWhereUniqueInput
+    create: XOR<ChainCreateWithoutFlowTransactionsInput, ChainUncheckedCreateWithoutFlowTransactionsInput>
+  }
+
   export type FlowUpsertWithoutTransactionsInput = {
     update: XOR<FlowUpdateWithoutTransactionsInput, FlowUncheckedUpdateWithoutTransactionsInput>
     create: XOR<FlowCreateWithoutTransactionsInput, FlowUncheckedCreateWithoutTransactionsInput>
@@ -13192,7 +15305,200 @@ export namespace Prisma {
 
   export type FlowUpdateWithoutTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmountRaw?: StringFieldUpdateOperationsInput | string
+    totalAmountDecimal?: StringFieldUpdateOperationsInput | string
+    hopsCount?: IntFieldUpdateOperationsInput | number
+    endpointAddress?: StringFieldUpdateOperationsInput | string
+    endpointReason?: EnumFlowEndpointReasonFieldUpdateOperationsInput | $Enums.FlowEndpointReason
+    isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
+    seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
+    endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
+  }
+
+  export type FlowUncheckedUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    caseId?: StringFieldUpdateOperationsInput | string
+    seedId?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmountRaw?: StringFieldUpdateOperationsInput | string
+    totalAmountDecimal?: StringFieldUpdateOperationsInput | string
+    hopsCount?: IntFieldUpdateOperationsInput | number
+    endpointAddress?: StringFieldUpdateOperationsInput | string
+    endpointReason?: EnumFlowEndpointReasonFieldUpdateOperationsInput | $Enums.FlowEndpointReason
+    endpointHotWalletId?: NullableStringFieldUpdateOperationsInput | string | null
+    isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChainUpsertWithoutFlowTransactionsInput = {
+    update: XOR<ChainUpdateWithoutFlowTransactionsInput, ChainUncheckedUpdateWithoutFlowTransactionsInput>
+    create: XOR<ChainCreateWithoutFlowTransactionsInput, ChainUncheckedCreateWithoutFlowTransactionsInput>
+    where?: ChainWhereInput
+  }
+
+  export type ChainUpdateToOneWithWhereWithoutFlowTransactionsInput = {
+    where?: ChainWhereInput
+    data: XOR<ChainUpdateWithoutFlowTransactionsInput, ChainUncheckedUpdateWithoutFlowTransactionsInput>
+  }
+
+  export type ChainUpdateWithoutFlowTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hotWallets?: HotWalletUpdateManyWithoutChainNestedInput
+    caseSeedTransactions?: CaseSeedTransactionUpdateManyWithoutChainNestedInput
+    flows?: FlowUpdateManyWithoutChainNestedInput
+  }
+
+  export type ChainUncheckedUpdateWithoutFlowTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    hotWallets?: HotWalletUncheckedUpdateManyWithoutChainNestedInput
+    caseSeedTransactions?: CaseSeedTransactionUncheckedUpdateManyWithoutChainNestedInput
+    flows?: FlowUncheckedUpdateManyWithoutChainNestedInput
+  }
+
+  export type HotWalletCreateManyChainInput = {
+    id?: string
+    exchangeId: string
+    address: string
+    label?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CaseSeedTransactionCreateManyChainInput = {
+    id?: string
+    caseId: string
+    txHash: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    amountRaw: string
+    amountDecimal: string
+    timestamp: Date | string
+    createdAt?: Date | string
+  }
+
+  export type FlowCreateManyChainInput = {
+    id?: string
+    caseId: string
+    seedId: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    totalAmountRaw: string
+    totalAmountDecimal: string
+    hopsCount: number
+    endpointAddress: string
+    endpointReason: $Enums.FlowEndpointReason
+    endpointHotWalletId?: string | null
+    isEndpointExchange?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlowTransactionCreateManyChainInput = {
+    id?: string
+    flowId: string
+    hopIndex: number
+    txHash: string
+    fromAddress: string
+    toAddress: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    amountRaw: string
+    amountDecimal: string
+    timestamp: Date | string
+    isEndpointHop?: boolean
+    createdAt?: Date | string
+  }
+
+  export type HotWalletUpdateWithoutChainInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    exchange?: ExchangeUpdateOneRequiredWithoutHotWalletsNestedInput
+    flowsAsEndpoint?: FlowUpdateManyWithoutEndpointHotWalletNestedInput
+  }
+
+  export type HotWalletUncheckedUpdateWithoutChainInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    exchangeId?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flowsAsEndpoint?: FlowUncheckedUpdateManyWithoutEndpointHotWalletNestedInput
+  }
+
+  export type HotWalletUncheckedUpdateManyWithoutChainInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    exchangeId?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CaseSeedTransactionUpdateWithoutChainInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    amountRaw?: StringFieldUpdateOperationsInput | string
+    amountDecimal?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    case?: CaseUpdateOneRequiredWithoutSeedsNestedInput
+    flows?: FlowUpdateManyWithoutSeedNestedInput
+  }
+
+  export type CaseSeedTransactionUncheckedUpdateWithoutChainInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    caseId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    amountRaw?: StringFieldUpdateOperationsInput | string
+    amountDecimal?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flows?: FlowUncheckedUpdateManyWithoutSeedNestedInput
+  }
+
+  export type CaseSeedTransactionUncheckedUpdateManyWithoutChainInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    caseId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    amountRaw?: StringFieldUpdateOperationsInput | string
+    amountDecimal?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowUpdateWithoutChainInput = {
+    id?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -13206,13 +15512,13 @@ export namespace Prisma {
     case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
+    transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
   }
 
-  export type FlowUncheckedUpdateWithoutTransactionsInput = {
+  export type FlowUncheckedUpdateWithoutChainInput = {
     id?: StringFieldUpdateOperationsInput | string
     caseId?: StringFieldUpdateOperationsInput | string
     seedId?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -13224,6 +15530,72 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
+  }
+
+  export type FlowUncheckedUpdateManyWithoutChainInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    caseId?: StringFieldUpdateOperationsInput | string
+    seedId?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmountRaw?: StringFieldUpdateOperationsInput | string
+    totalAmountDecimal?: StringFieldUpdateOperationsInput | string
+    hopsCount?: IntFieldUpdateOperationsInput | number
+    endpointAddress?: StringFieldUpdateOperationsInput | string
+    endpointReason?: EnumFlowEndpointReasonFieldUpdateOperationsInput | $Enums.FlowEndpointReason
+    endpointHotWalletId?: NullableStringFieldUpdateOperationsInput | string | null
+    isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowTransactionUpdateWithoutChainInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    hopIndex?: IntFieldUpdateOperationsInput | number
+    txHash?: StringFieldUpdateOperationsInput | string
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    amountRaw?: StringFieldUpdateOperationsInput | string
+    amountDecimal?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flow?: FlowUpdateOneRequiredWithoutTransactionsNestedInput
+  }
+
+  export type FlowTransactionUncheckedUpdateWithoutChainInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flowId?: StringFieldUpdateOperationsInput | string
+    hopIndex?: IntFieldUpdateOperationsInput | number
+    txHash?: StringFieldUpdateOperationsInput | string
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    amountRaw?: StringFieldUpdateOperationsInput | string
+    amountDecimal?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowTransactionUncheckedUpdateManyWithoutChainInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flowId?: StringFieldUpdateOperationsInput | string
+    hopIndex?: IntFieldUpdateOperationsInput | number
+    txHash?: StringFieldUpdateOperationsInput | string
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    amountRaw?: StringFieldUpdateOperationsInput | string
+    amountDecimal?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CaseCreateManyCreatedByUserInput = {
@@ -13272,8 +15644,8 @@ export namespace Prisma {
 
   export type HotWalletCreateManyExchangeInput = {
     id?: string
+    chainId: string
     address: string
-    blockchain: $Enums.Blockchain
     label?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -13283,18 +15655,18 @@ export namespace Prisma {
   export type HotWalletUpdateWithoutExchangeInput = {
     id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     label?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chain?: ChainUpdateOneRequiredWithoutHotWalletsNestedInput
     flowsAsEndpoint?: FlowUpdateManyWithoutEndpointHotWalletNestedInput
   }
 
   export type HotWalletUncheckedUpdateWithoutExchangeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     label?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13304,8 +15676,8 @@ export namespace Prisma {
 
   export type HotWalletUncheckedUpdateManyWithoutExchangeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     label?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13316,7 +15688,7 @@ export namespace Prisma {
     id?: string
     caseId: string
     seedId: string
-    blockchain: $Enums.Blockchain
+    chainId: string
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -13331,7 +15703,6 @@ export namespace Prisma {
 
   export type FlowUpdateWithoutEndpointHotWalletInput = {
     id?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -13344,6 +15715,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
   }
 
@@ -13351,7 +15723,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     caseId?: StringFieldUpdateOperationsInput | string
     seedId?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
+    chainId?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -13369,7 +15741,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     caseId?: StringFieldUpdateOperationsInput | string
     seedId?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
+    chainId?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -13384,8 +15756,8 @@ export namespace Prisma {
 
   export type CaseSeedTransactionCreateManyCaseInput = {
     id?: string
+    chainId: string
     txHash: string
-    blockchain: $Enums.Blockchain
     tokenAddress?: string | null
     tokenSymbol?: string | null
     amountRaw: string
@@ -13397,7 +15769,7 @@ export namespace Prisma {
   export type FlowCreateManyCaseInput = {
     id?: string
     seedId: string
-    blockchain: $Enums.Blockchain
+    chainId: string
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -13414,20 +15786,20 @@ export namespace Prisma {
   export type CaseSeedTransactionUpdateWithoutCaseInput = {
     id?: StringFieldUpdateOperationsInput | string
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     amountRaw?: StringFieldUpdateOperationsInput | string
     amountDecimal?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chain?: ChainUpdateOneRequiredWithoutCaseSeedTransactionsNestedInput
     flows?: FlowUpdateManyWithoutSeedNestedInput
   }
 
   export type CaseSeedTransactionUncheckedUpdateWithoutCaseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     amountRaw?: StringFieldUpdateOperationsInput | string
@@ -13439,8 +15811,8 @@ export namespace Prisma {
 
   export type CaseSeedTransactionUncheckedUpdateManyWithoutCaseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     amountRaw?: StringFieldUpdateOperationsInput | string
@@ -13451,7 +15823,6 @@ export namespace Prisma {
 
   export type FlowUpdateWithoutCaseInput = {
     id?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -13463,6 +15834,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
   }
@@ -13470,7 +15842,7 @@ export namespace Prisma {
   export type FlowUncheckedUpdateWithoutCaseInput = {
     id?: StringFieldUpdateOperationsInput | string
     seedId?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
+    chainId?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -13488,7 +15860,7 @@ export namespace Prisma {
   export type FlowUncheckedUpdateManyWithoutCaseInput = {
     id?: StringFieldUpdateOperationsInput | string
     seedId?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
+    chainId?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -13505,7 +15877,7 @@ export namespace Prisma {
   export type FlowCreateManySeedInput = {
     id?: string
     caseId: string
-    blockchain: $Enums.Blockchain
+    chainId: string
     tokenAddress?: string | null
     tokenSymbol?: string | null
     totalAmountRaw: string
@@ -13521,7 +15893,6 @@ export namespace Prisma {
 
   export type FlowUpdateWithoutSeedInput = {
     id?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -13533,6 +15904,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
   }
@@ -13540,7 +15912,7 @@ export namespace Prisma {
   export type FlowUncheckedUpdateWithoutSeedInput = {
     id?: StringFieldUpdateOperationsInput | string
     caseId?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
+    chainId?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -13558,7 +15930,7 @@ export namespace Prisma {
   export type FlowUncheckedUpdateManyWithoutSeedInput = {
     id?: StringFieldUpdateOperationsInput | string
     caseId?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
+    chainId?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmountRaw?: StringFieldUpdateOperationsInput | string
@@ -13574,9 +15946,9 @@ export namespace Prisma {
 
   export type FlowTransactionCreateManyFlowInput = {
     id?: string
+    chainId: string
     hopIndex: number
     txHash: string
-    blockchain: $Enums.Blockchain
     fromAddress: string
     toAddress: string
     tokenAddress?: string | null
@@ -13592,7 +15964,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     hopIndex?: IntFieldUpdateOperationsInput | number
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     fromAddress?: StringFieldUpdateOperationsInput | string
     toAddress?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13602,13 +15973,14 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chain?: ChainUpdateOneRequiredWithoutFlowTransactionsNestedInput
   }
 
   export type FlowTransactionUncheckedUpdateWithoutFlowInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     hopIndex?: IntFieldUpdateOperationsInput | number
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     fromAddress?: StringFieldUpdateOperationsInput | string
     toAddress?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13622,9 +15994,9 @@ export namespace Prisma {
 
   export type FlowTransactionUncheckedUpdateManyWithoutFlowInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
     hopIndex?: IntFieldUpdateOperationsInput | number
     txHash?: StringFieldUpdateOperationsInput | string
-    blockchain?: EnumBlockchainFieldUpdateOperationsInput | $Enums.Blockchain
     fromAddress?: StringFieldUpdateOperationsInput | string
     toAddress?: StringFieldUpdateOperationsInput | string
     tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null

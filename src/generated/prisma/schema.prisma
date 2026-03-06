@@ -8,9 +8,17 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Blockchain {
-  BSC
-  ETH
+model Chain {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  hotWallets           HotWallet[]
+  caseSeedTransactions CaseSeedTransaction[]
+  flows                Flow[]
+  flowTransactions     FlowTransaction[]
 }
 
 enum FlowEndpointReason {
@@ -42,17 +50,20 @@ model Exchange {
 }
 
 model HotWallet {
-  id         String     @id @default(cuid())
+  id         String   @id @default(cuid())
   exchangeId String
-  exchange   Exchange   @relation(fields: [exchangeId], references: [id])
+  exchange   Exchange @relation(fields: [exchangeId], references: [id])
+  chainId    String
+  chain      Chain    @relation(fields: [chainId], references: [id])
   address    String
-  blockchain Blockchain
   label      String?
-  isActive   Boolean    @default(true)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   flowsAsEndpoint Flow[]
+
+  @@unique([exchangeId, chainId, address])
 }
 
 model Case {
@@ -71,17 +82,18 @@ model Case {
 }
 
 model CaseSeedTransaction {
-  id            String     @id @default(cuid())
+  id            String   @id @default(cuid())
   caseId        String
-  case          Case       @relation(fields: [caseId], references: [id])
+  case          Case     @relation(fields: [caseId], references: [id])
+  chainId       String
+  chain         Chain    @relation(fields: [chainId], references: [id])
   txHash        String
-  blockchain    Blockchain
   tokenAddress  String?
   tokenSymbol   String?
   amountRaw     String
   amountDecimal String
   timestamp     DateTime
-  createdAt     DateTime   @default(now())
+  createdAt     DateTime @default(now())
 
   flows Flow[]
 }
@@ -92,7 +104,8 @@ model Flow {
   case                Case                @relation(fields: [caseId], references: [id])
   seedId              String
   seed                CaseSeedTransaction @relation(fields: [seedId], references: [id])
-  blockchain          Blockchain
+  chainId             String
+  chain               Chain               @relation(fields: [chainId], references: [id])
   tokenAddress        String?
   tokenSymbol         String?
   totalAmountRaw      String
@@ -110,12 +123,13 @@ model Flow {
 }
 
 model FlowTransaction {
-  id            String     @id @default(cuid())
+  id            String   @id @default(cuid())
   flowId        String
-  flow          Flow       @relation(fields: [flowId], references: [id])
+  flow          Flow     @relation(fields: [flowId], references: [id])
+  chainId       String
+  chain         Chain    @relation(fields: [chainId], references: [id])
   hopIndex      Int
   txHash        String
-  blockchain    Blockchain
   fromAddress   String
   toAddress     String
   tokenAddress  String?
@@ -123,8 +137,8 @@ model FlowTransaction {
   amountRaw     String
   amountDecimal String
   timestamp     DateTime
-  isEndpointHop Boolean    @default(false)
-  createdAt     DateTime   @default(now())
+  isEndpointHop Boolean  @default(false)
+  createdAt     DateTime @default(now())
 
   @@unique([flowId, hopIndex])
 }

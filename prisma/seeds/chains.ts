@@ -1,0 +1,15 @@
+export const CHAINS: { slug: string; name: string }[] = [
+  { slug: 'eth', name: 'Ethereum' },
+  { slug: 'bsc', name: 'BNB Smart Chain' },
+  { slug: 'polygon', name: 'Polygon' },
+  { slug: 'avalanche', name: 'Avalanche' },
+  { slug: 'tron', name: 'TRON' },
+  { slug: 'bitcoin', name: 'Bitcoin' },
+  { slug: 'solana', name: 'Solana' },
+  { slug: 'optimism', name: 'Optimism' },
+  { slug: 'base', name: 'Base' },
+  { slug: 'arbitrum', name: 'Arbitrum One' },
+  { slug: 'ton', name: 'TON' },
+  { slug: 'dogecoin', name: 'Dogecoin' },
+  { slug: 'zcash', name: 'Zcash' },
+];

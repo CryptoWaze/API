@@ -160,6 +160,7 @@ exports.Prisma.CaseScalarFieldEnum = {
   id: 'id',
   externalId: 'externalId',
   name: 'name',
+  status: 'status',
   createdByUserId: 'createdByUserId',
   totalAmountLostRaw: 'totalAmountLostRaw',
   totalAmountLostDecimal: 'totalAmountLostDecimal',
@@ -215,6 +216,31 @@ exports.Prisma.FlowTransactionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.FlowTraceLogScalarFieldEnum = {
+  id: 'id',
+  inputAddress: 'inputAddress',
+  chainSlug: 'chainSlug',
+  status: 'status',
+  endpointAddress: 'endpointAddress',
+  failureAtAddress: 'failureAtAddress',
+  failureReason: 'failureReason',
+  stepsCount: 'stepsCount',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FlowTraceLogStepScalarFieldEnum = {
+  id: 'id',
+  flowTraceLogId: 'flowTraceLogId',
+  stepIndex: 'stepIndex',
+  fromAddress: 'fromAddress',
+  toAddress: 'toAddress',
+  transferSymbol: 'transferSymbol',
+  transferAmountRaw: 'transferAmountRaw',
+  transferAmountDecimal: 'transferAmountDecimal',
+  txHash: 'txHash',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -229,11 +255,26 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.CaseStatus = exports.$Enums.CaseStatus = {
+  OPEN: 'OPEN',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  PARTIALLY: 'PARTIALLY',
+  FAILED: 'FAILED'
+};
+
 exports.FlowEndpointReason = exports.$Enums.FlowEndpointReason = {
   EXCHANGE_HOT_WALLET: 'EXCHANGE_HOT_WALLET',
   MAX_HOPS_REACHED: 'MAX_HOPS_REACHED',
   NO_OUTGOING_ABOVE_THRESHOLD: 'NO_OUTGOING_ABOVE_THRESHOLD',
   CYCLE_DETECTED: 'CYCLE_DETECTED'
+};
+
+exports.FlowTraceLogStatus = exports.$Enums.FlowTraceLogStatus = {
+  SUCCESS: 'SUCCESS',
+  NO_OUTBOUND: 'NO_OUTBOUND',
+  MAX_WALLETS_REACHED: 'MAX_WALLETS_REACHED',
+  EXHAUSTED_OPTIONS: 'EXHAUSTED_OPTIONS'
 };
 
 exports.Prisma.ModelName = {
@@ -244,7 +285,9 @@ exports.Prisma.ModelName = {
   Case: 'Case',
   CaseSeedTransaction: 'CaseSeedTransaction',
   Flow: 'Flow',
-  FlowTransaction: 'FlowTransaction'
+  FlowTransaction: 'FlowTransaction',
+  FlowTraceLog: 'FlowTraceLog',
+  FlowTraceLogStep: 'FlowTraceLogStep'
 };
 
 /**

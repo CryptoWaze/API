@@ -66,16 +66,25 @@ model HotWallet {
   @@unique([exchangeId, chainId, address])
 }
 
+enum CaseStatus {
+  OPEN // Aguardando processamento
+  PROCESSING // Processando caso
+  COMPLETED // Encontrou hot wallet
+  PARTIALLY // Chegou ao fim sem encontrar hot wallet
+  FAILED // Erro interno do sistema
+}
+
 model Case {
-  id                     String   @id @default(cuid())
-  externalId             String?  @unique
+  id                     String     @id @default(cuid())
+  externalId             String?    @unique
   name                   String
+  status                 CaseStatus @default(OPEN)
   createdByUserId        String
-  createdByUser          User     @relation(fields: [createdByUserId], references: [id])
+  createdByUser          User       @relation(fields: [createdByUserId], references: [id])
   totalAmountLostRaw     String
   totalAmountLostDecimal String
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
 
   seeds CaseSeedTransaction[]
   flows Flow[]
@@ -141,4 +150,41 @@ model FlowTransaction {
   createdAt     DateTime @default(now())
 
   @@unique([flowId, hopIndex])
+}
+
+enum FlowTraceLogStatus {
+  SUCCESS
+  NO_OUTBOUND
+  MAX_WALLETS_REACHED
+  EXHAUSTED_OPTIONS
+}
+
+model FlowTraceLog {
+  id               String             @id @default(cuid())
+  inputAddress     String
+  chainSlug        String
+  status           FlowTraceLogStatus
+  endpointAddress  String?
+  failureAtAddress String?
+  failureReason    String?
+  stepsCount       Int                @default(0)
+  createdAt        DateTime           @default(now())
+
+  steps FlowTraceLogStep[]
+}
+
+model FlowTraceLogStep {
+  id                    String       @id @default(cuid())
+  flowTraceLogId        String
+  flowTraceLog          FlowTraceLog @relation(fields: [flowTraceLogId], references: [id], onDelete: Cascade)
+  stepIndex             Int
+  fromAddress           String
+  toAddress             String
+  transferSymbol        String?
+  transferAmountRaw     String?
+  transferAmountDecimal String?
+  txHash                String?
+  createdAt             DateTime     @default(now())
+
+  @@unique([flowTraceLogId, stepIndex])
 }

@@ -20,6 +20,7 @@ import { GetAddressTopTransfersUseCase } from '../../application/use-cases/get-a
 import { GetAddressTopTransfersPaginatedUseCase } from '../../application/use-cases/get-address-top-transfers-paginated.use-case';
 import { GetAddressTopTransfersHistoryUseCase } from '../../application/use-cases/get-address-top-transfers-history.use-case';
 import { FollowFlowToExchangeUseCase } from '../../application/use-cases/follow-flow-to-exchange.use-case';
+import { FollowFlowToExchangeFullHistoryUseCase } from '../../application/use-cases/follow-flow-to-exchange-full-history.use-case';
 import type {
   GetAddressTopTransfersResult,
   GetAddressTopTransfersPaginatedResult,
@@ -35,6 +36,7 @@ export class AddressesController {
     private readonly getAddressTopTransfersPaginatedUseCase: GetAddressTopTransfersPaginatedUseCase,
     private readonly getAddressTopTransfersHistoryUseCase: GetAddressTopTransfersHistoryUseCase,
     private readonly followFlowToExchangeUseCase: FollowFlowToExchangeUseCase,
+    private readonly followFlowToExchangeFullHistoryUseCase: FollowFlowToExchangeFullHistoryUseCase,
   ) {}
 
   @Get(':address/top-transfers/paginated')
@@ -108,6 +110,30 @@ export class AddressesController {
       throw new BadRequestException(messages);
     }
     return this.getAddressTopTransfersUseCase.execute(result.data);
+  }
+
+  @Get(':address/flow-to-exchange/full-history')
+  @ApiOperation({
+    summary: 'Fluxo até exchange (histórico completo)',
+    description:
+      'Para cada carteira, percorre todo o histórico (API paginada), escolhe a maior saída e segue até a próxima, até encontrar uma hot wallet. Limite de 50 carteiras.',
+  })
+  @ApiParam({ name: 'address', description: 'Endereço da carteira de partida' })
+  @ApiQuery({ name: 'chain', description: 'Slug da chain (ex: bsc, eth)', required: true })
+  @ApiResponse({ status: 200, description: 'Passos do fluxo e endereço da hot wallet de destino.' })
+  @ApiResponse({ status: 404, description: 'Nenhum fluxo até exchange encontrado (máx. 50 carteiras).' })
+  async getFlowToExchangeFullHistory(
+    @Param('address') address: string,
+    @Query('chain') chain: string,
+  ): Promise<FollowFlowToExchangeResult> {
+    const result = getFlowToExchangeSchema.safeParse({ address, chain });
+    if (!result.success) {
+      const messages = result.error.errors
+        .map((e) => `${e.path.join('.')}: ${e.message}`)
+        .join('; ');
+      throw new BadRequestException(messages);
+    }
+    return this.followFlowToExchangeFullHistoryUseCase.execute(result.data);
   }
 
   @Get(':address/flow-to-exchange')

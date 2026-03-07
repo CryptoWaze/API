@@ -1,5 +1,11 @@
 export const FLOW_TRACE_LOG_WRITER = Symbol('FLOW_TRACE_LOG_WRITER');
 
+export type FlowTraceLogStepOutcome =
+  | 'SUCCESS'
+  | 'NO_OUTBOUND'
+  | 'MAX_WALLETS_REACHED'
+  | 'EXHAUSTED_OPTIONS';
+
 export type FlowTraceLogStepInput = {
   fromAddress: string;
   toAddress: string;
@@ -7,6 +13,7 @@ export type FlowTraceLogStepInput = {
   transferAmountRaw: string;
   transferAmountDecimal: number;
   txHash: string;
+  outcome?: FlowTraceLogStepOutcome | null;
 };
 
 export type FlowTraceLogInput = {

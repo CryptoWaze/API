@@ -47,8 +47,8 @@ function pickTopOutbounds(
 ): WalletTransfer[] {
   const out = transfers.filter((t) => t.direction === 'OUT');
   if (out.length === 0) return [];
-  const sorted = [...out].sort(
-    (a, b) => Number(BigInt(b.rawAmount) - BigInt(a.rawAmount)),
+  const sorted = [...out].sort((a, b) =>
+    Number(BigInt(b.rawAmount) - BigInt(a.rawAmount)),
   );
   return sorted.slice(0, limit);
 }
@@ -62,23 +62,44 @@ type TraceSuccess = {
 
 type TraceFailure = {
   success: false;
-  reason:
-    | 'NO_OUTBOUND'
-    | 'MAX_WALLETS_REACHED'
-    | 'EXHAUSTED_OPTIONS';
+  reason: 'NO_OUTBOUND' | 'MAX_WALLETS_REACHED' | 'EXHAUSTED_OPTIONS';
   lastWallet: string;
   steps: FlowStep[];
 };
 
-function stepsToLogInput(steps: FlowStep[]): FlowTraceLogStepInput[] {
-  return steps.map((s) => ({
-    fromAddress: s.fromAddress,
-    toAddress: s.toAddress,
-    transferSymbol: s.transfer.symbol,
-    transferAmountRaw: s.transfer.rawAmount,
-    transferAmountDecimal: s.transfer.amount,
-    txHash: s.transfer.txHash,
+type EdgeOutcome =
+  | 'SUCCESS'
+  | 'NO_OUTBOUND'
+  | 'MAX_WALLETS_REACHED'
+  | 'EXHAUSTED_OPTIONS';
+
+type EdgeRecord = {
+  fromAddress: string;
+  toAddress: string;
+  transfer: WalletTransfer;
+  outcome: EdgeOutcome | null;
+};
+
+function edgesToLogInput(edges: EdgeRecord[]): FlowTraceLogStepInput[] {
+  return edges.map((e) => ({
+    fromAddress: e.fromAddress,
+    toAddress: e.toAddress,
+    transferSymbol: e.transfer.symbol,
+    transferAmountRaw: e.transfer.rawAmount,
+    transferAmountDecimal: e.transfer.amount,
+    txHash: e.transfer.txHash,
+    outcome: e.outcome ?? undefined,
   }));
+}
+
+function markPathEdgesSuccess(edges: EdgeRecord[], path: FlowStep[]): void {
+  for (const step of path) {
+    const edge = edges.find(
+      (e) =>
+        e.fromAddress === step.fromAddress && e.toAddress === step.toAddress,
+    );
+    if (edge && edge.outcome === null) edge.outcome = 'SUCCESS';
+  }
 }
 
 function shortAddress(addr: string): string {
@@ -114,13 +135,13 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     );
 
     try {
-      const result = await this.traceFlowIterative(
+      const { result, edges } = await this.traceFlowIterative(
         covalentChainId,
         chainSlug,
         startAddress,
       );
 
-      const logSteps = stepsToLogInput(result.steps);
+      const logSteps = edgesToLogInput(edges);
       if (result.success) {
         await this.flowTraceLogWriter.write({
           inputAddress: startAddress,
@@ -180,7 +201,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     const all: WalletTransfer[] = [];
     const PAGE_LOG_INTERVAL = 20;
     for (let page = 0; page < MAX_PAGES_PER_WALLET; page++) {
-      const pageTransfers =
+      const pageTransfers: WalletTransfer[] =
         await this.addressTransfersFetcher.getAddressTransfersPage(
           covalentChainId,
           address,
@@ -197,7 +218,10 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     return pickTopOutbounds(all, limit);
   }
 
-  private visitedAddresses(path: FlowStep[], startAddress: string): Set<string> {
+  private visitedAddresses(
+    path: FlowStep[],
+    startAddress: string,
+  ): Set<string> {
     const set = new Set<string>([normalizeAddress(startAddress)]);
     for (const step of path) {
       set.add(normalizeAddress(step.fromAddress));
@@ -210,14 +234,19 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     covalentChainId: string,
     chainSlug: string,
     startAddress: string,
-  ): Promise<TraceSuccess | TraceFailure> {
+  ): Promise<{
+    result: TraceSuccess | TraceFailure;
+    edges: EdgeRecord[];
+  }> {
     type StackFrame = {
       path: FlowStep[];
       currentAddress: string;
       outbounds: WalletTransfer[] | null;
       outboundIndex: number;
+      edgeIndex?: number;
     };
 
+    const edges: EdgeRecord[] = [];
     const stack: StackFrame[] = [
       {
         path: [],
@@ -257,6 +286,9 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         this.logger.log(
           `MAX_WALLETS_REACHED depth=${depth} addr=${shortAddress(frame.currentAddress)}`,
         );
+        if (frame.edgeIndex !== undefined) {
+          edges[frame.edgeIndex].outcome = 'MAX_WALLETS_REACHED';
+        }
         lastFailure = {
           path: frame.path,
           lastWallet: frame.currentAddress,
@@ -273,11 +305,15 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         this.logger.log(
           `HOT WALLET FOUND depth=${depth} endpoint=${shortAddress(frame.currentAddress)}`,
         );
+        markPathEdgesSuccess(edges, frame.path);
         return {
-          success: true,
-          chain: chainSlug,
-          steps: frame.path,
-          endpointAddress: frame.currentAddress,
+          result: {
+            success: true,
+            chain: chainSlug,
+            steps: frame.path,
+            endpointAddress: frame.currentAddress,
+          },
+          edges,
         };
       }
 
@@ -298,6 +334,9 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         this.logger.log(
           `NO_OUTBOUND depth=${depth} addr=${shortAddress(frame.currentAddress)} (backtracking)`,
         );
+        if (frame.edgeIndex !== undefined) {
+          edges[frame.edgeIndex].outcome = 'NO_OUTBOUND';
+        }
         lastFailure = {
           path: frame.path,
           lastWallet: frame.currentAddress,
@@ -318,14 +357,24 @@ export class FollowFlowToExchangeFullHistoryUseCase {
             toAddress: counterparty,
             transfer,
           };
+          edges.push({
+            fromAddress: frame.currentAddress,
+            toAddress: counterparty,
+            transfer,
+            outcome: 'SUCCESS',
+          });
+          markPathEdgesSuccess(edges, frame.path);
           this.logger.log(
             `HOT WALLET FOUND IN HISTORY depth=${depth} endpoint=${shortAddress(counterparty)} (from outbound scan)`,
           );
           return {
-            success: true,
-            chain: chainSlug,
-            steps: frame.path.concat(step),
-            endpointAddress: counterparty,
+            result: {
+              success: true,
+              chain: chainSlug,
+              steps: frame.path.concat(step),
+              endpointAddress: counterparty,
+            },
+            edges,
           };
         }
       }
@@ -346,6 +395,13 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           transfer,
         };
         const newPath = frame.path.concat(newStep);
+        edges.push({
+          fromAddress: frame.currentAddress,
+          toAddress: nextAddress,
+          transfer,
+          outcome: null,
+        });
+        const edgeIndex = edges.length - 1;
         this.logger.log(
           `Forward depth=${depth} -> ${newPath.length} next=${shortAddress(nextAddress)} ${transfer.symbol} ${transfer.amount}`,
         );
@@ -360,6 +416,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           currentAddress: nextAddress,
           outbounds: null,
           outboundIndex: 0,
+          edgeIndex,
         });
         pushed = true;
         break;
@@ -368,6 +425,9 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         this.logger.log(
           `EXHAUSTED_OPTIONS depth=${depth} addr=${shortAddress(frame.currentAddress)} (backtracking)`,
         );
+        if (frame.edgeIndex !== undefined) {
+          edges[frame.edgeIndex].outcome = 'EXHAUSTED_OPTIONS';
+        }
         lastFailure = {
           path: frame.path,
           lastWallet: frame.currentAddress,
@@ -384,10 +444,13 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     const lastWallet = lastFailure?.lastWallet ?? startAddress;
     const reason = lastFailure?.reason ?? 'EXHAUSTED_OPTIONS';
     return {
-      success: false,
-      reason,
-      lastWallet,
-      steps: path,
+      result: {
+        success: false,
+        reason,
+        lastWallet,
+        steps: path,
+      },
+      edges,
     };
   }
 }

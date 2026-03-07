@@ -176,17 +176,18 @@ model FlowTraceLog {
 }
 
 model FlowTraceLogStep {
-  id                  String        @id @default(cuid())
-  flowTraceLogId      String
-  flowTraceLog        FlowTraceLog  @relation(fields: [flowTraceLogId], references: [id], onDelete: Cascade)
-  stepIndex           Int
-  fromAddress         String
-  toAddress           String
-  transferSymbol      String?
-  transferAmountRaw   String?
+  id                    String              @id @default(cuid())
+  flowTraceLogId        String
+  flowTraceLog          FlowTraceLog         @relation(fields: [flowTraceLogId], references: [id], onDelete: Cascade)
+  stepIndex             Int
+  fromAddress           String
+  toAddress             String
+  transferSymbol        String?
+  transferAmountRaw      String?
   transferAmountDecimal String?
-  txHash              String?
-  createdAt           DateTime      @default(now())
+  txHash                String?
+  outcome               FlowTraceLogStatus?
+  createdAt             DateTime             @default(now())
 
   @@unique([flowTraceLogId, stepIndex])
 }

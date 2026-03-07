@@ -33,6 +33,7 @@ export class FlowTraceLogWriterService implements IFlowTraceLogWriter {
           transferAmountRaw: s.transferAmountRaw,
           transferAmountDecimal: String(s.transferAmountDecimal),
           txHash: s.txHash,
+          outcome: s.outcome ?? null,
         })),
       });
     }

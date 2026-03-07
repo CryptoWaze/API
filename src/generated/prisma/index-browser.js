@@ -238,6 +238,7 @@ exports.Prisma.FlowTraceLogStepScalarFieldEnum = {
   transferAmountRaw: 'transferAmountRaw',
   transferAmountDecimal: 'transferAmountDecimal',
   txHash: 'txHash',
+  outcome: 'outcome',
   createdAt: 'createdAt'
 };
 

@@ -12485,6 +12485,7 @@ export namespace Prisma {
     transferAmountRaw: string | null
     transferAmountDecimal: string | null
     txHash: string | null
+    outcome: $Enums.FlowTraceLogStatus | null
     createdAt: Date | null
   }
 
@@ -12498,6 +12499,7 @@ export namespace Prisma {
     transferAmountRaw: string | null
     transferAmountDecimal: string | null
     txHash: string | null
+    outcome: $Enums.FlowTraceLogStatus | null
     createdAt: Date | null
   }
 
@@ -12511,6 +12513,7 @@ export namespace Prisma {
     transferAmountRaw: number
     transferAmountDecimal: number
     txHash: number
+    outcome: number
     createdAt: number
     _all: number
   }
@@ -12534,6 +12537,7 @@ export namespace Prisma {
     transferAmountRaw?: true
     transferAmountDecimal?: true
     txHash?: true
+    outcome?: true
     createdAt?: true
   }
 
@@ -12547,6 +12551,7 @@ export namespace Prisma {
     transferAmountRaw?: true
     transferAmountDecimal?: true
     txHash?: true
+    outcome?: true
     createdAt?: true
   }
 
@@ -12560,6 +12565,7 @@ export namespace Prisma {
     transferAmountRaw?: true
     transferAmountDecimal?: true
     txHash?: true
+    outcome?: true
     createdAt?: true
     _all?: true
   }
@@ -12660,6 +12666,7 @@ export namespace Prisma {
     transferAmountRaw: string | null
     transferAmountDecimal: string | null
     txHash: string | null
+    outcome: $Enums.FlowTraceLogStatus | null
     createdAt: Date
     _count: FlowTraceLogStepCountAggregateOutputType | null
     _avg: FlowTraceLogStepAvgAggregateOutputType | null
@@ -12692,6 +12699,7 @@ export namespace Prisma {
     transferAmountRaw?: boolean
     transferAmountDecimal?: boolean
     txHash?: boolean
+    outcome?: boolean
     createdAt?: boolean
     flowTraceLog?: boolean | FlowTraceLogDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowTraceLogStep"]>
@@ -12706,6 +12714,7 @@ export namespace Prisma {
     transferAmountRaw?: boolean
     transferAmountDecimal?: boolean
     txHash?: boolean
+    outcome?: boolean
     createdAt?: boolean
     flowTraceLog?: boolean | FlowTraceLogDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowTraceLogStep"]>
@@ -12720,6 +12729,7 @@ export namespace Prisma {
     transferAmountRaw?: boolean
     transferAmountDecimal?: boolean
     txHash?: boolean
+    outcome?: boolean
     createdAt?: boolean
     flowTraceLog?: boolean | FlowTraceLogDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowTraceLogStep"]>
@@ -12734,10 +12744,11 @@ export namespace Prisma {
     transferAmountRaw?: boolean
     transferAmountDecimal?: boolean
     txHash?: boolean
+    outcome?: boolean
     createdAt?: boolean
   }
 
-  export type FlowTraceLogStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flowTraceLogId" | "stepIndex" | "fromAddress" | "toAddress" | "transferSymbol" | "transferAmountRaw" | "transferAmountDecimal" | "txHash" | "createdAt", ExtArgs["result"]["flowTraceLogStep"]>
+  export type FlowTraceLogStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flowTraceLogId" | "stepIndex" | "fromAddress" | "toAddress" | "transferSymbol" | "transferAmountRaw" | "transferAmountDecimal" | "txHash" | "outcome" | "createdAt", ExtArgs["result"]["flowTraceLogStep"]>
   export type FlowTraceLogStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     flowTraceLog?: boolean | FlowTraceLogDefaultArgs<ExtArgs>
   }
@@ -12763,6 +12774,7 @@ export namespace Prisma {
       transferAmountRaw: string | null
       transferAmountDecimal: string | null
       txHash: string | null
+      outcome: $Enums.FlowTraceLogStatus | null
       createdAt: Date
     }, ExtArgs["result"]["flowTraceLogStep"]>
     composites: {}
@@ -13197,6 +13209,7 @@ export namespace Prisma {
     readonly transferAmountRaw: FieldRef<"FlowTraceLogStep", 'String'>
     readonly transferAmountDecimal: FieldRef<"FlowTraceLogStep", 'String'>
     readonly txHash: FieldRef<"FlowTraceLogStep", 'String'>
+    readonly outcome: FieldRef<"FlowTraceLogStep", 'FlowTraceLogStatus'>
     readonly createdAt: FieldRef<"FlowTraceLogStep", 'DateTime'>
   }
     
@@ -13771,6 +13784,7 @@ export namespace Prisma {
     transferAmountRaw: 'transferAmountRaw',
     transferAmountDecimal: 'transferAmountDecimal',
     txHash: 'txHash',
+    outcome: 'outcome',
     createdAt: 'createdAt'
   };
 
@@ -14652,6 +14666,7 @@ export namespace Prisma {
     transferAmountRaw?: StringNullableFilter<"FlowTraceLogStep"> | string | null
     transferAmountDecimal?: StringNullableFilter<"FlowTraceLogStep"> | string | null
     txHash?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    outcome?: EnumFlowTraceLogStatusNullableFilter<"FlowTraceLogStep"> | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeFilter<"FlowTraceLogStep"> | Date | string
     flowTraceLog?: XOR<FlowTraceLogScalarRelationFilter, FlowTraceLogWhereInput>
   }
@@ -14666,6 +14681,7 @@ export namespace Prisma {
     transferAmountRaw?: SortOrderInput | SortOrder
     transferAmountDecimal?: SortOrderInput | SortOrder
     txHash?: SortOrderInput | SortOrder
+    outcome?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     flowTraceLog?: FlowTraceLogOrderByWithRelationInput
   }
@@ -14684,6 +14700,7 @@ export namespace Prisma {
     transferAmountRaw?: StringNullableFilter<"FlowTraceLogStep"> | string | null
     transferAmountDecimal?: StringNullableFilter<"FlowTraceLogStep"> | string | null
     txHash?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    outcome?: EnumFlowTraceLogStatusNullableFilter<"FlowTraceLogStep"> | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeFilter<"FlowTraceLogStep"> | Date | string
     flowTraceLog?: XOR<FlowTraceLogScalarRelationFilter, FlowTraceLogWhereInput>
   }, "id" | "flowTraceLogId_stepIndex">
@@ -14698,6 +14715,7 @@ export namespace Prisma {
     transferAmountRaw?: SortOrderInput | SortOrder
     transferAmountDecimal?: SortOrderInput | SortOrder
     txHash?: SortOrderInput | SortOrder
+    outcome?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: FlowTraceLogStepCountOrderByAggregateInput
     _avg?: FlowTraceLogStepAvgOrderByAggregateInput
@@ -14719,6 +14737,7 @@ export namespace Prisma {
     transferAmountRaw?: StringNullableWithAggregatesFilter<"FlowTraceLogStep"> | string | null
     transferAmountDecimal?: StringNullableWithAggregatesFilter<"FlowTraceLogStep"> | string | null
     txHash?: StringNullableWithAggregatesFilter<"FlowTraceLogStep"> | string | null
+    outcome?: EnumFlowTraceLogStatusNullableWithAggregatesFilter<"FlowTraceLogStep"> | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeWithAggregatesFilter<"FlowTraceLogStep"> | Date | string
   }
 
@@ -15524,6 +15543,7 @@ export namespace Prisma {
     transferAmountRaw?: string | null
     transferAmountDecimal?: string | null
     txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
     createdAt?: Date | string
     flowTraceLog: FlowTraceLogCreateNestedOneWithoutStepsInput
   }
@@ -15538,6 +15558,7 @@ export namespace Prisma {
     transferAmountRaw?: string | null
     transferAmountDecimal?: string | null
     txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
     createdAt?: Date | string
   }
 
@@ -15550,6 +15571,7 @@ export namespace Prisma {
     transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
     transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
     txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flowTraceLog?: FlowTraceLogUpdateOneRequiredWithoutStepsNestedInput
   }
@@ -15564,6 +15586,7 @@ export namespace Prisma {
     transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
     transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
     txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -15577,6 +15600,7 @@ export namespace Prisma {
     transferAmountRaw?: string | null
     transferAmountDecimal?: string | null
     txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
     createdAt?: Date | string
   }
 
@@ -15589,6 +15613,7 @@ export namespace Prisma {
     transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
     transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
     txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -15602,6 +15627,7 @@ export namespace Prisma {
     transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
     transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
     txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -16246,6 +16272,13 @@ export namespace Prisma {
     _max?: NestedEnumFlowTraceLogStatusFilter<$PrismaModel>
   }
 
+  export type EnumFlowTraceLogStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel> | $Enums.FlowTraceLogStatus | null
+  }
+
   export type FlowTraceLogScalarRelationFilter = {
     is?: FlowTraceLogWhereInput
     isNot?: FlowTraceLogWhereInput
@@ -16266,6 +16299,7 @@ export namespace Prisma {
     transferAmountRaw?: SortOrder
     transferAmountDecimal?: SortOrder
     txHash?: SortOrder
+    outcome?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -16283,6 +16317,7 @@ export namespace Prisma {
     transferAmountRaw?: SortOrder
     transferAmountDecimal?: SortOrder
     txHash?: SortOrder
+    outcome?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -16296,11 +16331,22 @@ export namespace Prisma {
     transferAmountRaw?: SortOrder
     transferAmountDecimal?: SortOrder
     txHash?: SortOrder
+    outcome?: SortOrder
     createdAt?: SortOrder
   }
 
   export type FlowTraceLogStepSumOrderByAggregateInput = {
     stepIndex?: SortOrder
+  }
+
+  export type EnumFlowTraceLogStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowTraceLogStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.FlowTraceLogStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel>
   }
 
   export type HotWalletCreateNestedManyWithoutChainInput = {
@@ -17005,6 +17051,10 @@ export namespace Prisma {
     connect?: FlowTraceLogWhereUniqueInput
   }
 
+  export type NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput = {
+    set?: $Enums.FlowTraceLogStatus | null
+  }
+
   export type FlowTraceLogUpdateOneRequiredWithoutStepsNestedInput = {
     create?: XOR<FlowTraceLogCreateWithoutStepsInput, FlowTraceLogUncheckedCreateWithoutStepsInput>
     connectOrCreate?: FlowTraceLogCreateOrConnectWithoutStepsInput
@@ -17211,6 +17261,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumFlowTraceLogStatusFilter<$PrismaModel>
     _max?: NestedEnumFlowTraceLogStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel> | $Enums.FlowTraceLogStatus | null
+  }
+
+  export type NestedEnumFlowTraceLogStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowTraceLogStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.FlowTraceLogStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel>
   }
 
   export type HotWalletCreateWithoutChainInput = {
@@ -18616,6 +18683,7 @@ export namespace Prisma {
     transferAmountRaw?: string | null
     transferAmountDecimal?: string | null
     txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
     createdAt?: Date | string
   }
 
@@ -18628,6 +18696,7 @@ export namespace Prisma {
     transferAmountRaw?: string | null
     transferAmountDecimal?: string | null
     txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
     createdAt?: Date | string
   }
 
@@ -18670,6 +18739,7 @@ export namespace Prisma {
     transferAmountRaw?: StringNullableFilter<"FlowTraceLogStep"> | string | null
     transferAmountDecimal?: StringNullableFilter<"FlowTraceLogStep"> | string | null
     txHash?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    outcome?: EnumFlowTraceLogStatusNullableFilter<"FlowTraceLogStep"> | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeFilter<"FlowTraceLogStep"> | Date | string
   }
 
@@ -19386,6 +19456,7 @@ export namespace Prisma {
     transferAmountRaw?: string | null
     transferAmountDecimal?: string | null
     txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
     createdAt?: Date | string
   }
 
@@ -19398,6 +19469,7 @@ export namespace Prisma {
     transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
     transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
     txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -19410,6 +19482,7 @@ export namespace Prisma {
     transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
     transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
     txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -19422,6 +19495,7 @@ export namespace Prisma {
     transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
     transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
     txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

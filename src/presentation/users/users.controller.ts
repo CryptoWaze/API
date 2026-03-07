@@ -26,7 +26,9 @@ export class UsersController {
   async login(@Body() body: unknown): Promise<UserResponse> {
     const result = loginUserSchema.safeParse(body);
     if (!result.success) {
-      const messages = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join('; ');
+      const messages = result.error.errors
+        .map((e) => `${e.path.join('.')}: ${e.message}`)
+        .join('; ');
       throw new BadRequestException(messages);
     }
     return this.usersService.login(result.data);
@@ -50,7 +52,9 @@ export class UsersController {
   async register(@Body() body: unknown): Promise<UserResponse> {
     const result = registerUserSchema.safeParse(body);
     if (!result.success) {
-      const messages = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join('; ');
+      const messages = result.error.errors
+        .map((e) => `${e.path.join('.')}: ${e.message}`)
+        .join('; ');
       throw new BadRequestException(messages);
     }
     return this.usersService.register(result.data);

@@ -4,6 +4,7 @@ import { HelloModule } from './presentation/hello';
 import { UsersModule } from './presentation/users';
 import { TransactionsModule } from './presentation/transactions';
 import { AddressesModule } from './presentation/addresses/addresses.module';
+import { SocketModule } from './presentation/socket';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { AddressesModule } from './presentation/addresses/addresses.module';
     UsersModule,
     TransactionsModule,
     AddressesModule,
+    SocketModule,
   ],
 })
 export class AppModule {}

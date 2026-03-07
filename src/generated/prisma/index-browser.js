@@ -160,6 +160,7 @@ exports.Prisma.CaseScalarFieldEnum = {
   id: 'id',
   externalId: 'externalId',
   name: 'name',
+  status: 'status',
   createdByUserId: 'createdByUserId',
   totalAmountLostRaw: 'totalAmountLostRaw',
   totalAmountLostDecimal: 'totalAmountLostDecimal',
@@ -229,6 +230,14 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.CaseStatus = exports.$Enums.CaseStatus = {
+  OPEN: 'OPEN',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  PARTIALLY: 'PARTIALLY',
+  FAILED: 'FAILED'
+};
+
 exports.FlowEndpointReason = exports.$Enums.FlowEndpointReason = {
   EXCHANGE_HOT_WALLET: 'EXCHANGE_HOT_WALLET',
   MAX_HOPS_REACHED: 'MAX_HOPS_REACHED',

@@ -67,11 +67,26 @@ export namespace $Enums {
 
 export type FlowEndpointReason = (typeof FlowEndpointReason)[keyof typeof FlowEndpointReason]
 
+
+export const CaseStatus: {
+  OPEN: 'OPEN',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  PARTIALLY: 'PARTIALLY',
+  FAILED: 'FAILED'
+};
+
+export type CaseStatus = (typeof CaseStatus)[keyof typeof CaseStatus]
+
 }
 
 export type FlowEndpointReason = $Enums.FlowEndpointReason
 
 export const FlowEndpointReason: typeof $Enums.FlowEndpointReason
+
+export type CaseStatus = $Enums.CaseStatus
+
+export const CaseStatus: typeof $Enums.CaseStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -6230,6 +6245,7 @@ export namespace Prisma {
     id: string | null
     externalId: string | null
     name: string | null
+    status: $Enums.CaseStatus | null
     createdByUserId: string | null
     totalAmountLostRaw: string | null
     totalAmountLostDecimal: string | null
@@ -6241,6 +6257,7 @@ export namespace Prisma {
     id: string | null
     externalId: string | null
     name: string | null
+    status: $Enums.CaseStatus | null
     createdByUserId: string | null
     totalAmountLostRaw: string | null
     totalAmountLostDecimal: string | null
@@ -6252,6 +6269,7 @@ export namespace Prisma {
     id: number
     externalId: number
     name: number
+    status: number
     createdByUserId: number
     totalAmountLostRaw: number
     totalAmountLostDecimal: number
@@ -6265,6 +6283,7 @@ export namespace Prisma {
     id?: true
     externalId?: true
     name?: true
+    status?: true
     createdByUserId?: true
     totalAmountLostRaw?: true
     totalAmountLostDecimal?: true
@@ -6276,6 +6295,7 @@ export namespace Prisma {
     id?: true
     externalId?: true
     name?: true
+    status?: true
     createdByUserId?: true
     totalAmountLostRaw?: true
     totalAmountLostDecimal?: true
@@ -6287,6 +6307,7 @@ export namespace Prisma {
     id?: true
     externalId?: true
     name?: true
+    status?: true
     createdByUserId?: true
     totalAmountLostRaw?: true
     totalAmountLostDecimal?: true
@@ -6371,6 +6392,7 @@ export namespace Prisma {
     id: string
     externalId: string | null
     name: string
+    status: $Enums.CaseStatus
     createdByUserId: string
     totalAmountLostRaw: string
     totalAmountLostDecimal: string
@@ -6399,6 +6421,7 @@ export namespace Prisma {
     id?: boolean
     externalId?: boolean
     name?: boolean
+    status?: boolean
     createdByUserId?: boolean
     totalAmountLostRaw?: boolean
     totalAmountLostDecimal?: boolean
@@ -6414,6 +6437,7 @@ export namespace Prisma {
     id?: boolean
     externalId?: boolean
     name?: boolean
+    status?: boolean
     createdByUserId?: boolean
     totalAmountLostRaw?: boolean
     totalAmountLostDecimal?: boolean
@@ -6426,6 +6450,7 @@ export namespace Prisma {
     id?: boolean
     externalId?: boolean
     name?: boolean
+    status?: boolean
     createdByUserId?: boolean
     totalAmountLostRaw?: boolean
     totalAmountLostDecimal?: boolean
@@ -6438,6 +6463,7 @@ export namespace Prisma {
     id?: boolean
     externalId?: boolean
     name?: boolean
+    status?: boolean
     createdByUserId?: boolean
     totalAmountLostRaw?: boolean
     totalAmountLostDecimal?: boolean
@@ -6445,7 +6471,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "externalId" | "name" | "createdByUserId" | "totalAmountLostRaw" | "totalAmountLostDecimal" | "createdAt" | "updatedAt", ExtArgs["result"]["case"]>
+  export type CaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "externalId" | "name" | "status" | "createdByUserId" | "totalAmountLostRaw" | "totalAmountLostDecimal" | "createdAt" | "updatedAt", ExtArgs["result"]["case"]>
   export type CaseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdByUser?: boolean | UserDefaultArgs<ExtArgs>
     seeds?: boolean | Case$seedsArgs<ExtArgs>
@@ -6470,6 +6496,7 @@ export namespace Prisma {
       id: string
       externalId: string | null
       name: string
+      status: $Enums.CaseStatus
       createdByUserId: string
       totalAmountLostRaw: string
       totalAmountLostDecimal: string
@@ -6904,6 +6931,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Case", 'String'>
     readonly externalId: FieldRef<"Case", 'String'>
     readonly name: FieldRef<"Case", 'String'>
+    readonly status: FieldRef<"Case", 'CaseStatus'>
     readonly createdByUserId: FieldRef<"Case", 'String'>
     readonly totalAmountLostRaw: FieldRef<"Case", 'String'>
     readonly totalAmountLostDecimal: FieldRef<"Case", 'String'>
@@ -11110,6 +11138,7 @@ export namespace Prisma {
     id: 'id',
     externalId: 'externalId',
     name: 'name',
+    status: 'status',
     createdByUserId: 'createdByUserId',
     totalAmountLostRaw: 'totalAmountLostRaw',
     totalAmountLostDecimal: 'totalAmountLostDecimal',
@@ -11238,6 +11267,20 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'CaseStatus'
+   */
+  export type EnumCaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CaseStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CaseStatus[]'
+   */
+  export type ListEnumCaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CaseStatus[]'>
     
 
 
@@ -11549,6 +11592,7 @@ export namespace Prisma {
     id?: StringFilter<"Case"> | string
     externalId?: StringNullableFilter<"Case"> | string | null
     name?: StringFilter<"Case"> | string
+    status?: EnumCaseStatusFilter<"Case"> | $Enums.CaseStatus
     createdByUserId?: StringFilter<"Case"> | string
     totalAmountLostRaw?: StringFilter<"Case"> | string
     totalAmountLostDecimal?: StringFilter<"Case"> | string
@@ -11563,6 +11607,7 @@ export namespace Prisma {
     id?: SortOrder
     externalId?: SortOrderInput | SortOrder
     name?: SortOrder
+    status?: SortOrder
     createdByUserId?: SortOrder
     totalAmountLostRaw?: SortOrder
     totalAmountLostDecimal?: SortOrder
@@ -11580,6 +11625,7 @@ export namespace Prisma {
     OR?: CaseWhereInput[]
     NOT?: CaseWhereInput | CaseWhereInput[]
     name?: StringFilter<"Case"> | string
+    status?: EnumCaseStatusFilter<"Case"> | $Enums.CaseStatus
     createdByUserId?: StringFilter<"Case"> | string
     totalAmountLostRaw?: StringFilter<"Case"> | string
     totalAmountLostDecimal?: StringFilter<"Case"> | string
@@ -11594,6 +11640,7 @@ export namespace Prisma {
     id?: SortOrder
     externalId?: SortOrderInput | SortOrder
     name?: SortOrder
+    status?: SortOrder
     createdByUserId?: SortOrder
     totalAmountLostRaw?: SortOrder
     totalAmountLostDecimal?: SortOrder
@@ -11611,6 +11658,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Case"> | string
     externalId?: StringNullableWithAggregatesFilter<"Case"> | string | null
     name?: StringWithAggregatesFilter<"Case"> | string
+    status?: EnumCaseStatusWithAggregatesFilter<"Case"> | $Enums.CaseStatus
     createdByUserId?: StringWithAggregatesFilter<"Case"> | string
     totalAmountLostRaw?: StringWithAggregatesFilter<"Case"> | string
     totalAmountLostDecimal?: StringWithAggregatesFilter<"Case"> | string
@@ -12211,6 +12259,7 @@ export namespace Prisma {
     id?: string
     externalId?: string | null
     name: string
+    status?: $Enums.CaseStatus
     totalAmountLostRaw: string
     totalAmountLostDecimal: string
     createdAt?: Date | string
@@ -12224,6 +12273,7 @@ export namespace Prisma {
     id?: string
     externalId?: string | null
     name: string
+    status?: $Enums.CaseStatus
     createdByUserId: string
     totalAmountLostRaw: string
     totalAmountLostDecimal: string
@@ -12237,6 +12287,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
     totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12250,6 +12301,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
     createdByUserId?: StringFieldUpdateOperationsInput | string
     totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
@@ -12263,6 +12315,7 @@ export namespace Prisma {
     id?: string
     externalId?: string | null
     name: string
+    status?: $Enums.CaseStatus
     createdByUserId: string
     totalAmountLostRaw: string
     totalAmountLostDecimal: string
@@ -12274,6 +12327,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
     totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12284,6 +12338,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
     createdByUserId?: StringFieldUpdateOperationsInput | string
     totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
@@ -12910,6 +12965,13 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type EnumCaseStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CaseStatus | EnumCaseStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CaseStatus[] | ListEnumCaseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CaseStatus[] | ListEnumCaseStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCaseStatusFilter<$PrismaModel> | $Enums.CaseStatus
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -12919,6 +12981,7 @@ export namespace Prisma {
     id?: SortOrder
     externalId?: SortOrder
     name?: SortOrder
+    status?: SortOrder
     createdByUserId?: SortOrder
     totalAmountLostRaw?: SortOrder
     totalAmountLostDecimal?: SortOrder
@@ -12930,6 +12993,7 @@ export namespace Prisma {
     id?: SortOrder
     externalId?: SortOrder
     name?: SortOrder
+    status?: SortOrder
     createdByUserId?: SortOrder
     totalAmountLostRaw?: SortOrder
     totalAmountLostDecimal?: SortOrder
@@ -12941,11 +13005,22 @@ export namespace Prisma {
     id?: SortOrder
     externalId?: SortOrder
     name?: SortOrder
+    status?: SortOrder
     createdByUserId?: SortOrder
     totalAmountLostRaw?: SortOrder
     totalAmountLostDecimal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumCaseStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CaseStatus | EnumCaseStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CaseStatus[] | ListEnumCaseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CaseStatus[] | ListEnumCaseStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCaseStatusWithAggregatesFilter<$PrismaModel> | $Enums.CaseStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCaseStatusFilter<$PrismaModel>
+    _max?: NestedEnumCaseStatusFilter<$PrismaModel>
   }
 
   export type CaseScalarRelationFilter = {
@@ -13549,6 +13624,10 @@ export namespace Prisma {
     connect?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
   }
 
+  export type EnumCaseStatusFieldUpdateOperationsInput = {
+    set?: $Enums.CaseStatus
+  }
+
   export type UserUpdateOneRequiredWithoutCasesNestedInput = {
     create?: XOR<UserCreateWithoutCasesInput, UserUncheckedCreateWithoutCasesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCasesInput
@@ -13945,6 +14024,23 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedEnumCaseStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CaseStatus | EnumCaseStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CaseStatus[] | ListEnumCaseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CaseStatus[] | ListEnumCaseStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCaseStatusFilter<$PrismaModel> | $Enums.CaseStatus
+  }
+
+  export type NestedEnumCaseStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CaseStatus | EnumCaseStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CaseStatus[] | ListEnumCaseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CaseStatus[] | ListEnumCaseStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCaseStatusWithAggregatesFilter<$PrismaModel> | $Enums.CaseStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCaseStatusFilter<$PrismaModel>
+    _max?: NestedEnumCaseStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumFlowEndpointReasonFilter<$PrismaModel = never> = {
     equals?: $Enums.FlowEndpointReason | EnumFlowEndpointReasonFieldRefInput<$PrismaModel>
     in?: $Enums.FlowEndpointReason[] | ListEnumFlowEndpointReasonFieldRefInput<$PrismaModel>
@@ -14284,6 +14380,7 @@ export namespace Prisma {
     id?: string
     externalId?: string | null
     name: string
+    status?: $Enums.CaseStatus
     totalAmountLostRaw: string
     totalAmountLostDecimal: string
     createdAt?: Date | string
@@ -14296,6 +14393,7 @@ export namespace Prisma {
     id?: string
     externalId?: string | null
     name: string
+    status?: $Enums.CaseStatus
     totalAmountLostRaw: string
     totalAmountLostDecimal: string
     createdAt?: Date | string
@@ -14337,6 +14435,7 @@ export namespace Prisma {
     id?: StringFilter<"Case"> | string
     externalId?: StringNullableFilter<"Case"> | string | null
     name?: StringFilter<"Case"> | string
+    status?: EnumCaseStatusFilter<"Case"> | $Enums.CaseStatus
     createdByUserId?: StringFilter<"Case"> | string
     totalAmountLostRaw?: StringFilter<"Case"> | string
     totalAmountLostDecimal?: StringFilter<"Case"> | string
@@ -14732,6 +14831,7 @@ export namespace Prisma {
     id?: string
     externalId?: string | null
     name: string
+    status?: $Enums.CaseStatus
     totalAmountLostRaw: string
     totalAmountLostDecimal: string
     createdAt?: Date | string
@@ -14744,6 +14844,7 @@ export namespace Prisma {
     id?: string
     externalId?: string | null
     name: string
+    status?: $Enums.CaseStatus
     createdByUserId: string
     totalAmountLostRaw: string
     totalAmountLostDecimal: string
@@ -14845,6 +14946,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
     totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14857,6 +14959,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
     createdByUserId?: StringFieldUpdateOperationsInput | string
     totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
@@ -14918,6 +15021,7 @@ export namespace Prisma {
     id?: string
     externalId?: string | null
     name: string
+    status?: $Enums.CaseStatus
     totalAmountLostRaw: string
     totalAmountLostDecimal: string
     createdAt?: Date | string
@@ -14930,6 +15034,7 @@ export namespace Prisma {
     id?: string
     externalId?: string | null
     name: string
+    status?: $Enums.CaseStatus
     createdByUserId: string
     totalAmountLostRaw: string
     totalAmountLostDecimal: string
@@ -15085,6 +15190,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
     totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15097,6 +15203,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
     createdByUserId?: StringFieldUpdateOperationsInput | string
     totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
@@ -15602,6 +15709,7 @@ export namespace Prisma {
     id?: string
     externalId?: string | null
     name: string
+    status?: $Enums.CaseStatus
     totalAmountLostRaw: string
     totalAmountLostDecimal: string
     createdAt?: Date | string
@@ -15612,6 +15720,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
     totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15624,6 +15733,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
     totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15636,6 +15746,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
     totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

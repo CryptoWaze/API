@@ -1,4 +1,11 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Injectable,
+  Inject,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import type { ResolveTransactionInput } from '../schemas/resolve-transaction.schema';
 import type { ResolveTransactionResult } from '../types';
 import {
@@ -35,6 +42,8 @@ function pickTransferByReportedAmount(
 
 @Injectable()
 export class ResolveTransactionUseCase {
+  private readonly logger = new Logger(ResolveTransactionUseCase.name);
+
   constructor(
     @Inject(TRANSACTION_FETCHER)
     private readonly transactionFetcher: ITransactionFetcher,
@@ -43,35 +52,49 @@ export class ResolveTransactionUseCase {
   async execute(
     input: ResolveTransactionInput,
   ): Promise<ResolveTransactionResult> {
-    const { txHash, reportedLossAmount } = input;
-    const normalizedHash = txHash.trim();
+    try {
+      const { txHash, reportedLossAmount } = input;
+      const normalizedHash = txHash.trim();
 
-    for (const chain of CHAINS) {
-      const data = await this.transactionFetcher.getTransactionWithTransfers(
-        chain,
-        normalizedHash,
+      for (const chain of CHAINS) {
+        const data = await this.transactionFetcher.getTransactionWithTransfers(
+          chain,
+          normalizedHash,
+        );
+        if (!data) continue;
+
+        const seedTransfer = pickTransferByReportedAmount(
+          data.transfers,
+          reportedLossAmount ?? undefined,
+        );
+
+        return {
+          chain,
+          transaction: {
+            fromAddress: data.fromAddress,
+            toAddress: data.toAddress,
+            blockSignedAt: data.blockSignedAt,
+          },
+          transfers: data.transfers,
+          seedTransfer,
+        };
+      }
+
+      throw new NotFoundException(
+        `Transação não encontrada em nenhuma chain (${CHAINS.join(', ')}). Verifique o hash.`,
       );
-      if (!data) continue;
-
-      const seedTransfer = pickTransferByReportedAmount(
-        data.transfers,
-        reportedLossAmount ?? undefined,
+    } catch (err) {
+      if (err instanceof NotFoundException) throw err;
+      const message = err instanceof Error ? err.message : String(err);
+      this.logger.error(`resolveTransaction failed: ${message}`);
+      if (/Covalent API error: (500|502|503)/.test(message)) {
+        throw new BadGatewayException(
+          'Serviço de transações temporariamente indisponível. Tente novamente mais tarde.',
+        );
+      }
+      throw new InternalServerErrorException(
+        'Erro ao resolver transação.',
       );
-
-      return {
-        chain,
-        transaction: {
-          fromAddress: data.fromAddress,
-          toAddress: data.toAddress,
-          blockSignedAt: data.blockSignedAt,
-        },
-        transfers: data.transfers,
-        seedTransfer,
-      };
     }
-
-    throw new NotFoundException(
-      `Transação não encontrada em nenhuma chain (${CHAINS.join(', ')}). Verifique o hash.`,
-    );
   }
 }

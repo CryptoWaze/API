@@ -53,6 +53,16 @@ export type Flow = $Result.DefaultSelection<Prisma.$FlowPayload>
  * 
  */
 export type FlowTransaction = $Result.DefaultSelection<Prisma.$FlowTransactionPayload>
+/**
+ * Model FlowTraceLog
+ * 
+ */
+export type FlowTraceLog = $Result.DefaultSelection<Prisma.$FlowTraceLogPayload>
+/**
+ * Model FlowTraceLogStep
+ * 
+ */
+export type FlowTraceLogStep = $Result.DefaultSelection<Prisma.$FlowTraceLogStepPayload>
 
 /**
  * Enums
@@ -78,6 +88,16 @@ export const CaseStatus: {
 
 export type CaseStatus = (typeof CaseStatus)[keyof typeof CaseStatus]
 
+
+export const FlowTraceLogStatus: {
+  SUCCESS: 'SUCCESS',
+  NO_OUTBOUND: 'NO_OUTBOUND',
+  MAX_WALLETS_REACHED: 'MAX_WALLETS_REACHED',
+  EXHAUSTED_OPTIONS: 'EXHAUSTED_OPTIONS'
+};
+
+export type FlowTraceLogStatus = (typeof FlowTraceLogStatus)[keyof typeof FlowTraceLogStatus]
+
 }
 
 export type FlowEndpointReason = $Enums.FlowEndpointReason
@@ -87,6 +107,10 @@ export const FlowEndpointReason: typeof $Enums.FlowEndpointReason
 export type CaseStatus = $Enums.CaseStatus
 
 export const CaseStatus: typeof $Enums.CaseStatus
+
+export type FlowTraceLogStatus = $Enums.FlowTraceLogStatus
+
+export const FlowTraceLogStatus: typeof $Enums.FlowTraceLogStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -288,6 +312,26 @@ export class PrismaClient<
     * ```
     */
   get flowTransaction(): Prisma.FlowTransactionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.flowTraceLog`: Exposes CRUD operations for the **FlowTraceLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FlowTraceLogs
+    * const flowTraceLogs = await prisma.flowTraceLog.findMany()
+    * ```
+    */
+  get flowTraceLog(): Prisma.FlowTraceLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.flowTraceLogStep`: Exposes CRUD operations for the **FlowTraceLogStep** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FlowTraceLogSteps
+    * const flowTraceLogSteps = await prisma.flowTraceLogStep.findMany()
+    * ```
+    */
+  get flowTraceLogStep(): Prisma.FlowTraceLogStepDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -729,7 +773,9 @@ export namespace Prisma {
     Case: 'Case',
     CaseSeedTransaction: 'CaseSeedTransaction',
     Flow: 'Flow',
-    FlowTransaction: 'FlowTransaction'
+    FlowTransaction: 'FlowTransaction',
+    FlowTraceLog: 'FlowTraceLog',
+    FlowTraceLogStep: 'FlowTraceLogStep'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -745,7 +791,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "chain" | "user" | "exchange" | "hotWallet" | "case" | "caseSeedTransaction" | "flow" | "flowTransaction"
+      modelProps: "chain" | "user" | "exchange" | "hotWallet" | "case" | "caseSeedTransaction" | "flow" | "flowTransaction" | "flowTraceLog" | "flowTraceLogStep"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1341,6 +1387,154 @@ export namespace Prisma {
           }
         }
       }
+      FlowTraceLog: {
+        payload: Prisma.$FlowTraceLogPayload<ExtArgs>
+        fields: Prisma.FlowTraceLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FlowTraceLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FlowTraceLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogPayload>
+          }
+          findFirst: {
+            args: Prisma.FlowTraceLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FlowTraceLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogPayload>
+          }
+          findMany: {
+            args: Prisma.FlowTraceLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogPayload>[]
+          }
+          create: {
+            args: Prisma.FlowTraceLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogPayload>
+          }
+          createMany: {
+            args: Prisma.FlowTraceLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FlowTraceLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogPayload>[]
+          }
+          delete: {
+            args: Prisma.FlowTraceLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogPayload>
+          }
+          update: {
+            args: Prisma.FlowTraceLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.FlowTraceLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FlowTraceLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FlowTraceLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.FlowTraceLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogPayload>
+          }
+          aggregate: {
+            args: Prisma.FlowTraceLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFlowTraceLog>
+          }
+          groupBy: {
+            args: Prisma.FlowTraceLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FlowTraceLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FlowTraceLogCountArgs<ExtArgs>
+            result: $Utils.Optional<FlowTraceLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      FlowTraceLogStep: {
+        payload: Prisma.$FlowTraceLogStepPayload<ExtArgs>
+        fields: Prisma.FlowTraceLogStepFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FlowTraceLogStepFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogStepPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FlowTraceLogStepFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogStepPayload>
+          }
+          findFirst: {
+            args: Prisma.FlowTraceLogStepFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogStepPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FlowTraceLogStepFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogStepPayload>
+          }
+          findMany: {
+            args: Prisma.FlowTraceLogStepFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogStepPayload>[]
+          }
+          create: {
+            args: Prisma.FlowTraceLogStepCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogStepPayload>
+          }
+          createMany: {
+            args: Prisma.FlowTraceLogStepCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FlowTraceLogStepCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogStepPayload>[]
+          }
+          delete: {
+            args: Prisma.FlowTraceLogStepDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogStepPayload>
+          }
+          update: {
+            args: Prisma.FlowTraceLogStepUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogStepPayload>
+          }
+          deleteMany: {
+            args: Prisma.FlowTraceLogStepDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FlowTraceLogStepUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FlowTraceLogStepUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogStepPayload>[]
+          }
+          upsert: {
+            args: Prisma.FlowTraceLogStepUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowTraceLogStepPayload>
+          }
+          aggregate: {
+            args: Prisma.FlowTraceLogStepAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFlowTraceLogStep>
+          }
+          groupBy: {
+            args: Prisma.FlowTraceLogStepGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FlowTraceLogStepGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FlowTraceLogStepCountArgs<ExtArgs>
+            result: $Utils.Optional<FlowTraceLogStepCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1457,6 +1651,8 @@ export namespace Prisma {
     caseSeedTransaction?: CaseSeedTransactionOmit
     flow?: FlowOmit
     flowTransaction?: FlowTransactionOmit
+    flowTraceLog?: FlowTraceLogOmit
+    flowTraceLogStep?: FlowTraceLogStepOmit
   }
 
   /* Types for Logging */
@@ -1782,6 +1978,37 @@ export namespace Prisma {
    */
   export type FlowCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FlowTransactionWhereInput
+  }
+
+
+  /**
+   * Count Type FlowTraceLogCountOutputType
+   */
+
+  export type FlowTraceLogCountOutputType = {
+    steps: number
+  }
+
+  export type FlowTraceLogCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    steps?: boolean | FlowTraceLogCountOutputTypeCountStepsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FlowTraceLogCountOutputType without action
+   */
+  export type FlowTraceLogCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogCountOutputType
+     */
+    select?: FlowTraceLogCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FlowTraceLogCountOutputType without action
+   */
+  export type FlowTraceLogCountOutputTypeCountStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlowTraceLogStepWhereInput
   }
 
 
@@ -11073,6 +11300,2332 @@ export namespace Prisma {
 
 
   /**
+   * Model FlowTraceLog
+   */
+
+  export type AggregateFlowTraceLog = {
+    _count: FlowTraceLogCountAggregateOutputType | null
+    _avg: FlowTraceLogAvgAggregateOutputType | null
+    _sum: FlowTraceLogSumAggregateOutputType | null
+    _min: FlowTraceLogMinAggregateOutputType | null
+    _max: FlowTraceLogMaxAggregateOutputType | null
+  }
+
+  export type FlowTraceLogAvgAggregateOutputType = {
+    stepsCount: number | null
+  }
+
+  export type FlowTraceLogSumAggregateOutputType = {
+    stepsCount: number | null
+  }
+
+  export type FlowTraceLogMinAggregateOutputType = {
+    id: string | null
+    inputAddress: string | null
+    chainSlug: string | null
+    status: $Enums.FlowTraceLogStatus | null
+    endpointAddress: string | null
+    failureAtAddress: string | null
+    failureReason: string | null
+    stepsCount: number | null
+    createdAt: Date | null
+  }
+
+  export type FlowTraceLogMaxAggregateOutputType = {
+    id: string | null
+    inputAddress: string | null
+    chainSlug: string | null
+    status: $Enums.FlowTraceLogStatus | null
+    endpointAddress: string | null
+    failureAtAddress: string | null
+    failureReason: string | null
+    stepsCount: number | null
+    createdAt: Date | null
+  }
+
+  export type FlowTraceLogCountAggregateOutputType = {
+    id: number
+    inputAddress: number
+    chainSlug: number
+    status: number
+    endpointAddress: number
+    failureAtAddress: number
+    failureReason: number
+    stepsCount: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FlowTraceLogAvgAggregateInputType = {
+    stepsCount?: true
+  }
+
+  export type FlowTraceLogSumAggregateInputType = {
+    stepsCount?: true
+  }
+
+  export type FlowTraceLogMinAggregateInputType = {
+    id?: true
+    inputAddress?: true
+    chainSlug?: true
+    status?: true
+    endpointAddress?: true
+    failureAtAddress?: true
+    failureReason?: true
+    stepsCount?: true
+    createdAt?: true
+  }
+
+  export type FlowTraceLogMaxAggregateInputType = {
+    id?: true
+    inputAddress?: true
+    chainSlug?: true
+    status?: true
+    endpointAddress?: true
+    failureAtAddress?: true
+    failureReason?: true
+    stepsCount?: true
+    createdAt?: true
+  }
+
+  export type FlowTraceLogCountAggregateInputType = {
+    id?: true
+    inputAddress?: true
+    chainSlug?: true
+    status?: true
+    endpointAddress?: true
+    failureAtAddress?: true
+    failureReason?: true
+    stepsCount?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FlowTraceLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlowTraceLog to aggregate.
+     */
+    where?: FlowTraceLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowTraceLogs to fetch.
+     */
+    orderBy?: FlowTraceLogOrderByWithRelationInput | FlowTraceLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FlowTraceLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowTraceLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowTraceLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FlowTraceLogs
+    **/
+    _count?: true | FlowTraceLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FlowTraceLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FlowTraceLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FlowTraceLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FlowTraceLogMaxAggregateInputType
+  }
+
+  export type GetFlowTraceLogAggregateType<T extends FlowTraceLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateFlowTraceLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFlowTraceLog[P]>
+      : GetScalarType<T[P], AggregateFlowTraceLog[P]>
+  }
+
+
+
+
+  export type FlowTraceLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlowTraceLogWhereInput
+    orderBy?: FlowTraceLogOrderByWithAggregationInput | FlowTraceLogOrderByWithAggregationInput[]
+    by: FlowTraceLogScalarFieldEnum[] | FlowTraceLogScalarFieldEnum
+    having?: FlowTraceLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FlowTraceLogCountAggregateInputType | true
+    _avg?: FlowTraceLogAvgAggregateInputType
+    _sum?: FlowTraceLogSumAggregateInputType
+    _min?: FlowTraceLogMinAggregateInputType
+    _max?: FlowTraceLogMaxAggregateInputType
+  }
+
+  export type FlowTraceLogGroupByOutputType = {
+    id: string
+    inputAddress: string
+    chainSlug: string
+    status: $Enums.FlowTraceLogStatus
+    endpointAddress: string | null
+    failureAtAddress: string | null
+    failureReason: string | null
+    stepsCount: number
+    createdAt: Date
+    _count: FlowTraceLogCountAggregateOutputType | null
+    _avg: FlowTraceLogAvgAggregateOutputType | null
+    _sum: FlowTraceLogSumAggregateOutputType | null
+    _min: FlowTraceLogMinAggregateOutputType | null
+    _max: FlowTraceLogMaxAggregateOutputType | null
+  }
+
+  type GetFlowTraceLogGroupByPayload<T extends FlowTraceLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FlowTraceLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FlowTraceLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FlowTraceLogGroupByOutputType[P]>
+            : GetScalarType<T[P], FlowTraceLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FlowTraceLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    inputAddress?: boolean
+    chainSlug?: boolean
+    status?: boolean
+    endpointAddress?: boolean
+    failureAtAddress?: boolean
+    failureReason?: boolean
+    stepsCount?: boolean
+    createdAt?: boolean
+    steps?: boolean | FlowTraceLog$stepsArgs<ExtArgs>
+    _count?: boolean | FlowTraceLogCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flowTraceLog"]>
+
+  export type FlowTraceLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    inputAddress?: boolean
+    chainSlug?: boolean
+    status?: boolean
+    endpointAddress?: boolean
+    failureAtAddress?: boolean
+    failureReason?: boolean
+    stepsCount?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["flowTraceLog"]>
+
+  export type FlowTraceLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    inputAddress?: boolean
+    chainSlug?: boolean
+    status?: boolean
+    endpointAddress?: boolean
+    failureAtAddress?: boolean
+    failureReason?: boolean
+    stepsCount?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["flowTraceLog"]>
+
+  export type FlowTraceLogSelectScalar = {
+    id?: boolean
+    inputAddress?: boolean
+    chainSlug?: boolean
+    status?: boolean
+    endpointAddress?: boolean
+    failureAtAddress?: boolean
+    failureReason?: boolean
+    stepsCount?: boolean
+    createdAt?: boolean
+  }
+
+  export type FlowTraceLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "inputAddress" | "chainSlug" | "status" | "endpointAddress" | "failureAtAddress" | "failureReason" | "stepsCount" | "createdAt", ExtArgs["result"]["flowTraceLog"]>
+  export type FlowTraceLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    steps?: boolean | FlowTraceLog$stepsArgs<ExtArgs>
+    _count?: boolean | FlowTraceLogCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FlowTraceLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type FlowTraceLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $FlowTraceLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FlowTraceLog"
+    objects: {
+      steps: Prisma.$FlowTraceLogStepPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      inputAddress: string
+      chainSlug: string
+      status: $Enums.FlowTraceLogStatus
+      endpointAddress: string | null
+      failureAtAddress: string | null
+      failureReason: string | null
+      stepsCount: number
+      createdAt: Date
+    }, ExtArgs["result"]["flowTraceLog"]>
+    composites: {}
+  }
+
+  type FlowTraceLogGetPayload<S extends boolean | null | undefined | FlowTraceLogDefaultArgs> = $Result.GetResult<Prisma.$FlowTraceLogPayload, S>
+
+  type FlowTraceLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FlowTraceLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FlowTraceLogCountAggregateInputType | true
+    }
+
+  export interface FlowTraceLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FlowTraceLog'], meta: { name: 'FlowTraceLog' } }
+    /**
+     * Find zero or one FlowTraceLog that matches the filter.
+     * @param {FlowTraceLogFindUniqueArgs} args - Arguments to find a FlowTraceLog
+     * @example
+     * // Get one FlowTraceLog
+     * const flowTraceLog = await prisma.flowTraceLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FlowTraceLogFindUniqueArgs>(args: SelectSubset<T, FlowTraceLogFindUniqueArgs<ExtArgs>>): Prisma__FlowTraceLogClient<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FlowTraceLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FlowTraceLogFindUniqueOrThrowArgs} args - Arguments to find a FlowTraceLog
+     * @example
+     * // Get one FlowTraceLog
+     * const flowTraceLog = await prisma.flowTraceLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FlowTraceLogFindUniqueOrThrowArgs>(args: SelectSubset<T, FlowTraceLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FlowTraceLogClient<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FlowTraceLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogFindFirstArgs} args - Arguments to find a FlowTraceLog
+     * @example
+     * // Get one FlowTraceLog
+     * const flowTraceLog = await prisma.flowTraceLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FlowTraceLogFindFirstArgs>(args?: SelectSubset<T, FlowTraceLogFindFirstArgs<ExtArgs>>): Prisma__FlowTraceLogClient<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FlowTraceLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogFindFirstOrThrowArgs} args - Arguments to find a FlowTraceLog
+     * @example
+     * // Get one FlowTraceLog
+     * const flowTraceLog = await prisma.flowTraceLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FlowTraceLogFindFirstOrThrowArgs>(args?: SelectSubset<T, FlowTraceLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__FlowTraceLogClient<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FlowTraceLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FlowTraceLogs
+     * const flowTraceLogs = await prisma.flowTraceLog.findMany()
+     * 
+     * // Get first 10 FlowTraceLogs
+     * const flowTraceLogs = await prisma.flowTraceLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const flowTraceLogWithIdOnly = await prisma.flowTraceLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FlowTraceLogFindManyArgs>(args?: SelectSubset<T, FlowTraceLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FlowTraceLog.
+     * @param {FlowTraceLogCreateArgs} args - Arguments to create a FlowTraceLog.
+     * @example
+     * // Create one FlowTraceLog
+     * const FlowTraceLog = await prisma.flowTraceLog.create({
+     *   data: {
+     *     // ... data to create a FlowTraceLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends FlowTraceLogCreateArgs>(args: SelectSubset<T, FlowTraceLogCreateArgs<ExtArgs>>): Prisma__FlowTraceLogClient<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FlowTraceLogs.
+     * @param {FlowTraceLogCreateManyArgs} args - Arguments to create many FlowTraceLogs.
+     * @example
+     * // Create many FlowTraceLogs
+     * const flowTraceLog = await prisma.flowTraceLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FlowTraceLogCreateManyArgs>(args?: SelectSubset<T, FlowTraceLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FlowTraceLogs and returns the data saved in the database.
+     * @param {FlowTraceLogCreateManyAndReturnArgs} args - Arguments to create many FlowTraceLogs.
+     * @example
+     * // Create many FlowTraceLogs
+     * const flowTraceLog = await prisma.flowTraceLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FlowTraceLogs and only return the `id`
+     * const flowTraceLogWithIdOnly = await prisma.flowTraceLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FlowTraceLogCreateManyAndReturnArgs>(args?: SelectSubset<T, FlowTraceLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FlowTraceLog.
+     * @param {FlowTraceLogDeleteArgs} args - Arguments to delete one FlowTraceLog.
+     * @example
+     * // Delete one FlowTraceLog
+     * const FlowTraceLog = await prisma.flowTraceLog.delete({
+     *   where: {
+     *     // ... filter to delete one FlowTraceLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FlowTraceLogDeleteArgs>(args: SelectSubset<T, FlowTraceLogDeleteArgs<ExtArgs>>): Prisma__FlowTraceLogClient<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FlowTraceLog.
+     * @param {FlowTraceLogUpdateArgs} args - Arguments to update one FlowTraceLog.
+     * @example
+     * // Update one FlowTraceLog
+     * const flowTraceLog = await prisma.flowTraceLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FlowTraceLogUpdateArgs>(args: SelectSubset<T, FlowTraceLogUpdateArgs<ExtArgs>>): Prisma__FlowTraceLogClient<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FlowTraceLogs.
+     * @param {FlowTraceLogDeleteManyArgs} args - Arguments to filter FlowTraceLogs to delete.
+     * @example
+     * // Delete a few FlowTraceLogs
+     * const { count } = await prisma.flowTraceLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FlowTraceLogDeleteManyArgs>(args?: SelectSubset<T, FlowTraceLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FlowTraceLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FlowTraceLogs
+     * const flowTraceLog = await prisma.flowTraceLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FlowTraceLogUpdateManyArgs>(args: SelectSubset<T, FlowTraceLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FlowTraceLogs and returns the data updated in the database.
+     * @param {FlowTraceLogUpdateManyAndReturnArgs} args - Arguments to update many FlowTraceLogs.
+     * @example
+     * // Update many FlowTraceLogs
+     * const flowTraceLog = await prisma.flowTraceLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FlowTraceLogs and only return the `id`
+     * const flowTraceLogWithIdOnly = await prisma.flowTraceLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FlowTraceLogUpdateManyAndReturnArgs>(args: SelectSubset<T, FlowTraceLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FlowTraceLog.
+     * @param {FlowTraceLogUpsertArgs} args - Arguments to update or create a FlowTraceLog.
+     * @example
+     * // Update or create a FlowTraceLog
+     * const flowTraceLog = await prisma.flowTraceLog.upsert({
+     *   create: {
+     *     // ... data to create a FlowTraceLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FlowTraceLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FlowTraceLogUpsertArgs>(args: SelectSubset<T, FlowTraceLogUpsertArgs<ExtArgs>>): Prisma__FlowTraceLogClient<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FlowTraceLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogCountArgs} args - Arguments to filter FlowTraceLogs to count.
+     * @example
+     * // Count the number of FlowTraceLogs
+     * const count = await prisma.flowTraceLog.count({
+     *   where: {
+     *     // ... the filter for the FlowTraceLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends FlowTraceLogCountArgs>(
+      args?: Subset<T, FlowTraceLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FlowTraceLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FlowTraceLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FlowTraceLogAggregateArgs>(args: Subset<T, FlowTraceLogAggregateArgs>): Prisma.PrismaPromise<GetFlowTraceLogAggregateType<T>>
+
+    /**
+     * Group by FlowTraceLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FlowTraceLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FlowTraceLogGroupByArgs['orderBy'] }
+        : { orderBy?: FlowTraceLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FlowTraceLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFlowTraceLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FlowTraceLog model
+   */
+  readonly fields: FlowTraceLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FlowTraceLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FlowTraceLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    steps<T extends FlowTraceLog$stepsArgs<ExtArgs> = {}>(args?: Subset<T, FlowTraceLog$stepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FlowTraceLog model
+   */
+  interface FlowTraceLogFieldRefs {
+    readonly id: FieldRef<"FlowTraceLog", 'String'>
+    readonly inputAddress: FieldRef<"FlowTraceLog", 'String'>
+    readonly chainSlug: FieldRef<"FlowTraceLog", 'String'>
+    readonly status: FieldRef<"FlowTraceLog", 'FlowTraceLogStatus'>
+    readonly endpointAddress: FieldRef<"FlowTraceLog", 'String'>
+    readonly failureAtAddress: FieldRef<"FlowTraceLog", 'String'>
+    readonly failureReason: FieldRef<"FlowTraceLog", 'String'>
+    readonly stepsCount: FieldRef<"FlowTraceLog", 'Int'>
+    readonly createdAt: FieldRef<"FlowTraceLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FlowTraceLog findUnique
+   */
+  export type FlowTraceLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowTraceLog to fetch.
+     */
+    where: FlowTraceLogWhereUniqueInput
+  }
+
+  /**
+   * FlowTraceLog findUniqueOrThrow
+   */
+  export type FlowTraceLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowTraceLog to fetch.
+     */
+    where: FlowTraceLogWhereUniqueInput
+  }
+
+  /**
+   * FlowTraceLog findFirst
+   */
+  export type FlowTraceLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowTraceLog to fetch.
+     */
+    where?: FlowTraceLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowTraceLogs to fetch.
+     */
+    orderBy?: FlowTraceLogOrderByWithRelationInput | FlowTraceLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlowTraceLogs.
+     */
+    cursor?: FlowTraceLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowTraceLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowTraceLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlowTraceLogs.
+     */
+    distinct?: FlowTraceLogScalarFieldEnum | FlowTraceLogScalarFieldEnum[]
+  }
+
+  /**
+   * FlowTraceLog findFirstOrThrow
+   */
+  export type FlowTraceLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowTraceLog to fetch.
+     */
+    where?: FlowTraceLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowTraceLogs to fetch.
+     */
+    orderBy?: FlowTraceLogOrderByWithRelationInput | FlowTraceLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlowTraceLogs.
+     */
+    cursor?: FlowTraceLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowTraceLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowTraceLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlowTraceLogs.
+     */
+    distinct?: FlowTraceLogScalarFieldEnum | FlowTraceLogScalarFieldEnum[]
+  }
+
+  /**
+   * FlowTraceLog findMany
+   */
+  export type FlowTraceLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowTraceLogs to fetch.
+     */
+    where?: FlowTraceLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowTraceLogs to fetch.
+     */
+    orderBy?: FlowTraceLogOrderByWithRelationInput | FlowTraceLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FlowTraceLogs.
+     */
+    cursor?: FlowTraceLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowTraceLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowTraceLogs.
+     */
+    skip?: number
+    distinct?: FlowTraceLogScalarFieldEnum | FlowTraceLogScalarFieldEnum[]
+  }
+
+  /**
+   * FlowTraceLog create
+   */
+  export type FlowTraceLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FlowTraceLog.
+     */
+    data: XOR<FlowTraceLogCreateInput, FlowTraceLogUncheckedCreateInput>
+  }
+
+  /**
+   * FlowTraceLog createMany
+   */
+  export type FlowTraceLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FlowTraceLogs.
+     */
+    data: FlowTraceLogCreateManyInput | FlowTraceLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FlowTraceLog createManyAndReturn
+   */
+  export type FlowTraceLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many FlowTraceLogs.
+     */
+    data: FlowTraceLogCreateManyInput | FlowTraceLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FlowTraceLog update
+   */
+  export type FlowTraceLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FlowTraceLog.
+     */
+    data: XOR<FlowTraceLogUpdateInput, FlowTraceLogUncheckedUpdateInput>
+    /**
+     * Choose, which FlowTraceLog to update.
+     */
+    where: FlowTraceLogWhereUniqueInput
+  }
+
+  /**
+   * FlowTraceLog updateMany
+   */
+  export type FlowTraceLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FlowTraceLogs.
+     */
+    data: XOR<FlowTraceLogUpdateManyMutationInput, FlowTraceLogUncheckedUpdateManyInput>
+    /**
+     * Filter which FlowTraceLogs to update
+     */
+    where?: FlowTraceLogWhereInput
+    /**
+     * Limit how many FlowTraceLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FlowTraceLog updateManyAndReturn
+   */
+  export type FlowTraceLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * The data used to update FlowTraceLogs.
+     */
+    data: XOR<FlowTraceLogUpdateManyMutationInput, FlowTraceLogUncheckedUpdateManyInput>
+    /**
+     * Filter which FlowTraceLogs to update
+     */
+    where?: FlowTraceLogWhereInput
+    /**
+     * Limit how many FlowTraceLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FlowTraceLog upsert
+   */
+  export type FlowTraceLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FlowTraceLog to update in case it exists.
+     */
+    where: FlowTraceLogWhereUniqueInput
+    /**
+     * In case the FlowTraceLog found by the `where` argument doesn't exist, create a new FlowTraceLog with this data.
+     */
+    create: XOR<FlowTraceLogCreateInput, FlowTraceLogUncheckedCreateInput>
+    /**
+     * In case the FlowTraceLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FlowTraceLogUpdateInput, FlowTraceLogUncheckedUpdateInput>
+  }
+
+  /**
+   * FlowTraceLog delete
+   */
+  export type FlowTraceLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogInclude<ExtArgs> | null
+    /**
+     * Filter which FlowTraceLog to delete.
+     */
+    where: FlowTraceLogWhereUniqueInput
+  }
+
+  /**
+   * FlowTraceLog deleteMany
+   */
+  export type FlowTraceLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlowTraceLogs to delete
+     */
+    where?: FlowTraceLogWhereInput
+    /**
+     * Limit how many FlowTraceLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FlowTraceLog.steps
+   */
+  export type FlowTraceLog$stepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepInclude<ExtArgs> | null
+    where?: FlowTraceLogStepWhereInput
+    orderBy?: FlowTraceLogStepOrderByWithRelationInput | FlowTraceLogStepOrderByWithRelationInput[]
+    cursor?: FlowTraceLogStepWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlowTraceLogStepScalarFieldEnum | FlowTraceLogStepScalarFieldEnum[]
+  }
+
+  /**
+   * FlowTraceLog without action
+   */
+  export type FlowTraceLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLog
+     */
+    select?: FlowTraceLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLog
+     */
+    omit?: FlowTraceLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FlowTraceLogStep
+   */
+
+  export type AggregateFlowTraceLogStep = {
+    _count: FlowTraceLogStepCountAggregateOutputType | null
+    _avg: FlowTraceLogStepAvgAggregateOutputType | null
+    _sum: FlowTraceLogStepSumAggregateOutputType | null
+    _min: FlowTraceLogStepMinAggregateOutputType | null
+    _max: FlowTraceLogStepMaxAggregateOutputType | null
+  }
+
+  export type FlowTraceLogStepAvgAggregateOutputType = {
+    stepIndex: number | null
+  }
+
+  export type FlowTraceLogStepSumAggregateOutputType = {
+    stepIndex: number | null
+  }
+
+  export type FlowTraceLogStepMinAggregateOutputType = {
+    id: string | null
+    flowTraceLogId: string | null
+    stepIndex: number | null
+    fromAddress: string | null
+    toAddress: string | null
+    transferSymbol: string | null
+    transferAmountRaw: string | null
+    transferAmountDecimal: string | null
+    txHash: string | null
+    outcome: $Enums.FlowTraceLogStatus | null
+    createdAt: Date | null
+  }
+
+  export type FlowTraceLogStepMaxAggregateOutputType = {
+    id: string | null
+    flowTraceLogId: string | null
+    stepIndex: number | null
+    fromAddress: string | null
+    toAddress: string | null
+    transferSymbol: string | null
+    transferAmountRaw: string | null
+    transferAmountDecimal: string | null
+    txHash: string | null
+    outcome: $Enums.FlowTraceLogStatus | null
+    createdAt: Date | null
+  }
+
+  export type FlowTraceLogStepCountAggregateOutputType = {
+    id: number
+    flowTraceLogId: number
+    stepIndex: number
+    fromAddress: number
+    toAddress: number
+    transferSymbol: number
+    transferAmountRaw: number
+    transferAmountDecimal: number
+    txHash: number
+    outcome: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FlowTraceLogStepAvgAggregateInputType = {
+    stepIndex?: true
+  }
+
+  export type FlowTraceLogStepSumAggregateInputType = {
+    stepIndex?: true
+  }
+
+  export type FlowTraceLogStepMinAggregateInputType = {
+    id?: true
+    flowTraceLogId?: true
+    stepIndex?: true
+    fromAddress?: true
+    toAddress?: true
+    transferSymbol?: true
+    transferAmountRaw?: true
+    transferAmountDecimal?: true
+    txHash?: true
+    outcome?: true
+    createdAt?: true
+  }
+
+  export type FlowTraceLogStepMaxAggregateInputType = {
+    id?: true
+    flowTraceLogId?: true
+    stepIndex?: true
+    fromAddress?: true
+    toAddress?: true
+    transferSymbol?: true
+    transferAmountRaw?: true
+    transferAmountDecimal?: true
+    txHash?: true
+    outcome?: true
+    createdAt?: true
+  }
+
+  export type FlowTraceLogStepCountAggregateInputType = {
+    id?: true
+    flowTraceLogId?: true
+    stepIndex?: true
+    fromAddress?: true
+    toAddress?: true
+    transferSymbol?: true
+    transferAmountRaw?: true
+    transferAmountDecimal?: true
+    txHash?: true
+    outcome?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FlowTraceLogStepAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlowTraceLogStep to aggregate.
+     */
+    where?: FlowTraceLogStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowTraceLogSteps to fetch.
+     */
+    orderBy?: FlowTraceLogStepOrderByWithRelationInput | FlowTraceLogStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FlowTraceLogStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowTraceLogSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowTraceLogSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FlowTraceLogSteps
+    **/
+    _count?: true | FlowTraceLogStepCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FlowTraceLogStepAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FlowTraceLogStepSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FlowTraceLogStepMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FlowTraceLogStepMaxAggregateInputType
+  }
+
+  export type GetFlowTraceLogStepAggregateType<T extends FlowTraceLogStepAggregateArgs> = {
+        [P in keyof T & keyof AggregateFlowTraceLogStep]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFlowTraceLogStep[P]>
+      : GetScalarType<T[P], AggregateFlowTraceLogStep[P]>
+  }
+
+
+
+
+  export type FlowTraceLogStepGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlowTraceLogStepWhereInput
+    orderBy?: FlowTraceLogStepOrderByWithAggregationInput | FlowTraceLogStepOrderByWithAggregationInput[]
+    by: FlowTraceLogStepScalarFieldEnum[] | FlowTraceLogStepScalarFieldEnum
+    having?: FlowTraceLogStepScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FlowTraceLogStepCountAggregateInputType | true
+    _avg?: FlowTraceLogStepAvgAggregateInputType
+    _sum?: FlowTraceLogStepSumAggregateInputType
+    _min?: FlowTraceLogStepMinAggregateInputType
+    _max?: FlowTraceLogStepMaxAggregateInputType
+  }
+
+  export type FlowTraceLogStepGroupByOutputType = {
+    id: string
+    flowTraceLogId: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol: string | null
+    transferAmountRaw: string | null
+    transferAmountDecimal: string | null
+    txHash: string | null
+    outcome: $Enums.FlowTraceLogStatus | null
+    createdAt: Date
+    _count: FlowTraceLogStepCountAggregateOutputType | null
+    _avg: FlowTraceLogStepAvgAggregateOutputType | null
+    _sum: FlowTraceLogStepSumAggregateOutputType | null
+    _min: FlowTraceLogStepMinAggregateOutputType | null
+    _max: FlowTraceLogStepMaxAggregateOutputType | null
+  }
+
+  type GetFlowTraceLogStepGroupByPayload<T extends FlowTraceLogStepGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FlowTraceLogStepGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FlowTraceLogStepGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FlowTraceLogStepGroupByOutputType[P]>
+            : GetScalarType<T[P], FlowTraceLogStepGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FlowTraceLogStepSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flowTraceLogId?: boolean
+    stepIndex?: boolean
+    fromAddress?: boolean
+    toAddress?: boolean
+    transferSymbol?: boolean
+    transferAmountRaw?: boolean
+    transferAmountDecimal?: boolean
+    txHash?: boolean
+    outcome?: boolean
+    createdAt?: boolean
+    flowTraceLog?: boolean | FlowTraceLogDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flowTraceLogStep"]>
+
+  export type FlowTraceLogStepSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flowTraceLogId?: boolean
+    stepIndex?: boolean
+    fromAddress?: boolean
+    toAddress?: boolean
+    transferSymbol?: boolean
+    transferAmountRaw?: boolean
+    transferAmountDecimal?: boolean
+    txHash?: boolean
+    outcome?: boolean
+    createdAt?: boolean
+    flowTraceLog?: boolean | FlowTraceLogDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flowTraceLogStep"]>
+
+  export type FlowTraceLogStepSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flowTraceLogId?: boolean
+    stepIndex?: boolean
+    fromAddress?: boolean
+    toAddress?: boolean
+    transferSymbol?: boolean
+    transferAmountRaw?: boolean
+    transferAmountDecimal?: boolean
+    txHash?: boolean
+    outcome?: boolean
+    createdAt?: boolean
+    flowTraceLog?: boolean | FlowTraceLogDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flowTraceLogStep"]>
+
+  export type FlowTraceLogStepSelectScalar = {
+    id?: boolean
+    flowTraceLogId?: boolean
+    stepIndex?: boolean
+    fromAddress?: boolean
+    toAddress?: boolean
+    transferSymbol?: boolean
+    transferAmountRaw?: boolean
+    transferAmountDecimal?: boolean
+    txHash?: boolean
+    outcome?: boolean
+    createdAt?: boolean
+  }
+
+  export type FlowTraceLogStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flowTraceLogId" | "stepIndex" | "fromAddress" | "toAddress" | "transferSymbol" | "transferAmountRaw" | "transferAmountDecimal" | "txHash" | "outcome" | "createdAt", ExtArgs["result"]["flowTraceLogStep"]>
+  export type FlowTraceLogStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flowTraceLog?: boolean | FlowTraceLogDefaultArgs<ExtArgs>
+  }
+  export type FlowTraceLogStepIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flowTraceLog?: boolean | FlowTraceLogDefaultArgs<ExtArgs>
+  }
+  export type FlowTraceLogStepIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flowTraceLog?: boolean | FlowTraceLogDefaultArgs<ExtArgs>
+  }
+
+  export type $FlowTraceLogStepPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FlowTraceLogStep"
+    objects: {
+      flowTraceLog: Prisma.$FlowTraceLogPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      flowTraceLogId: string
+      stepIndex: number
+      fromAddress: string
+      toAddress: string
+      transferSymbol: string | null
+      transferAmountRaw: string | null
+      transferAmountDecimal: string | null
+      txHash: string | null
+      outcome: $Enums.FlowTraceLogStatus | null
+      createdAt: Date
+    }, ExtArgs["result"]["flowTraceLogStep"]>
+    composites: {}
+  }
+
+  type FlowTraceLogStepGetPayload<S extends boolean | null | undefined | FlowTraceLogStepDefaultArgs> = $Result.GetResult<Prisma.$FlowTraceLogStepPayload, S>
+
+  type FlowTraceLogStepCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FlowTraceLogStepFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FlowTraceLogStepCountAggregateInputType | true
+    }
+
+  export interface FlowTraceLogStepDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FlowTraceLogStep'], meta: { name: 'FlowTraceLogStep' } }
+    /**
+     * Find zero or one FlowTraceLogStep that matches the filter.
+     * @param {FlowTraceLogStepFindUniqueArgs} args - Arguments to find a FlowTraceLogStep
+     * @example
+     * // Get one FlowTraceLogStep
+     * const flowTraceLogStep = await prisma.flowTraceLogStep.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FlowTraceLogStepFindUniqueArgs>(args: SelectSubset<T, FlowTraceLogStepFindUniqueArgs<ExtArgs>>): Prisma__FlowTraceLogStepClient<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FlowTraceLogStep that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FlowTraceLogStepFindUniqueOrThrowArgs} args - Arguments to find a FlowTraceLogStep
+     * @example
+     * // Get one FlowTraceLogStep
+     * const flowTraceLogStep = await prisma.flowTraceLogStep.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FlowTraceLogStepFindUniqueOrThrowArgs>(args: SelectSubset<T, FlowTraceLogStepFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FlowTraceLogStepClient<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FlowTraceLogStep that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogStepFindFirstArgs} args - Arguments to find a FlowTraceLogStep
+     * @example
+     * // Get one FlowTraceLogStep
+     * const flowTraceLogStep = await prisma.flowTraceLogStep.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FlowTraceLogStepFindFirstArgs>(args?: SelectSubset<T, FlowTraceLogStepFindFirstArgs<ExtArgs>>): Prisma__FlowTraceLogStepClient<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FlowTraceLogStep that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogStepFindFirstOrThrowArgs} args - Arguments to find a FlowTraceLogStep
+     * @example
+     * // Get one FlowTraceLogStep
+     * const flowTraceLogStep = await prisma.flowTraceLogStep.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FlowTraceLogStepFindFirstOrThrowArgs>(args?: SelectSubset<T, FlowTraceLogStepFindFirstOrThrowArgs<ExtArgs>>): Prisma__FlowTraceLogStepClient<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FlowTraceLogSteps that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogStepFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FlowTraceLogSteps
+     * const flowTraceLogSteps = await prisma.flowTraceLogStep.findMany()
+     * 
+     * // Get first 10 FlowTraceLogSteps
+     * const flowTraceLogSteps = await prisma.flowTraceLogStep.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const flowTraceLogStepWithIdOnly = await prisma.flowTraceLogStep.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FlowTraceLogStepFindManyArgs>(args?: SelectSubset<T, FlowTraceLogStepFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FlowTraceLogStep.
+     * @param {FlowTraceLogStepCreateArgs} args - Arguments to create a FlowTraceLogStep.
+     * @example
+     * // Create one FlowTraceLogStep
+     * const FlowTraceLogStep = await prisma.flowTraceLogStep.create({
+     *   data: {
+     *     // ... data to create a FlowTraceLogStep
+     *   }
+     * })
+     * 
+     */
+    create<T extends FlowTraceLogStepCreateArgs>(args: SelectSubset<T, FlowTraceLogStepCreateArgs<ExtArgs>>): Prisma__FlowTraceLogStepClient<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FlowTraceLogSteps.
+     * @param {FlowTraceLogStepCreateManyArgs} args - Arguments to create many FlowTraceLogSteps.
+     * @example
+     * // Create many FlowTraceLogSteps
+     * const flowTraceLogStep = await prisma.flowTraceLogStep.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FlowTraceLogStepCreateManyArgs>(args?: SelectSubset<T, FlowTraceLogStepCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FlowTraceLogSteps and returns the data saved in the database.
+     * @param {FlowTraceLogStepCreateManyAndReturnArgs} args - Arguments to create many FlowTraceLogSteps.
+     * @example
+     * // Create many FlowTraceLogSteps
+     * const flowTraceLogStep = await prisma.flowTraceLogStep.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FlowTraceLogSteps and only return the `id`
+     * const flowTraceLogStepWithIdOnly = await prisma.flowTraceLogStep.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FlowTraceLogStepCreateManyAndReturnArgs>(args?: SelectSubset<T, FlowTraceLogStepCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FlowTraceLogStep.
+     * @param {FlowTraceLogStepDeleteArgs} args - Arguments to delete one FlowTraceLogStep.
+     * @example
+     * // Delete one FlowTraceLogStep
+     * const FlowTraceLogStep = await prisma.flowTraceLogStep.delete({
+     *   where: {
+     *     // ... filter to delete one FlowTraceLogStep
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FlowTraceLogStepDeleteArgs>(args: SelectSubset<T, FlowTraceLogStepDeleteArgs<ExtArgs>>): Prisma__FlowTraceLogStepClient<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FlowTraceLogStep.
+     * @param {FlowTraceLogStepUpdateArgs} args - Arguments to update one FlowTraceLogStep.
+     * @example
+     * // Update one FlowTraceLogStep
+     * const flowTraceLogStep = await prisma.flowTraceLogStep.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FlowTraceLogStepUpdateArgs>(args: SelectSubset<T, FlowTraceLogStepUpdateArgs<ExtArgs>>): Prisma__FlowTraceLogStepClient<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FlowTraceLogSteps.
+     * @param {FlowTraceLogStepDeleteManyArgs} args - Arguments to filter FlowTraceLogSteps to delete.
+     * @example
+     * // Delete a few FlowTraceLogSteps
+     * const { count } = await prisma.flowTraceLogStep.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FlowTraceLogStepDeleteManyArgs>(args?: SelectSubset<T, FlowTraceLogStepDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FlowTraceLogSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogStepUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FlowTraceLogSteps
+     * const flowTraceLogStep = await prisma.flowTraceLogStep.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FlowTraceLogStepUpdateManyArgs>(args: SelectSubset<T, FlowTraceLogStepUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FlowTraceLogSteps and returns the data updated in the database.
+     * @param {FlowTraceLogStepUpdateManyAndReturnArgs} args - Arguments to update many FlowTraceLogSteps.
+     * @example
+     * // Update many FlowTraceLogSteps
+     * const flowTraceLogStep = await prisma.flowTraceLogStep.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FlowTraceLogSteps and only return the `id`
+     * const flowTraceLogStepWithIdOnly = await prisma.flowTraceLogStep.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FlowTraceLogStepUpdateManyAndReturnArgs>(args: SelectSubset<T, FlowTraceLogStepUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FlowTraceLogStep.
+     * @param {FlowTraceLogStepUpsertArgs} args - Arguments to update or create a FlowTraceLogStep.
+     * @example
+     * // Update or create a FlowTraceLogStep
+     * const flowTraceLogStep = await prisma.flowTraceLogStep.upsert({
+     *   create: {
+     *     // ... data to create a FlowTraceLogStep
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FlowTraceLogStep we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FlowTraceLogStepUpsertArgs>(args: SelectSubset<T, FlowTraceLogStepUpsertArgs<ExtArgs>>): Prisma__FlowTraceLogStepClient<$Result.GetResult<Prisma.$FlowTraceLogStepPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FlowTraceLogSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogStepCountArgs} args - Arguments to filter FlowTraceLogSteps to count.
+     * @example
+     * // Count the number of FlowTraceLogSteps
+     * const count = await prisma.flowTraceLogStep.count({
+     *   where: {
+     *     // ... the filter for the FlowTraceLogSteps we want to count
+     *   }
+     * })
+    **/
+    count<T extends FlowTraceLogStepCountArgs>(
+      args?: Subset<T, FlowTraceLogStepCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FlowTraceLogStepCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FlowTraceLogStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogStepAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FlowTraceLogStepAggregateArgs>(args: Subset<T, FlowTraceLogStepAggregateArgs>): Prisma.PrismaPromise<GetFlowTraceLogStepAggregateType<T>>
+
+    /**
+     * Group by FlowTraceLogStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowTraceLogStepGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FlowTraceLogStepGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FlowTraceLogStepGroupByArgs['orderBy'] }
+        : { orderBy?: FlowTraceLogStepGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FlowTraceLogStepGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFlowTraceLogStepGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FlowTraceLogStep model
+   */
+  readonly fields: FlowTraceLogStepFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FlowTraceLogStep.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FlowTraceLogStepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    flowTraceLog<T extends FlowTraceLogDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FlowTraceLogDefaultArgs<ExtArgs>>): Prisma__FlowTraceLogClient<$Result.GetResult<Prisma.$FlowTraceLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FlowTraceLogStep model
+   */
+  interface FlowTraceLogStepFieldRefs {
+    readonly id: FieldRef<"FlowTraceLogStep", 'String'>
+    readonly flowTraceLogId: FieldRef<"FlowTraceLogStep", 'String'>
+    readonly stepIndex: FieldRef<"FlowTraceLogStep", 'Int'>
+    readonly fromAddress: FieldRef<"FlowTraceLogStep", 'String'>
+    readonly toAddress: FieldRef<"FlowTraceLogStep", 'String'>
+    readonly transferSymbol: FieldRef<"FlowTraceLogStep", 'String'>
+    readonly transferAmountRaw: FieldRef<"FlowTraceLogStep", 'String'>
+    readonly transferAmountDecimal: FieldRef<"FlowTraceLogStep", 'String'>
+    readonly txHash: FieldRef<"FlowTraceLogStep", 'String'>
+    readonly outcome: FieldRef<"FlowTraceLogStep", 'FlowTraceLogStatus'>
+    readonly createdAt: FieldRef<"FlowTraceLogStep", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FlowTraceLogStep findUnique
+   */
+  export type FlowTraceLogStepFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowTraceLogStep to fetch.
+     */
+    where: FlowTraceLogStepWhereUniqueInput
+  }
+
+  /**
+   * FlowTraceLogStep findUniqueOrThrow
+   */
+  export type FlowTraceLogStepFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowTraceLogStep to fetch.
+     */
+    where: FlowTraceLogStepWhereUniqueInput
+  }
+
+  /**
+   * FlowTraceLogStep findFirst
+   */
+  export type FlowTraceLogStepFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowTraceLogStep to fetch.
+     */
+    where?: FlowTraceLogStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowTraceLogSteps to fetch.
+     */
+    orderBy?: FlowTraceLogStepOrderByWithRelationInput | FlowTraceLogStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlowTraceLogSteps.
+     */
+    cursor?: FlowTraceLogStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowTraceLogSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowTraceLogSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlowTraceLogSteps.
+     */
+    distinct?: FlowTraceLogStepScalarFieldEnum | FlowTraceLogStepScalarFieldEnum[]
+  }
+
+  /**
+   * FlowTraceLogStep findFirstOrThrow
+   */
+  export type FlowTraceLogStepFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowTraceLogStep to fetch.
+     */
+    where?: FlowTraceLogStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowTraceLogSteps to fetch.
+     */
+    orderBy?: FlowTraceLogStepOrderByWithRelationInput | FlowTraceLogStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlowTraceLogSteps.
+     */
+    cursor?: FlowTraceLogStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowTraceLogSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowTraceLogSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlowTraceLogSteps.
+     */
+    distinct?: FlowTraceLogStepScalarFieldEnum | FlowTraceLogStepScalarFieldEnum[]
+  }
+
+  /**
+   * FlowTraceLogStep findMany
+   */
+  export type FlowTraceLogStepFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowTraceLogSteps to fetch.
+     */
+    where?: FlowTraceLogStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowTraceLogSteps to fetch.
+     */
+    orderBy?: FlowTraceLogStepOrderByWithRelationInput | FlowTraceLogStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FlowTraceLogSteps.
+     */
+    cursor?: FlowTraceLogStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowTraceLogSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowTraceLogSteps.
+     */
+    skip?: number
+    distinct?: FlowTraceLogStepScalarFieldEnum | FlowTraceLogStepScalarFieldEnum[]
+  }
+
+  /**
+   * FlowTraceLogStep create
+   */
+  export type FlowTraceLogStepCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FlowTraceLogStep.
+     */
+    data: XOR<FlowTraceLogStepCreateInput, FlowTraceLogStepUncheckedCreateInput>
+  }
+
+  /**
+   * FlowTraceLogStep createMany
+   */
+  export type FlowTraceLogStepCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FlowTraceLogSteps.
+     */
+    data: FlowTraceLogStepCreateManyInput | FlowTraceLogStepCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FlowTraceLogStep createManyAndReturn
+   */
+  export type FlowTraceLogStepCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * The data used to create many FlowTraceLogSteps.
+     */
+    data: FlowTraceLogStepCreateManyInput | FlowTraceLogStepCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FlowTraceLogStep update
+   */
+  export type FlowTraceLogStepUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FlowTraceLogStep.
+     */
+    data: XOR<FlowTraceLogStepUpdateInput, FlowTraceLogStepUncheckedUpdateInput>
+    /**
+     * Choose, which FlowTraceLogStep to update.
+     */
+    where: FlowTraceLogStepWhereUniqueInput
+  }
+
+  /**
+   * FlowTraceLogStep updateMany
+   */
+  export type FlowTraceLogStepUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FlowTraceLogSteps.
+     */
+    data: XOR<FlowTraceLogStepUpdateManyMutationInput, FlowTraceLogStepUncheckedUpdateManyInput>
+    /**
+     * Filter which FlowTraceLogSteps to update
+     */
+    where?: FlowTraceLogStepWhereInput
+    /**
+     * Limit how many FlowTraceLogSteps to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FlowTraceLogStep updateManyAndReturn
+   */
+  export type FlowTraceLogStepUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * The data used to update FlowTraceLogSteps.
+     */
+    data: XOR<FlowTraceLogStepUpdateManyMutationInput, FlowTraceLogStepUncheckedUpdateManyInput>
+    /**
+     * Filter which FlowTraceLogSteps to update
+     */
+    where?: FlowTraceLogStepWhereInput
+    /**
+     * Limit how many FlowTraceLogSteps to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FlowTraceLogStep upsert
+   */
+  export type FlowTraceLogStepUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FlowTraceLogStep to update in case it exists.
+     */
+    where: FlowTraceLogStepWhereUniqueInput
+    /**
+     * In case the FlowTraceLogStep found by the `where` argument doesn't exist, create a new FlowTraceLogStep with this data.
+     */
+    create: XOR<FlowTraceLogStepCreateInput, FlowTraceLogStepUncheckedCreateInput>
+    /**
+     * In case the FlowTraceLogStep was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FlowTraceLogStepUpdateInput, FlowTraceLogStepUncheckedUpdateInput>
+  }
+
+  /**
+   * FlowTraceLogStep delete
+   */
+  export type FlowTraceLogStepDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepInclude<ExtArgs> | null
+    /**
+     * Filter which FlowTraceLogStep to delete.
+     */
+    where: FlowTraceLogStepWhereUniqueInput
+  }
+
+  /**
+   * FlowTraceLogStep deleteMany
+   */
+  export type FlowTraceLogStepDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlowTraceLogSteps to delete
+     */
+    where?: FlowTraceLogStepWhereInput
+    /**
+     * Limit how many FlowTraceLogSteps to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FlowTraceLogStep without action
+   */
+  export type FlowTraceLogStepDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowTraceLogStep
+     */
+    select?: FlowTraceLogStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowTraceLogStep
+     */
+    omit?: FlowTraceLogStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowTraceLogStepInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -11206,6 +13759,38 @@ export namespace Prisma {
   export type FlowTransactionScalarFieldEnum = (typeof FlowTransactionScalarFieldEnum)[keyof typeof FlowTransactionScalarFieldEnum]
 
 
+  export const FlowTraceLogScalarFieldEnum: {
+    id: 'id',
+    inputAddress: 'inputAddress',
+    chainSlug: 'chainSlug',
+    status: 'status',
+    endpointAddress: 'endpointAddress',
+    failureAtAddress: 'failureAtAddress',
+    failureReason: 'failureReason',
+    stepsCount: 'stepsCount',
+    createdAt: 'createdAt'
+  };
+
+  export type FlowTraceLogScalarFieldEnum = (typeof FlowTraceLogScalarFieldEnum)[keyof typeof FlowTraceLogScalarFieldEnum]
+
+
+  export const FlowTraceLogStepScalarFieldEnum: {
+    id: 'id',
+    flowTraceLogId: 'flowTraceLogId',
+    stepIndex: 'stepIndex',
+    fromAddress: 'fromAddress',
+    toAddress: 'toAddress',
+    transferSymbol: 'transferSymbol',
+    transferAmountRaw: 'transferAmountRaw',
+    transferAmountDecimal: 'transferAmountDecimal',
+    txHash: 'txHash',
+    outcome: 'outcome',
+    createdAt: 'createdAt'
+  };
+
+  export type FlowTraceLogStepScalarFieldEnum = (typeof FlowTraceLogStepScalarFieldEnum)[keyof typeof FlowTraceLogStepScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -11309,6 +13894,20 @@ export namespace Prisma {
    * Reference to a field of type 'FlowEndpointReason[]'
    */
   export type ListEnumFlowEndpointReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlowEndpointReason[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'FlowTraceLogStatus'
+   */
+  export type EnumFlowTraceLogStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlowTraceLogStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'FlowTraceLogStatus[]'
+   */
+  export type ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlowTraceLogStatus[]'>
     
 
 
@@ -11975,6 +14574,171 @@ export namespace Prisma {
     timestamp?: DateTimeWithAggregatesFilter<"FlowTransaction"> | Date | string
     isEndpointHop?: BoolWithAggregatesFilter<"FlowTransaction"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"FlowTransaction"> | Date | string
+  }
+
+  export type FlowTraceLogWhereInput = {
+    AND?: FlowTraceLogWhereInput | FlowTraceLogWhereInput[]
+    OR?: FlowTraceLogWhereInput[]
+    NOT?: FlowTraceLogWhereInput | FlowTraceLogWhereInput[]
+    id?: StringFilter<"FlowTraceLog"> | string
+    inputAddress?: StringFilter<"FlowTraceLog"> | string
+    chainSlug?: StringFilter<"FlowTraceLog"> | string
+    status?: EnumFlowTraceLogStatusFilter<"FlowTraceLog"> | $Enums.FlowTraceLogStatus
+    endpointAddress?: StringNullableFilter<"FlowTraceLog"> | string | null
+    failureAtAddress?: StringNullableFilter<"FlowTraceLog"> | string | null
+    failureReason?: StringNullableFilter<"FlowTraceLog"> | string | null
+    stepsCount?: IntFilter<"FlowTraceLog"> | number
+    createdAt?: DateTimeFilter<"FlowTraceLog"> | Date | string
+    steps?: FlowTraceLogStepListRelationFilter
+  }
+
+  export type FlowTraceLogOrderByWithRelationInput = {
+    id?: SortOrder
+    inputAddress?: SortOrder
+    chainSlug?: SortOrder
+    status?: SortOrder
+    endpointAddress?: SortOrderInput | SortOrder
+    failureAtAddress?: SortOrderInput | SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    stepsCount?: SortOrder
+    createdAt?: SortOrder
+    steps?: FlowTraceLogStepOrderByRelationAggregateInput
+  }
+
+  export type FlowTraceLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FlowTraceLogWhereInput | FlowTraceLogWhereInput[]
+    OR?: FlowTraceLogWhereInput[]
+    NOT?: FlowTraceLogWhereInput | FlowTraceLogWhereInput[]
+    inputAddress?: StringFilter<"FlowTraceLog"> | string
+    chainSlug?: StringFilter<"FlowTraceLog"> | string
+    status?: EnumFlowTraceLogStatusFilter<"FlowTraceLog"> | $Enums.FlowTraceLogStatus
+    endpointAddress?: StringNullableFilter<"FlowTraceLog"> | string | null
+    failureAtAddress?: StringNullableFilter<"FlowTraceLog"> | string | null
+    failureReason?: StringNullableFilter<"FlowTraceLog"> | string | null
+    stepsCount?: IntFilter<"FlowTraceLog"> | number
+    createdAt?: DateTimeFilter<"FlowTraceLog"> | Date | string
+    steps?: FlowTraceLogStepListRelationFilter
+  }, "id">
+
+  export type FlowTraceLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    inputAddress?: SortOrder
+    chainSlug?: SortOrder
+    status?: SortOrder
+    endpointAddress?: SortOrderInput | SortOrder
+    failureAtAddress?: SortOrderInput | SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    stepsCount?: SortOrder
+    createdAt?: SortOrder
+    _count?: FlowTraceLogCountOrderByAggregateInput
+    _avg?: FlowTraceLogAvgOrderByAggregateInput
+    _max?: FlowTraceLogMaxOrderByAggregateInput
+    _min?: FlowTraceLogMinOrderByAggregateInput
+    _sum?: FlowTraceLogSumOrderByAggregateInput
+  }
+
+  export type FlowTraceLogScalarWhereWithAggregatesInput = {
+    AND?: FlowTraceLogScalarWhereWithAggregatesInput | FlowTraceLogScalarWhereWithAggregatesInput[]
+    OR?: FlowTraceLogScalarWhereWithAggregatesInput[]
+    NOT?: FlowTraceLogScalarWhereWithAggregatesInput | FlowTraceLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FlowTraceLog"> | string
+    inputAddress?: StringWithAggregatesFilter<"FlowTraceLog"> | string
+    chainSlug?: StringWithAggregatesFilter<"FlowTraceLog"> | string
+    status?: EnumFlowTraceLogStatusWithAggregatesFilter<"FlowTraceLog"> | $Enums.FlowTraceLogStatus
+    endpointAddress?: StringNullableWithAggregatesFilter<"FlowTraceLog"> | string | null
+    failureAtAddress?: StringNullableWithAggregatesFilter<"FlowTraceLog"> | string | null
+    failureReason?: StringNullableWithAggregatesFilter<"FlowTraceLog"> | string | null
+    stepsCount?: IntWithAggregatesFilter<"FlowTraceLog"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"FlowTraceLog"> | Date | string
+  }
+
+  export type FlowTraceLogStepWhereInput = {
+    AND?: FlowTraceLogStepWhereInput | FlowTraceLogStepWhereInput[]
+    OR?: FlowTraceLogStepWhereInput[]
+    NOT?: FlowTraceLogStepWhereInput | FlowTraceLogStepWhereInput[]
+    id?: StringFilter<"FlowTraceLogStep"> | string
+    flowTraceLogId?: StringFilter<"FlowTraceLogStep"> | string
+    stepIndex?: IntFilter<"FlowTraceLogStep"> | number
+    fromAddress?: StringFilter<"FlowTraceLogStep"> | string
+    toAddress?: StringFilter<"FlowTraceLogStep"> | string
+    transferSymbol?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    transferAmountRaw?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    transferAmountDecimal?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    txHash?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    outcome?: EnumFlowTraceLogStatusNullableFilter<"FlowTraceLogStep"> | $Enums.FlowTraceLogStatus | null
+    createdAt?: DateTimeFilter<"FlowTraceLogStep"> | Date | string
+    flowTraceLog?: XOR<FlowTraceLogScalarRelationFilter, FlowTraceLogWhereInput>
+  }
+
+  export type FlowTraceLogStepOrderByWithRelationInput = {
+    id?: SortOrder
+    flowTraceLogId?: SortOrder
+    stepIndex?: SortOrder
+    fromAddress?: SortOrder
+    toAddress?: SortOrder
+    transferSymbol?: SortOrderInput | SortOrder
+    transferAmountRaw?: SortOrderInput | SortOrder
+    transferAmountDecimal?: SortOrderInput | SortOrder
+    txHash?: SortOrderInput | SortOrder
+    outcome?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    flowTraceLog?: FlowTraceLogOrderByWithRelationInput
+  }
+
+  export type FlowTraceLogStepWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    flowTraceLogId_stepIndex?: FlowTraceLogStepFlowTraceLogIdStepIndexCompoundUniqueInput
+    AND?: FlowTraceLogStepWhereInput | FlowTraceLogStepWhereInput[]
+    OR?: FlowTraceLogStepWhereInput[]
+    NOT?: FlowTraceLogStepWhereInput | FlowTraceLogStepWhereInput[]
+    flowTraceLogId?: StringFilter<"FlowTraceLogStep"> | string
+    stepIndex?: IntFilter<"FlowTraceLogStep"> | number
+    fromAddress?: StringFilter<"FlowTraceLogStep"> | string
+    toAddress?: StringFilter<"FlowTraceLogStep"> | string
+    transferSymbol?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    transferAmountRaw?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    transferAmountDecimal?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    txHash?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    outcome?: EnumFlowTraceLogStatusNullableFilter<"FlowTraceLogStep"> | $Enums.FlowTraceLogStatus | null
+    createdAt?: DateTimeFilter<"FlowTraceLogStep"> | Date | string
+    flowTraceLog?: XOR<FlowTraceLogScalarRelationFilter, FlowTraceLogWhereInput>
+  }, "id" | "flowTraceLogId_stepIndex">
+
+  export type FlowTraceLogStepOrderByWithAggregationInput = {
+    id?: SortOrder
+    flowTraceLogId?: SortOrder
+    stepIndex?: SortOrder
+    fromAddress?: SortOrder
+    toAddress?: SortOrder
+    transferSymbol?: SortOrderInput | SortOrder
+    transferAmountRaw?: SortOrderInput | SortOrder
+    transferAmountDecimal?: SortOrderInput | SortOrder
+    txHash?: SortOrderInput | SortOrder
+    outcome?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: FlowTraceLogStepCountOrderByAggregateInput
+    _avg?: FlowTraceLogStepAvgOrderByAggregateInput
+    _max?: FlowTraceLogStepMaxOrderByAggregateInput
+    _min?: FlowTraceLogStepMinOrderByAggregateInput
+    _sum?: FlowTraceLogStepSumOrderByAggregateInput
+  }
+
+  export type FlowTraceLogStepScalarWhereWithAggregatesInput = {
+    AND?: FlowTraceLogStepScalarWhereWithAggregatesInput | FlowTraceLogStepScalarWhereWithAggregatesInput[]
+    OR?: FlowTraceLogStepScalarWhereWithAggregatesInput[]
+    NOT?: FlowTraceLogStepScalarWhereWithAggregatesInput | FlowTraceLogStepScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FlowTraceLogStep"> | string
+    flowTraceLogId?: StringWithAggregatesFilter<"FlowTraceLogStep"> | string
+    stepIndex?: IntWithAggregatesFilter<"FlowTraceLogStep"> | number
+    fromAddress?: StringWithAggregatesFilter<"FlowTraceLogStep"> | string
+    toAddress?: StringWithAggregatesFilter<"FlowTraceLogStep"> | string
+    transferSymbol?: StringNullableWithAggregatesFilter<"FlowTraceLogStep"> | string | null
+    transferAmountRaw?: StringNullableWithAggregatesFilter<"FlowTraceLogStep"> | string | null
+    transferAmountDecimal?: StringNullableWithAggregatesFilter<"FlowTraceLogStep"> | string | null
+    txHash?: StringNullableWithAggregatesFilter<"FlowTraceLogStep"> | string | null
+    outcome?: EnumFlowTraceLogStatusNullableWithAggregatesFilter<"FlowTraceLogStep"> | $Enums.FlowTraceLogStatus | null
+    createdAt?: DateTimeWithAggregatesFilter<"FlowTraceLogStep"> | Date | string
   }
 
   export type ChainCreateInput = {
@@ -12682,6 +15446,191 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FlowTraceLogCreateInput = {
+    id?: string
+    inputAddress: string
+    chainSlug: string
+    status: $Enums.FlowTraceLogStatus
+    endpointAddress?: string | null
+    failureAtAddress?: string | null
+    failureReason?: string | null
+    stepsCount?: number
+    createdAt?: Date | string
+    steps?: FlowTraceLogStepCreateNestedManyWithoutFlowTraceLogInput
+  }
+
+  export type FlowTraceLogUncheckedCreateInput = {
+    id?: string
+    inputAddress: string
+    chainSlug: string
+    status: $Enums.FlowTraceLogStatus
+    endpointAddress?: string | null
+    failureAtAddress?: string | null
+    failureReason?: string | null
+    stepsCount?: number
+    createdAt?: Date | string
+    steps?: FlowTraceLogStepUncheckedCreateNestedManyWithoutFlowTraceLogInput
+  }
+
+  export type FlowTraceLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inputAddress?: StringFieldUpdateOperationsInput | string
+    chainSlug?: StringFieldUpdateOperationsInput | string
+    status?: EnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus
+    endpointAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureAtAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    stepsCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    steps?: FlowTraceLogStepUpdateManyWithoutFlowTraceLogNestedInput
+  }
+
+  export type FlowTraceLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inputAddress?: StringFieldUpdateOperationsInput | string
+    chainSlug?: StringFieldUpdateOperationsInput | string
+    status?: EnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus
+    endpointAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureAtAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    stepsCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    steps?: FlowTraceLogStepUncheckedUpdateManyWithoutFlowTraceLogNestedInput
+  }
+
+  export type FlowTraceLogCreateManyInput = {
+    id?: string
+    inputAddress: string
+    chainSlug: string
+    status: $Enums.FlowTraceLogStatus
+    endpointAddress?: string | null
+    failureAtAddress?: string | null
+    failureReason?: string | null
+    stepsCount?: number
+    createdAt?: Date | string
+  }
+
+  export type FlowTraceLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inputAddress?: StringFieldUpdateOperationsInput | string
+    chainSlug?: StringFieldUpdateOperationsInput | string
+    status?: EnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus
+    endpointAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureAtAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    stepsCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowTraceLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inputAddress?: StringFieldUpdateOperationsInput | string
+    chainSlug?: StringFieldUpdateOperationsInput | string
+    status?: EnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus
+    endpointAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureAtAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    stepsCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowTraceLogStepCreateInput = {
+    id?: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
+    createdAt?: Date | string
+    flowTraceLog: FlowTraceLogCreateNestedOneWithoutStepsInput
+  }
+
+  export type FlowTraceLogStepUncheckedCreateInput = {
+    id?: string
+    flowTraceLogId: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
+    createdAt?: Date | string
+  }
+
+  export type FlowTraceLogStepUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flowTraceLog?: FlowTraceLogUpdateOneRequiredWithoutStepsNestedInput
+  }
+
+  export type FlowTraceLogStepUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flowTraceLogId?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowTraceLogStepCreateManyInput = {
+    id?: string
+    flowTraceLogId: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
+    createdAt?: Date | string
+  }
+
+  export type FlowTraceLogStepUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowTraceLogStepUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flowTraceLogId?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -13250,6 +16199,154 @@ export namespace Prisma {
 
   export type FlowTransactionSumOrderByAggregateInput = {
     hopIndex?: SortOrder
+  }
+
+  export type EnumFlowTraceLogStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlowTraceLogStatusFilter<$PrismaModel> | $Enums.FlowTraceLogStatus
+  }
+
+  export type FlowTraceLogStepListRelationFilter = {
+    every?: FlowTraceLogStepWhereInput
+    some?: FlowTraceLogStepWhereInput
+    none?: FlowTraceLogStepWhereInput
+  }
+
+  export type FlowTraceLogStepOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FlowTraceLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    inputAddress?: SortOrder
+    chainSlug?: SortOrder
+    status?: SortOrder
+    endpointAddress?: SortOrder
+    failureAtAddress?: SortOrder
+    failureReason?: SortOrder
+    stepsCount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FlowTraceLogAvgOrderByAggregateInput = {
+    stepsCount?: SortOrder
+  }
+
+  export type FlowTraceLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    inputAddress?: SortOrder
+    chainSlug?: SortOrder
+    status?: SortOrder
+    endpointAddress?: SortOrder
+    failureAtAddress?: SortOrder
+    failureReason?: SortOrder
+    stepsCount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FlowTraceLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    inputAddress?: SortOrder
+    chainSlug?: SortOrder
+    status?: SortOrder
+    endpointAddress?: SortOrder
+    failureAtAddress?: SortOrder
+    failureReason?: SortOrder
+    stepsCount?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FlowTraceLogSumOrderByAggregateInput = {
+    stepsCount?: SortOrder
+  }
+
+  export type EnumFlowTraceLogStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlowTraceLogStatusWithAggregatesFilter<$PrismaModel> | $Enums.FlowTraceLogStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFlowTraceLogStatusFilter<$PrismaModel>
+    _max?: NestedEnumFlowTraceLogStatusFilter<$PrismaModel>
+  }
+
+  export type EnumFlowTraceLogStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel> | $Enums.FlowTraceLogStatus | null
+  }
+
+  export type FlowTraceLogScalarRelationFilter = {
+    is?: FlowTraceLogWhereInput
+    isNot?: FlowTraceLogWhereInput
+  }
+
+  export type FlowTraceLogStepFlowTraceLogIdStepIndexCompoundUniqueInput = {
+    flowTraceLogId: string
+    stepIndex: number
+  }
+
+  export type FlowTraceLogStepCountOrderByAggregateInput = {
+    id?: SortOrder
+    flowTraceLogId?: SortOrder
+    stepIndex?: SortOrder
+    fromAddress?: SortOrder
+    toAddress?: SortOrder
+    transferSymbol?: SortOrder
+    transferAmountRaw?: SortOrder
+    transferAmountDecimal?: SortOrder
+    txHash?: SortOrder
+    outcome?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FlowTraceLogStepAvgOrderByAggregateInput = {
+    stepIndex?: SortOrder
+  }
+
+  export type FlowTraceLogStepMaxOrderByAggregateInput = {
+    id?: SortOrder
+    flowTraceLogId?: SortOrder
+    stepIndex?: SortOrder
+    fromAddress?: SortOrder
+    toAddress?: SortOrder
+    transferSymbol?: SortOrder
+    transferAmountRaw?: SortOrder
+    transferAmountDecimal?: SortOrder
+    txHash?: SortOrder
+    outcome?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FlowTraceLogStepMinOrderByAggregateInput = {
+    id?: SortOrder
+    flowTraceLogId?: SortOrder
+    stepIndex?: SortOrder
+    fromAddress?: SortOrder
+    toAddress?: SortOrder
+    transferSymbol?: SortOrder
+    transferAmountRaw?: SortOrder
+    transferAmountDecimal?: SortOrder
+    txHash?: SortOrder
+    outcome?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FlowTraceLogStepSumOrderByAggregateInput = {
+    stepIndex?: SortOrder
+  }
+
+  export type EnumFlowTraceLogStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowTraceLogStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.FlowTraceLogStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel>
   }
 
   export type HotWalletCreateNestedManyWithoutChainInput = {
@@ -13902,6 +16999,70 @@ export namespace Prisma {
     update?: XOR<XOR<ChainUpdateToOneWithWhereWithoutFlowTransactionsInput, ChainUpdateWithoutFlowTransactionsInput>, ChainUncheckedUpdateWithoutFlowTransactionsInput>
   }
 
+  export type FlowTraceLogStepCreateNestedManyWithoutFlowTraceLogInput = {
+    create?: XOR<FlowTraceLogStepCreateWithoutFlowTraceLogInput, FlowTraceLogStepUncheckedCreateWithoutFlowTraceLogInput> | FlowTraceLogStepCreateWithoutFlowTraceLogInput[] | FlowTraceLogStepUncheckedCreateWithoutFlowTraceLogInput[]
+    connectOrCreate?: FlowTraceLogStepCreateOrConnectWithoutFlowTraceLogInput | FlowTraceLogStepCreateOrConnectWithoutFlowTraceLogInput[]
+    createMany?: FlowTraceLogStepCreateManyFlowTraceLogInputEnvelope
+    connect?: FlowTraceLogStepWhereUniqueInput | FlowTraceLogStepWhereUniqueInput[]
+  }
+
+  export type FlowTraceLogStepUncheckedCreateNestedManyWithoutFlowTraceLogInput = {
+    create?: XOR<FlowTraceLogStepCreateWithoutFlowTraceLogInput, FlowTraceLogStepUncheckedCreateWithoutFlowTraceLogInput> | FlowTraceLogStepCreateWithoutFlowTraceLogInput[] | FlowTraceLogStepUncheckedCreateWithoutFlowTraceLogInput[]
+    connectOrCreate?: FlowTraceLogStepCreateOrConnectWithoutFlowTraceLogInput | FlowTraceLogStepCreateOrConnectWithoutFlowTraceLogInput[]
+    createMany?: FlowTraceLogStepCreateManyFlowTraceLogInputEnvelope
+    connect?: FlowTraceLogStepWhereUniqueInput | FlowTraceLogStepWhereUniqueInput[]
+  }
+
+  export type EnumFlowTraceLogStatusFieldUpdateOperationsInput = {
+    set?: $Enums.FlowTraceLogStatus
+  }
+
+  export type FlowTraceLogStepUpdateManyWithoutFlowTraceLogNestedInput = {
+    create?: XOR<FlowTraceLogStepCreateWithoutFlowTraceLogInput, FlowTraceLogStepUncheckedCreateWithoutFlowTraceLogInput> | FlowTraceLogStepCreateWithoutFlowTraceLogInput[] | FlowTraceLogStepUncheckedCreateWithoutFlowTraceLogInput[]
+    connectOrCreate?: FlowTraceLogStepCreateOrConnectWithoutFlowTraceLogInput | FlowTraceLogStepCreateOrConnectWithoutFlowTraceLogInput[]
+    upsert?: FlowTraceLogStepUpsertWithWhereUniqueWithoutFlowTraceLogInput | FlowTraceLogStepUpsertWithWhereUniqueWithoutFlowTraceLogInput[]
+    createMany?: FlowTraceLogStepCreateManyFlowTraceLogInputEnvelope
+    set?: FlowTraceLogStepWhereUniqueInput | FlowTraceLogStepWhereUniqueInput[]
+    disconnect?: FlowTraceLogStepWhereUniqueInput | FlowTraceLogStepWhereUniqueInput[]
+    delete?: FlowTraceLogStepWhereUniqueInput | FlowTraceLogStepWhereUniqueInput[]
+    connect?: FlowTraceLogStepWhereUniqueInput | FlowTraceLogStepWhereUniqueInput[]
+    update?: FlowTraceLogStepUpdateWithWhereUniqueWithoutFlowTraceLogInput | FlowTraceLogStepUpdateWithWhereUniqueWithoutFlowTraceLogInput[]
+    updateMany?: FlowTraceLogStepUpdateManyWithWhereWithoutFlowTraceLogInput | FlowTraceLogStepUpdateManyWithWhereWithoutFlowTraceLogInput[]
+    deleteMany?: FlowTraceLogStepScalarWhereInput | FlowTraceLogStepScalarWhereInput[]
+  }
+
+  export type FlowTraceLogStepUncheckedUpdateManyWithoutFlowTraceLogNestedInput = {
+    create?: XOR<FlowTraceLogStepCreateWithoutFlowTraceLogInput, FlowTraceLogStepUncheckedCreateWithoutFlowTraceLogInput> | FlowTraceLogStepCreateWithoutFlowTraceLogInput[] | FlowTraceLogStepUncheckedCreateWithoutFlowTraceLogInput[]
+    connectOrCreate?: FlowTraceLogStepCreateOrConnectWithoutFlowTraceLogInput | FlowTraceLogStepCreateOrConnectWithoutFlowTraceLogInput[]
+    upsert?: FlowTraceLogStepUpsertWithWhereUniqueWithoutFlowTraceLogInput | FlowTraceLogStepUpsertWithWhereUniqueWithoutFlowTraceLogInput[]
+    createMany?: FlowTraceLogStepCreateManyFlowTraceLogInputEnvelope
+    set?: FlowTraceLogStepWhereUniqueInput | FlowTraceLogStepWhereUniqueInput[]
+    disconnect?: FlowTraceLogStepWhereUniqueInput | FlowTraceLogStepWhereUniqueInput[]
+    delete?: FlowTraceLogStepWhereUniqueInput | FlowTraceLogStepWhereUniqueInput[]
+    connect?: FlowTraceLogStepWhereUniqueInput | FlowTraceLogStepWhereUniqueInput[]
+    update?: FlowTraceLogStepUpdateWithWhereUniqueWithoutFlowTraceLogInput | FlowTraceLogStepUpdateWithWhereUniqueWithoutFlowTraceLogInput[]
+    updateMany?: FlowTraceLogStepUpdateManyWithWhereWithoutFlowTraceLogInput | FlowTraceLogStepUpdateManyWithWhereWithoutFlowTraceLogInput[]
+    deleteMany?: FlowTraceLogStepScalarWhereInput | FlowTraceLogStepScalarWhereInput[]
+  }
+
+  export type FlowTraceLogCreateNestedOneWithoutStepsInput = {
+    create?: XOR<FlowTraceLogCreateWithoutStepsInput, FlowTraceLogUncheckedCreateWithoutStepsInput>
+    connectOrCreate?: FlowTraceLogCreateOrConnectWithoutStepsInput
+    connect?: FlowTraceLogWhereUniqueInput
+  }
+
+  export type NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput = {
+    set?: $Enums.FlowTraceLogStatus | null
+  }
+
+  export type FlowTraceLogUpdateOneRequiredWithoutStepsNestedInput = {
+    create?: XOR<FlowTraceLogCreateWithoutStepsInput, FlowTraceLogUncheckedCreateWithoutStepsInput>
+    connectOrCreate?: FlowTraceLogCreateOrConnectWithoutStepsInput
+    upsert?: FlowTraceLogUpsertWithoutStepsInput
+    connect?: FlowTraceLogWhereUniqueInput
+    update?: XOR<XOR<FlowTraceLogUpdateToOneWithWhereWithoutStepsInput, FlowTraceLogUpdateWithoutStepsInput>, FlowTraceLogUncheckedUpdateWithoutStepsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -14083,6 +17244,40 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumFlowEndpointReasonFilter<$PrismaModel>
     _max?: NestedEnumFlowEndpointReasonFilter<$PrismaModel>
+  }
+
+  export type NestedEnumFlowTraceLogStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlowTraceLogStatusFilter<$PrismaModel> | $Enums.FlowTraceLogStatus
+  }
+
+  export type NestedEnumFlowTraceLogStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlowTraceLogStatusWithAggregatesFilter<$PrismaModel> | $Enums.FlowTraceLogStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFlowTraceLogStatusFilter<$PrismaModel>
+    _max?: NestedEnumFlowTraceLogStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel> | $Enums.FlowTraceLogStatus | null
+  }
+
+  export type NestedEnumFlowTraceLogStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowTraceLogStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.FlowTraceLogStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel>
   }
 
   export type HotWalletCreateWithoutChainInput = {
@@ -15479,6 +18674,139 @@ export namespace Prisma {
     flows?: FlowUncheckedUpdateManyWithoutChainNestedInput
   }
 
+  export type FlowTraceLogStepCreateWithoutFlowTraceLogInput = {
+    id?: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
+    createdAt?: Date | string
+  }
+
+  export type FlowTraceLogStepUncheckedCreateWithoutFlowTraceLogInput = {
+    id?: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
+    createdAt?: Date | string
+  }
+
+  export type FlowTraceLogStepCreateOrConnectWithoutFlowTraceLogInput = {
+    where: FlowTraceLogStepWhereUniqueInput
+    create: XOR<FlowTraceLogStepCreateWithoutFlowTraceLogInput, FlowTraceLogStepUncheckedCreateWithoutFlowTraceLogInput>
+  }
+
+  export type FlowTraceLogStepCreateManyFlowTraceLogInputEnvelope = {
+    data: FlowTraceLogStepCreateManyFlowTraceLogInput | FlowTraceLogStepCreateManyFlowTraceLogInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FlowTraceLogStepUpsertWithWhereUniqueWithoutFlowTraceLogInput = {
+    where: FlowTraceLogStepWhereUniqueInput
+    update: XOR<FlowTraceLogStepUpdateWithoutFlowTraceLogInput, FlowTraceLogStepUncheckedUpdateWithoutFlowTraceLogInput>
+    create: XOR<FlowTraceLogStepCreateWithoutFlowTraceLogInput, FlowTraceLogStepUncheckedCreateWithoutFlowTraceLogInput>
+  }
+
+  export type FlowTraceLogStepUpdateWithWhereUniqueWithoutFlowTraceLogInput = {
+    where: FlowTraceLogStepWhereUniqueInput
+    data: XOR<FlowTraceLogStepUpdateWithoutFlowTraceLogInput, FlowTraceLogStepUncheckedUpdateWithoutFlowTraceLogInput>
+  }
+
+  export type FlowTraceLogStepUpdateManyWithWhereWithoutFlowTraceLogInput = {
+    where: FlowTraceLogStepScalarWhereInput
+    data: XOR<FlowTraceLogStepUpdateManyMutationInput, FlowTraceLogStepUncheckedUpdateManyWithoutFlowTraceLogInput>
+  }
+
+  export type FlowTraceLogStepScalarWhereInput = {
+    AND?: FlowTraceLogStepScalarWhereInput | FlowTraceLogStepScalarWhereInput[]
+    OR?: FlowTraceLogStepScalarWhereInput[]
+    NOT?: FlowTraceLogStepScalarWhereInput | FlowTraceLogStepScalarWhereInput[]
+    id?: StringFilter<"FlowTraceLogStep"> | string
+    flowTraceLogId?: StringFilter<"FlowTraceLogStep"> | string
+    stepIndex?: IntFilter<"FlowTraceLogStep"> | number
+    fromAddress?: StringFilter<"FlowTraceLogStep"> | string
+    toAddress?: StringFilter<"FlowTraceLogStep"> | string
+    transferSymbol?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    transferAmountRaw?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    transferAmountDecimal?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    txHash?: StringNullableFilter<"FlowTraceLogStep"> | string | null
+    outcome?: EnumFlowTraceLogStatusNullableFilter<"FlowTraceLogStep"> | $Enums.FlowTraceLogStatus | null
+    createdAt?: DateTimeFilter<"FlowTraceLogStep"> | Date | string
+  }
+
+  export type FlowTraceLogCreateWithoutStepsInput = {
+    id?: string
+    inputAddress: string
+    chainSlug: string
+    status: $Enums.FlowTraceLogStatus
+    endpointAddress?: string | null
+    failureAtAddress?: string | null
+    failureReason?: string | null
+    stepsCount?: number
+    createdAt?: Date | string
+  }
+
+  export type FlowTraceLogUncheckedCreateWithoutStepsInput = {
+    id?: string
+    inputAddress: string
+    chainSlug: string
+    status: $Enums.FlowTraceLogStatus
+    endpointAddress?: string | null
+    failureAtAddress?: string | null
+    failureReason?: string | null
+    stepsCount?: number
+    createdAt?: Date | string
+  }
+
+  export type FlowTraceLogCreateOrConnectWithoutStepsInput = {
+    where: FlowTraceLogWhereUniqueInput
+    create: XOR<FlowTraceLogCreateWithoutStepsInput, FlowTraceLogUncheckedCreateWithoutStepsInput>
+  }
+
+  export type FlowTraceLogUpsertWithoutStepsInput = {
+    update: XOR<FlowTraceLogUpdateWithoutStepsInput, FlowTraceLogUncheckedUpdateWithoutStepsInput>
+    create: XOR<FlowTraceLogCreateWithoutStepsInput, FlowTraceLogUncheckedCreateWithoutStepsInput>
+    where?: FlowTraceLogWhereInput
+  }
+
+  export type FlowTraceLogUpdateToOneWithWhereWithoutStepsInput = {
+    where?: FlowTraceLogWhereInput
+    data: XOR<FlowTraceLogUpdateWithoutStepsInput, FlowTraceLogUncheckedUpdateWithoutStepsInput>
+  }
+
+  export type FlowTraceLogUpdateWithoutStepsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inputAddress?: StringFieldUpdateOperationsInput | string
+    chainSlug?: StringFieldUpdateOperationsInput | string
+    status?: EnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus
+    endpointAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureAtAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    stepsCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowTraceLogUncheckedUpdateWithoutStepsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    inputAddress?: StringFieldUpdateOperationsInput | string
+    chainSlug?: StringFieldUpdateOperationsInput | string
+    status?: EnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus
+    endpointAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureAtAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    stepsCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type HotWalletCreateManyChainInput = {
     id?: string
     exchangeId: string
@@ -16116,6 +19444,58 @@ export namespace Prisma {
     amountDecimal?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowTraceLogStepCreateManyFlowTraceLogInput = {
+    id?: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    outcome?: $Enums.FlowTraceLogStatus | null
+    createdAt?: Date | string
+  }
+
+  export type FlowTraceLogStepUpdateWithoutFlowTraceLogInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowTraceLogStepUncheckedUpdateWithoutFlowTraceLogInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowTraceLogStepUncheckedUpdateManyWithoutFlowTraceLogInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowTraceLogStatusFieldUpdateOperationsInput | $Enums.FlowTraceLogStatus | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

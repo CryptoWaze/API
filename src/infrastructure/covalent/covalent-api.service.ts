@@ -13,12 +13,20 @@ import {
 } from './covalent-mapper';
 
 const API_BASE = 'https://api.covalenthq.com/v1';
+const THROTTLE_MS = 500;
+const RATE_LIMIT_RETRY_DELAY_MS = 15_000;
+const RATE_LIMIT_MAX_RETRIES = 3;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 @Injectable()
 export class CovalentApiService
   implements ITransactionFetcher, IAddressTransfersFetcher
 {
   private readonly apiKey: string;
+  private lastRequestAt = 0;
 
   constructor(private readonly configService: ConfigService) {
     const key = this.configService.get<string>('GOLDRUSH_API_KEY');
@@ -33,9 +41,16 @@ export class CovalentApiService
     txHash: string,
   ): Promise<TransactionWithTransfers | null> {
     const path = `${chain}/transaction_v2/${txHash}`;
-    const data = (await this.fetchJson(path)) as {
-      data?: { items?: CovalentItem[] };
-    };
+    let data: { data?: { items?: CovalentItem[] } };
+    try {
+      data = (await this.fetchJson(path)) as {
+        data?: { items?: CovalentItem[] };
+      };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('404')) return null;
+      throw err;
+    }
     const items = data.data?.items ?? [];
     if (items.length === 0) return null;
 
@@ -85,6 +100,14 @@ export class CovalentApiService
     );
   }
 
+  private async throttle(): Promise<void> {
+    const elapsed = Date.now() - this.lastRequestAt;
+    if (elapsed < THROTTLE_MS) {
+      await sleep(THROTTLE_MS - elapsed);
+    }
+    this.lastRequestAt = Date.now();
+  }
+
   private async fetchJson(
     path: string,
     params: Record<string, string | number | undefined> = {},
@@ -95,14 +118,26 @@ export class CovalentApiService
       if (value !== undefined && value !== null)
         url.searchParams.set(key, String(value));
     });
-    const res = await fetch(url.toString(), {
-      headers: { Authorization: `Bearer ${this.apiKey}` },
-    });
-    if (!res.ok) {
-      throw new Error(
-        `Covalent API error: ${res.status} ${res.statusText} – ${await res.text()}`,
-      );
+    const fullUrl = url.toString();
+    const headers = { Authorization: `Bearer ${this.apiKey}` };
+
+    for (let attempt = 0; attempt <= RATE_LIMIT_MAX_RETRIES; attempt++) {
+      await this.throttle();
+      const res = await fetch(fullUrl, { headers });
+      if (res.status === 429 && attempt < RATE_LIMIT_MAX_RETRIES) {
+        await sleep(RATE_LIMIT_RETRY_DELAY_MS);
+        continue;
+      }
+      if (!res.ok) {
+        throw new Error(
+          `Covalent API error: ${res.status} ${res.statusText} – ${await res.text()}`,
+        );
+      }
+      return res.json();
     }
-    return res.json();
+
+    throw new Error(
+      `Covalent API error: 429 Too Many Requests (retried ${RATE_LIMIT_MAX_RETRIES} times)`,
+    );
   }
 }

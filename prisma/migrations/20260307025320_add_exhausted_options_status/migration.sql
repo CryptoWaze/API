@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "FlowTraceLogStatus" ADD VALUE 'EXHAUSTED_OPTIONS';

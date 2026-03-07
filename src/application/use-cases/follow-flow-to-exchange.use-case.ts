@@ -1,4 +1,11 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Injectable,
+  Inject,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import type { GetFlowToExchangeInput } from '../schemas/get-flow-to-exchange.schema';
 import type {
   FollowFlowToExchangeResult,
@@ -40,6 +47,8 @@ function pickLargestOutbound(
 
 @Injectable()
 export class FollowFlowToExchangeUseCase {
+  private readonly logger = new Logger(FollowFlowToExchangeUseCase.name);
+
   constructor(
     @Inject(ADDRESS_TRANSFERS_FETCHER)
     private readonly addressTransfersFetcher: IAddressTransfersFetcher,
@@ -50,20 +59,34 @@ export class FollowFlowToExchangeUseCase {
   async execute(
     input: GetFlowToExchangeInput,
   ): Promise<FollowFlowToExchangeResult> {
-    const chainSlug = input.chain.trim();
-    const covalentChainId = toCovalentChainId(chainSlug);
-    const startAddress = normalizeAddress(input.address);
-    const result = await this.traceFlow(
-      covalentChainId,
-      chainSlug,
-      startAddress,
-    );
-    if (result === null) {
-      throw new NotFoundException(
-        `Nenhum fluxo até exchange encontrado a partir desta carteira (máx. ${MAX_HOPS} saltos).`,
+    try {
+      const chainSlug = input.chain.trim();
+      const covalentChainId = toCovalentChainId(chainSlug);
+      const startAddress = normalizeAddress(input.address);
+      const result = await this.traceFlow(
+        covalentChainId,
+        chainSlug,
+        startAddress,
+      );
+      if (result === null) {
+        throw new NotFoundException(
+          `Nenhum fluxo até exchange encontrado a partir desta carteira (máx. ${MAX_HOPS} saltos).`,
+        );
+      }
+      return result;
+    } catch (err) {
+      if (err instanceof NotFoundException) throw err;
+      const message = err instanceof Error ? err.message : String(err);
+      this.logger.error(`followFlowToExchange failed: ${message}`);
+      if (/Covalent API error: (500|502|503)/.test(message)) {
+        throw new BadGatewayException(
+          'Serviço de transações temporariamente indisponível. Tente novamente mais tarde.',
+        );
+      }
+      throw new InternalServerErrorException(
+        'Erro ao rastrear fluxo até exchange.',
       );
     }
-    return result;
   }
 
   private async traceFlow(

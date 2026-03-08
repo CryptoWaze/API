@@ -4,11 +4,12 @@ import {
   Inject,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
+  Optional,
 } from '@nestjs/common';
 import type { GetFlowToExchangeInput } from '../schemas/get-flow-to-exchange.schema';
 import type {
-  FollowFlowToExchangeResult,
+  FollowFlowToExchangeFullHistoryResult,
+  FlowGraph,
   FlowStep,
   WalletTransfer,
 } from '../types';
@@ -25,6 +26,11 @@ import {
   type IFlowTraceLogWriter,
   type FlowTraceLogStepInput,
 } from '../ports/flow-trace-log-writer.port';
+import {
+  FLOW_TRACE_PROGRESS_EMITTER,
+  type IFlowTraceProgressEmitter,
+  type FlowTraceProgressPayload,
+} from '../ports/flow-trace-progress-emitter.port';
 
 const MAX_WALLETS = 50;
 const MAX_PAGES_PER_WALLET = 50;
@@ -102,10 +108,39 @@ function markPathEdgesSuccess(edges: EdgeRecord[], path: FlowStep[]): void {
   }
 }
 
-function shortAddress(addr: string): string {
-  const a = addr.trim();
-  if (a.length <= 12) return a;
-  return `${a.slice(0, 6)}...${a.slice(-4)}`;
+function friendlyReason(reason: string): string {
+  switch (reason) {
+    case 'NO_OUTBOUND':
+      return 'Carteira sem transferências de saída no histórico';
+    case 'MAX_WALLETS_REACHED':
+      return 'Limite máximo de carteiras analisadas (50)';
+    case 'EXHAUSTED_OPTIONS':
+      return 'Todos os caminhos desta ramificação já foram tentados';
+    default:
+      return reason;
+  }
+}
+
+function buildGraph(edges: EdgeRecord[]): FlowGraph {
+  const nodeIds = new Set<string>();
+  for (const e of edges) {
+    nodeIds.add(e.fromAddress);
+    nodeIds.add(e.toAddress);
+  }
+  const nodes = Array.from(nodeIds).map((id) => ({
+    id,
+    label: id,
+  }));
+  const graphEdges = edges.map((e) => ({
+    from: e.fromAddress,
+    to: e.toAddress,
+    symbol: e.transfer.symbol,
+    amount: e.transfer.amount,
+    amountRaw: e.transfer.rawAmount,
+    txHash: e.transfer.txHash,
+    outcome: e.outcome ?? undefined,
+  }));
+  return { nodes, edges: graphEdges };
 }
 
 @Injectable()
@@ -121,27 +156,44 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     private readonly hotWalletChecker: IHotWalletChecker,
     @Inject(FLOW_TRACE_LOG_WRITER)
     private readonly flowTraceLogWriter: IFlowTraceLogWriter,
+    @Optional()
+    @Inject(FLOW_TRACE_PROGRESS_EMITTER)
+    private readonly flowTraceProgressEmitter: IFlowTraceProgressEmitter | null,
   ) {}
+
+  private progress(
+    traceId: string | undefined,
+    payload: FlowTraceProgressPayload,
+  ): void {
+    this.logger.log(payload.message);
+    if (traceId && this.flowTraceProgressEmitter) {
+      this.flowTraceProgressEmitter.emit(traceId, payload);
+    }
+  }
 
   async execute(
     input: GetFlowToExchangeInput,
-  ): Promise<FollowFlowToExchangeResult> {
+  ): Promise<FollowFlowToExchangeFullHistoryResult> {
     const chainSlug = input.chain.trim();
     const covalentChainId = toCovalentChainId(chainSlug);
     const startAddress = normalizeAddress(input.address);
+    const traceId = input.traceId;
 
-    this.logger.log(
-      `Flow trace started chain=${chainSlug} start=${shortAddress(startAddress)}`,
-    );
+    this.progress(traceId, {
+      message: `Iniciando rastreio do fluxo na rede ${chainSlug}. Carteira de partida: ${startAddress}`,
+      address: startAddress,
+    });
 
     try {
       const { result, edges } = await this.traceFlowIterative(
         covalentChainId,
         chainSlug,
         startAddress,
+        traceId,
       );
 
       const logSteps = edgesToLogInput(edges);
+      const graph = buildGraph(edges);
       if (result.success) {
         await this.flowTraceLogWriter.write({
           inputAddress: startAddress,
@@ -151,9 +203,11 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           steps: logSteps,
         });
         return {
+          success: true,
           chain: result.chain,
           steps: result.steps,
           endpointAddress: result.endpointAddress,
+          graph,
         };
       }
 
@@ -171,11 +225,15 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         failureReason,
         steps: logSteps,
       });
-      throw new NotFoundException(
-        `Nenhum fluxo até exchange encontrado (máx. ${MAX_WALLETS} carteiras).`,
-      );
+      return {
+        success: false,
+        chain: chainSlug,
+        reason: result.reason,
+        lastWallet: result.lastWallet,
+        steps: result.steps,
+        graph,
+      };
     } catch (err) {
-      if (err instanceof NotFoundException) throw err;
       const message = err instanceof Error ? err.message : String(err);
       const stack = err instanceof Error ? err.stack : undefined;
       this.logger.error(
@@ -197,22 +255,28 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     covalentChainId: string,
     address: string,
     limit: number,
+    traceId: string | undefined,
   ): Promise<WalletTransfer[]> {
     const all: WalletTransfer[] = [];
     const PAGE_LOG_INTERVAL = 20;
     for (let page = 0; page < MAX_PAGES_PER_WALLET; page++) {
-      const pageTransfers: WalletTransfer[] =
-        await this.addressTransfersFetcher.getAddressTransfersPage(
+      /* eslint-disable @typescript-eslint/no-unsafe-call */
+      const pageTransfers =
+        (await this.addressTransfersFetcher.getAddressTransfersPage(
           covalentChainId,
           address,
           page,
-        );
+        )) as WalletTransfer[];
+      /* eslint-enable @typescript-eslint/no-unsafe-call */
       if (pageTransfers.length === 0) break;
       all.push(...pageTransfers);
       if (page > 0 && page % PAGE_LOG_INTERVAL === 0) {
-        this.logger.log(
-          `Fetching outbounds addr=${shortAddress(address)} page=${page} totalTransfers=${all.length}`,
-        );
+        this.progress(traceId, {
+          message: `Buscando histórico de transferências da carteira... (página ${page + 1}, ${all.length} transferências encontradas até agora)`,
+          address: normalizeAddress(address),
+          page: page + 1,
+          totalTransfers: all.length,
+        });
       }
     }
     return pickTopOutbounds(all, limit);
@@ -234,6 +298,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     covalentChainId: string,
     chainSlug: string,
     startAddress: string,
+    traceId: string | undefined,
   ): Promise<{
     result: TraceSuccess | TraceFailure;
     edges: EdgeRecord[];
@@ -268,9 +333,12 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     while (stack.length > 0) {
       if (Date.now() - lastHeartbeatAt >= HEARTBEAT_INTERVAL_MS) {
         const top = stack[stack.length - 1];
-        this.logger.log(
-          `Flow trace in progress stack=${stack.length} depth=${top.path.length} current=${shortAddress(top.currentAddress)}`,
-        );
+        this.progress(traceId, {
+          message: `Rastreio em andamento. Analisando carteira na etapa ${top.path.length + 1}.`,
+          stackLength: stack.length,
+          depth: top.path.length,
+          address: top.currentAddress,
+        });
         lastHeartbeatAt = Date.now();
       }
 
@@ -278,14 +346,19 @@ export class FollowFlowToExchangeFullHistoryUseCase {
       const depth = frame.path.length;
       const stackRemaining = stack.length;
 
-      this.logger.log(
-        `Processing depth=${depth} stackRemaining=${stackRemaining} addr=${shortAddress(frame.currentAddress)}`,
-      );
+      this.progress(traceId, {
+        message: `Analisando carteira na etapa ${depth + 1}...`,
+        depth: depth + 1,
+        stackRemaining,
+        address: frame.currentAddress,
+      });
 
       if (frame.path.length >= MAX_WALLETS) {
-        this.logger.log(
-          `MAX_WALLETS_REACHED depth=${depth} addr=${shortAddress(frame.currentAddress)}`,
-        );
+        this.progress(traceId, {
+          message: `Limite máximo de carteiras analisadas atingido (50). Interrompendo rastreio.`,
+          depth: depth + 1,
+          address: frame.currentAddress,
+        });
         if (frame.edgeIndex !== undefined) {
           edges[frame.edgeIndex].outcome = 'MAX_WALLETS_REACHED';
         }
@@ -302,9 +375,11 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         frame.currentAddress,
       );
       if (isHot) {
-        this.logger.log(
-          `HOT WALLET FOUND depth=${depth} endpoint=${shortAddress(frame.currentAddress)}`,
-        );
+        this.progress(traceId, {
+          message: `Exchange encontrada. Carteira de destino identificada.`,
+          depth: depth + 1,
+          address: frame.currentAddress,
+        });
         markPathEdgesSuccess(edges, frame.path);
         return {
           result: {
@@ -318,22 +393,30 @@ export class FollowFlowToExchangeFullHistoryUseCase {
       }
 
       if (frame.outbounds === null) {
-        this.logger.log(
-          `Fetching outbounds depth=${depth} addr=${shortAddress(frame.currentAddress)}`,
-        );
+        this.progress(traceId, {
+          message: `Buscando todas as transferências de saída desta carteira...`,
+          depth: depth + 1,
+          address: frame.currentAddress,
+        });
         frame.outbounds = await this.getFullHistoryTopOutbounds(
           covalentChainId,
           frame.currentAddress,
           HOT_WALLET_SCAN_LIMIT,
+          traceId,
         );
-        this.logger.log(
-          `Outbounds received depth=${depth} count=${frame.outbounds.length}`,
-        );
+        this.progress(traceId, {
+          message: `Foram encontradas ${frame.outbounds.length} transferências de saída. Verificando destinos...`,
+          depth: depth + 1,
+          count: frame.outbounds.length,
+          address: frame.currentAddress,
+        });
       }
       if (frame.outbounds.length === 0) {
-        this.logger.log(
-          `NO_OUTBOUND depth=${depth} addr=${shortAddress(frame.currentAddress)} (backtracking)`,
-        );
+        this.progress(traceId, {
+          message: `Esta carteira não possui transferências de saída no histórico. Voltando para tentar outro caminho.`,
+          depth: depth + 1,
+          address: frame.currentAddress,
+        });
         if (frame.edgeIndex !== undefined) {
           edges[frame.edgeIndex].outcome = 'NO_OUTBOUND';
         }
@@ -364,9 +447,11 @@ export class FollowFlowToExchangeFullHistoryUseCase {
             outcome: 'SUCCESS',
           });
           markPathEdgesSuccess(edges, frame.path);
-          this.logger.log(
-            `HOT WALLET FOUND IN HISTORY depth=${depth} endpoint=${shortAddress(counterparty)} (from outbound scan)`,
-          );
+          this.progress(traceId, {
+            message: `Exchange encontrada. Uma das transferências desta carteira vai direto para uma exchange cadastrada.`,
+            depth: depth + 1,
+            address: counterparty,
+          });
           return {
             result: {
               success: true,
@@ -402,9 +487,13 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           outcome: null,
         });
         const edgeIndex = edges.length - 1;
-        this.logger.log(
-          `Forward depth=${depth} -> ${newPath.length} next=${shortAddress(nextAddress)} ${transfer.symbol} ${transfer.amount}`,
-        );
+        this.progress(traceId, {
+          message: `Seguindo transferência de ${transfer.amount} ${transfer.symbol} para a próxima carteira...`,
+          depth: depth + 1,
+          nextAddress,
+          symbol: transfer.symbol,
+          amount: transfer.amount,
+        });
         stack.push({
           path: frame.path,
           currentAddress: frame.currentAddress,
@@ -422,9 +511,11 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         break;
       }
       if (!pushed) {
-        this.logger.log(
-          `EXHAUSTED_OPTIONS depth=${depth} addr=${shortAddress(frame.currentAddress)} (backtracking)`,
-        );
+        this.progress(traceId, {
+          message: `Todos os caminhos possíveis a partir desta carteira já foram tentados. Voltando para tentar outra ramificação.`,
+          depth: depth + 1,
+          address: frame.currentAddress,
+        });
         if (frame.edgeIndex !== undefined) {
           edges[frame.edgeIndex].outcome = 'EXHAUSTED_OPTIONS';
         }
@@ -436,9 +527,13 @@ export class FollowFlowToExchangeFullHistoryUseCase {
       }
     }
 
-    this.logger.log(
-      `Flow trace finished no hot wallet lastWallet=${shortAddress(lastFailure?.lastWallet ?? startAddress)} reason=${lastFailure?.reason ?? 'EXHAUSTED_OPTIONS'}`,
-    );
+    const lastWalletFull = lastFailure?.lastWallet ?? startAddress;
+    const reasonCode = lastFailure?.reason ?? 'EXHAUSTED_OPTIONS';
+    this.progress(traceId, {
+      message: `Rastreio finalizado. Nenhuma exchange foi encontrada no caminho. Última carteira analisada: ${lastWalletFull}. Motivo: ${friendlyReason(reasonCode)}.`,
+      lastWallet: lastWalletFull,
+      reason: friendlyReason(reasonCode),
+    });
 
     const path = lastFailure?.path ?? [];
     const lastWallet = lastFailure?.lastWallet ?? startAddress;

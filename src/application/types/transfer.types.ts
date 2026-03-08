@@ -60,3 +60,48 @@ export type FollowFlowToExchangeResult = {
   steps: FlowStep[];
   endpointAddress: string;
 };
+
+export type FlowGraphNode = {
+  id: string;
+  label: string;
+};
+
+export type FlowGraphEdge = {
+  from: string;
+  to: string;
+  symbol: string;
+  amount: number;
+  amountRaw: string;
+  txHash: string;
+  outcome?:
+    | 'SUCCESS'
+    | 'NO_OUTBOUND'
+    | 'MAX_WALLETS_REACHED'
+    | 'EXHAUSTED_OPTIONS';
+};
+
+export type FlowGraph = {
+  nodes: FlowGraphNode[];
+  edges: FlowGraphEdge[];
+};
+
+export type FollowFlowToExchangeFullHistorySuccess = {
+  success: true;
+  chain: string;
+  steps: FlowStep[];
+  endpointAddress: string;
+  graph: FlowGraph;
+};
+
+export type FollowFlowToExchangeFullHistoryFailure = {
+  success: false;
+  chain: string;
+  reason: string;
+  lastWallet: string;
+  steps: FlowStep[];
+  graph: FlowGraph;
+};
+
+export type FollowFlowToExchangeFullHistoryResult =
+  | FollowFlowToExchangeFullHistorySuccess
+  | FollowFlowToExchangeFullHistoryFailure;

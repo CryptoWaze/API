@@ -7,4 +7,10 @@ export type {
   GetAddressTopTransfersHistoryResult,
   FlowStep,
   FollowFlowToExchangeResult,
+  FlowGraph,
+  FlowGraphNode,
+  FlowGraphEdge,
+  FollowFlowToExchangeFullHistoryResult,
+  FollowFlowToExchangeFullHistorySuccess,
+  FollowFlowToExchangeFullHistoryFailure,
 } from './transfer.types';

@@ -7,5 +7,6 @@ import { TransactionsController } from './transactions.controller';
   imports: [CovalentModule],
   controllers: [TransactionsController],
   providers: [ResolveTransactionUseCase],
+  exports: [ResolveTransactionUseCase],
 })
 export class TransactionsModule {}

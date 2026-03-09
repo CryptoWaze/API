@@ -22,5 +22,6 @@ import { AddressesController } from './addresses.controller';
     FollowFlowToExchangeFullHistoryUseCase,
     FlowToExchangeFromTransactionUseCase,
   ],
+  exports: [FollowFlowToExchangeFullHistoryUseCase],
 })
 export class AddressesModule {}

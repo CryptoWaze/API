@@ -54,6 +54,11 @@ export type Flow = $Result.DefaultSelection<Prisma.$FlowPayload>
  */
 export type FlowTransaction = $Result.DefaultSelection<Prisma.$FlowTransactionPayload>
 /**
+ * Model FlowEdge
+ * 
+ */
+export type FlowEdge = $Result.DefaultSelection<Prisma.$FlowEdgePayload>
+/**
  * Model FlowTraceLog
  * 
  */
@@ -72,7 +77,9 @@ export namespace $Enums {
   EXCHANGE_HOT_WALLET: 'EXCHANGE_HOT_WALLET',
   MAX_HOPS_REACHED: 'MAX_HOPS_REACHED',
   NO_OUTGOING_ABOVE_THRESHOLD: 'NO_OUTGOING_ABOVE_THRESHOLD',
-  CYCLE_DETECTED: 'CYCLE_DETECTED'
+  CYCLE_DETECTED: 'CYCLE_DETECTED',
+  NO_OUTBOUND: 'NO_OUTBOUND',
+  EXHAUSTED_OPTIONS: 'EXHAUSTED_OPTIONS'
 };
 
 export type FlowEndpointReason = (typeof FlowEndpointReason)[keyof typeof FlowEndpointReason]
@@ -87,6 +94,16 @@ export const CaseStatus: {
 };
 
 export type CaseStatus = (typeof CaseStatus)[keyof typeof CaseStatus]
+
+
+export const FlowEdgeOutcome: {
+  SUCCESS: 'SUCCESS',
+  NO_OUTBOUND: 'NO_OUTBOUND',
+  MAX_WALLETS_REACHED: 'MAX_WALLETS_REACHED',
+  EXHAUSTED_OPTIONS: 'EXHAUSTED_OPTIONS'
+};
+
+export type FlowEdgeOutcome = (typeof FlowEdgeOutcome)[keyof typeof FlowEdgeOutcome]
 
 
 export const FlowTraceLogStatus: {
@@ -107,6 +124,10 @@ export const FlowEndpointReason: typeof $Enums.FlowEndpointReason
 export type CaseStatus = $Enums.CaseStatus
 
 export const CaseStatus: typeof $Enums.CaseStatus
+
+export type FlowEdgeOutcome = $Enums.FlowEdgeOutcome
+
+export const FlowEdgeOutcome: typeof $Enums.FlowEdgeOutcome
 
 export type FlowTraceLogStatus = $Enums.FlowTraceLogStatus
 
@@ -312,6 +333,16 @@ export class PrismaClient<
     * ```
     */
   get flowTransaction(): Prisma.FlowTransactionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.flowEdge`: Exposes CRUD operations for the **FlowEdge** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FlowEdges
+    * const flowEdges = await prisma.flowEdge.findMany()
+    * ```
+    */
+  get flowEdge(): Prisma.FlowEdgeDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.flowTraceLog`: Exposes CRUD operations for the **FlowTraceLog** model.
@@ -774,6 +805,7 @@ export namespace Prisma {
     CaseSeedTransaction: 'CaseSeedTransaction',
     Flow: 'Flow',
     FlowTransaction: 'FlowTransaction',
+    FlowEdge: 'FlowEdge',
     FlowTraceLog: 'FlowTraceLog',
     FlowTraceLogStep: 'FlowTraceLogStep'
   };
@@ -791,7 +823,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "chain" | "user" | "exchange" | "hotWallet" | "case" | "caseSeedTransaction" | "flow" | "flowTransaction" | "flowTraceLog" | "flowTraceLogStep"
+      modelProps: "chain" | "user" | "exchange" | "hotWallet" | "case" | "caseSeedTransaction" | "flow" | "flowTransaction" | "flowEdge" | "flowTraceLog" | "flowTraceLogStep"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1387,6 +1419,80 @@ export namespace Prisma {
           }
         }
       }
+      FlowEdge: {
+        payload: Prisma.$FlowEdgePayload<ExtArgs>
+        fields: Prisma.FlowEdgeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FlowEdgeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowEdgePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FlowEdgeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowEdgePayload>
+          }
+          findFirst: {
+            args: Prisma.FlowEdgeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowEdgePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FlowEdgeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowEdgePayload>
+          }
+          findMany: {
+            args: Prisma.FlowEdgeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowEdgePayload>[]
+          }
+          create: {
+            args: Prisma.FlowEdgeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowEdgePayload>
+          }
+          createMany: {
+            args: Prisma.FlowEdgeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FlowEdgeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowEdgePayload>[]
+          }
+          delete: {
+            args: Prisma.FlowEdgeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowEdgePayload>
+          }
+          update: {
+            args: Prisma.FlowEdgeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowEdgePayload>
+          }
+          deleteMany: {
+            args: Prisma.FlowEdgeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FlowEdgeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FlowEdgeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowEdgePayload>[]
+          }
+          upsert: {
+            args: Prisma.FlowEdgeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowEdgePayload>
+          }
+          aggregate: {
+            args: Prisma.FlowEdgeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFlowEdge>
+          }
+          groupBy: {
+            args: Prisma.FlowEdgeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FlowEdgeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FlowEdgeCountArgs<ExtArgs>
+            result: $Utils.Optional<FlowEdgeCountAggregateOutputType> | number
+          }
+        }
+      }
       FlowTraceLog: {
         payload: Prisma.$FlowTraceLogPayload<ExtArgs>
         fields: Prisma.FlowTraceLogFieldRefs
@@ -1651,6 +1757,7 @@ export namespace Prisma {
     caseSeedTransaction?: CaseSeedTransactionOmit
     flow?: FlowOmit
     flowTransaction?: FlowTransactionOmit
+    flowEdge?: FlowEdgeOmit
     flowTraceLog?: FlowTraceLogOmit
     flowTraceLogStep?: FlowTraceLogStepOmit
   }
@@ -1956,10 +2063,12 @@ export namespace Prisma {
 
   export type FlowCountOutputType = {
     transactions: number
+    edges: number
   }
 
   export type FlowCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transactions?: boolean | FlowCountOutputTypeCountTransactionsArgs
+    edges?: boolean | FlowCountOutputTypeCountEdgesArgs
   }
 
   // Custom InputTypes
@@ -1978,6 +2087,13 @@ export namespace Prisma {
    */
   export type FlowCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FlowTransactionWhereInput
+  }
+
+  /**
+   * FlowCountOutputType without action
+   */
+  export type FlowCountOutputTypeCountEdgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlowEdgeWhereInput
   }
 
 
@@ -9070,6 +9186,7 @@ export namespace Prisma {
     chain?: boolean | ChainDefaultArgs<ExtArgs>
     endpointHotWallet?: boolean | Flow$endpointHotWalletArgs<ExtArgs>
     transactions?: boolean | Flow$transactionsArgs<ExtArgs>
+    edges?: boolean | Flow$edgesArgs<ExtArgs>
     _count?: boolean | FlowCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flow"]>
 
@@ -9142,6 +9259,7 @@ export namespace Prisma {
     chain?: boolean | ChainDefaultArgs<ExtArgs>
     endpointHotWallet?: boolean | Flow$endpointHotWalletArgs<ExtArgs>
     transactions?: boolean | Flow$transactionsArgs<ExtArgs>
+    edges?: boolean | Flow$edgesArgs<ExtArgs>
     _count?: boolean | FlowCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FlowIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9165,6 +9283,7 @@ export namespace Prisma {
       chain: Prisma.$ChainPayload<ExtArgs>
       endpointHotWallet: Prisma.$HotWalletPayload<ExtArgs> | null
       transactions: Prisma.$FlowTransactionPayload<ExtArgs>[]
+      edges: Prisma.$FlowEdgePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9581,6 +9700,7 @@ export namespace Prisma {
     chain<T extends ChainDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChainDefaultArgs<ExtArgs>>): Prisma__ChainClient<$Result.GetResult<Prisma.$ChainPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     endpointHotWallet<T extends Flow$endpointHotWalletArgs<ExtArgs> = {}>(args?: Subset<T, Flow$endpointHotWalletArgs<ExtArgs>>): Prisma__HotWalletClient<$Result.GetResult<Prisma.$HotWalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     transactions<T extends Flow$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Flow$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    edges<T extends Flow$edgesArgs<ExtArgs> = {}>(args?: Subset<T, Flow$edgesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10061,6 +10181,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FlowTransactionScalarFieldEnum | FlowTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Flow.edges
+   */
+  export type Flow$edgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeInclude<ExtArgs> | null
+    where?: FlowEdgeWhereInput
+    orderBy?: FlowEdgeOrderByWithRelationInput | FlowEdgeOrderByWithRelationInput[]
+    cursor?: FlowEdgeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlowEdgeScalarFieldEnum | FlowEdgeScalarFieldEnum[]
   }
 
   /**
@@ -11296,6 +11440,1202 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FlowTransactionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FlowEdge
+   */
+
+  export type AggregateFlowEdge = {
+    _count: FlowEdgeCountAggregateOutputType | null
+    _avg: FlowEdgeAvgAggregateOutputType | null
+    _sum: FlowEdgeSumAggregateOutputType | null
+    _min: FlowEdgeMinAggregateOutputType | null
+    _max: FlowEdgeMaxAggregateOutputType | null
+  }
+
+  export type FlowEdgeAvgAggregateOutputType = {
+    stepIndex: number | null
+  }
+
+  export type FlowEdgeSumAggregateOutputType = {
+    stepIndex: number | null
+  }
+
+  export type FlowEdgeMinAggregateOutputType = {
+    id: string | null
+    flowId: string | null
+    stepIndex: number | null
+    fromAddress: string | null
+    toAddress: string | null
+    transferSymbol: string | null
+    transferAmountRaw: string | null
+    transferAmountDecimal: string | null
+    txHash: string | null
+    tokenAddress: string | null
+    outcome: $Enums.FlowEdgeOutcome | null
+    transferTimestamp: Date | null
+    createdAt: Date | null
+  }
+
+  export type FlowEdgeMaxAggregateOutputType = {
+    id: string | null
+    flowId: string | null
+    stepIndex: number | null
+    fromAddress: string | null
+    toAddress: string | null
+    transferSymbol: string | null
+    transferAmountRaw: string | null
+    transferAmountDecimal: string | null
+    txHash: string | null
+    tokenAddress: string | null
+    outcome: $Enums.FlowEdgeOutcome | null
+    transferTimestamp: Date | null
+    createdAt: Date | null
+  }
+
+  export type FlowEdgeCountAggregateOutputType = {
+    id: number
+    flowId: number
+    stepIndex: number
+    fromAddress: number
+    toAddress: number
+    transferSymbol: number
+    transferAmountRaw: number
+    transferAmountDecimal: number
+    txHash: number
+    tokenAddress: number
+    outcome: number
+    transferTimestamp: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FlowEdgeAvgAggregateInputType = {
+    stepIndex?: true
+  }
+
+  export type FlowEdgeSumAggregateInputType = {
+    stepIndex?: true
+  }
+
+  export type FlowEdgeMinAggregateInputType = {
+    id?: true
+    flowId?: true
+    stepIndex?: true
+    fromAddress?: true
+    toAddress?: true
+    transferSymbol?: true
+    transferAmountRaw?: true
+    transferAmountDecimal?: true
+    txHash?: true
+    tokenAddress?: true
+    outcome?: true
+    transferTimestamp?: true
+    createdAt?: true
+  }
+
+  export type FlowEdgeMaxAggregateInputType = {
+    id?: true
+    flowId?: true
+    stepIndex?: true
+    fromAddress?: true
+    toAddress?: true
+    transferSymbol?: true
+    transferAmountRaw?: true
+    transferAmountDecimal?: true
+    txHash?: true
+    tokenAddress?: true
+    outcome?: true
+    transferTimestamp?: true
+    createdAt?: true
+  }
+
+  export type FlowEdgeCountAggregateInputType = {
+    id?: true
+    flowId?: true
+    stepIndex?: true
+    fromAddress?: true
+    toAddress?: true
+    transferSymbol?: true
+    transferAmountRaw?: true
+    transferAmountDecimal?: true
+    txHash?: true
+    tokenAddress?: true
+    outcome?: true
+    transferTimestamp?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FlowEdgeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlowEdge to aggregate.
+     */
+    where?: FlowEdgeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowEdges to fetch.
+     */
+    orderBy?: FlowEdgeOrderByWithRelationInput | FlowEdgeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FlowEdgeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowEdges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowEdges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FlowEdges
+    **/
+    _count?: true | FlowEdgeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FlowEdgeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FlowEdgeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FlowEdgeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FlowEdgeMaxAggregateInputType
+  }
+
+  export type GetFlowEdgeAggregateType<T extends FlowEdgeAggregateArgs> = {
+        [P in keyof T & keyof AggregateFlowEdge]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFlowEdge[P]>
+      : GetScalarType<T[P], AggregateFlowEdge[P]>
+  }
+
+
+
+
+  export type FlowEdgeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlowEdgeWhereInput
+    orderBy?: FlowEdgeOrderByWithAggregationInput | FlowEdgeOrderByWithAggregationInput[]
+    by: FlowEdgeScalarFieldEnum[] | FlowEdgeScalarFieldEnum
+    having?: FlowEdgeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FlowEdgeCountAggregateInputType | true
+    _avg?: FlowEdgeAvgAggregateInputType
+    _sum?: FlowEdgeSumAggregateInputType
+    _min?: FlowEdgeMinAggregateInputType
+    _max?: FlowEdgeMaxAggregateInputType
+  }
+
+  export type FlowEdgeGroupByOutputType = {
+    id: string
+    flowId: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol: string | null
+    transferAmountRaw: string | null
+    transferAmountDecimal: string | null
+    txHash: string | null
+    tokenAddress: string | null
+    outcome: $Enums.FlowEdgeOutcome | null
+    transferTimestamp: Date | null
+    createdAt: Date
+    _count: FlowEdgeCountAggregateOutputType | null
+    _avg: FlowEdgeAvgAggregateOutputType | null
+    _sum: FlowEdgeSumAggregateOutputType | null
+    _min: FlowEdgeMinAggregateOutputType | null
+    _max: FlowEdgeMaxAggregateOutputType | null
+  }
+
+  type GetFlowEdgeGroupByPayload<T extends FlowEdgeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FlowEdgeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FlowEdgeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FlowEdgeGroupByOutputType[P]>
+            : GetScalarType<T[P], FlowEdgeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FlowEdgeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flowId?: boolean
+    stepIndex?: boolean
+    fromAddress?: boolean
+    toAddress?: boolean
+    transferSymbol?: boolean
+    transferAmountRaw?: boolean
+    transferAmountDecimal?: boolean
+    txHash?: boolean
+    tokenAddress?: boolean
+    outcome?: boolean
+    transferTimestamp?: boolean
+    createdAt?: boolean
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flowEdge"]>
+
+  export type FlowEdgeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flowId?: boolean
+    stepIndex?: boolean
+    fromAddress?: boolean
+    toAddress?: boolean
+    transferSymbol?: boolean
+    transferAmountRaw?: boolean
+    transferAmountDecimal?: boolean
+    txHash?: boolean
+    tokenAddress?: boolean
+    outcome?: boolean
+    transferTimestamp?: boolean
+    createdAt?: boolean
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flowEdge"]>
+
+  export type FlowEdgeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flowId?: boolean
+    stepIndex?: boolean
+    fromAddress?: boolean
+    toAddress?: boolean
+    transferSymbol?: boolean
+    transferAmountRaw?: boolean
+    transferAmountDecimal?: boolean
+    txHash?: boolean
+    tokenAddress?: boolean
+    outcome?: boolean
+    transferTimestamp?: boolean
+    createdAt?: boolean
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flowEdge"]>
+
+  export type FlowEdgeSelectScalar = {
+    id?: boolean
+    flowId?: boolean
+    stepIndex?: boolean
+    fromAddress?: boolean
+    toAddress?: boolean
+    transferSymbol?: boolean
+    transferAmountRaw?: boolean
+    transferAmountDecimal?: boolean
+    txHash?: boolean
+    tokenAddress?: boolean
+    outcome?: boolean
+    transferTimestamp?: boolean
+    createdAt?: boolean
+  }
+
+  export type FlowEdgeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flowId" | "stepIndex" | "fromAddress" | "toAddress" | "transferSymbol" | "transferAmountRaw" | "transferAmountDecimal" | "txHash" | "tokenAddress" | "outcome" | "transferTimestamp" | "createdAt", ExtArgs["result"]["flowEdge"]>
+  export type FlowEdgeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }
+  export type FlowEdgeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }
+  export type FlowEdgeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }
+
+  export type $FlowEdgePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FlowEdge"
+    objects: {
+      flow: Prisma.$FlowPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      flowId: string
+      stepIndex: number
+      fromAddress: string
+      toAddress: string
+      transferSymbol: string | null
+      transferAmountRaw: string | null
+      transferAmountDecimal: string | null
+      txHash: string | null
+      tokenAddress: string | null
+      outcome: $Enums.FlowEdgeOutcome | null
+      transferTimestamp: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["flowEdge"]>
+    composites: {}
+  }
+
+  type FlowEdgeGetPayload<S extends boolean | null | undefined | FlowEdgeDefaultArgs> = $Result.GetResult<Prisma.$FlowEdgePayload, S>
+
+  type FlowEdgeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FlowEdgeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FlowEdgeCountAggregateInputType | true
+    }
+
+  export interface FlowEdgeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FlowEdge'], meta: { name: 'FlowEdge' } }
+    /**
+     * Find zero or one FlowEdge that matches the filter.
+     * @param {FlowEdgeFindUniqueArgs} args - Arguments to find a FlowEdge
+     * @example
+     * // Get one FlowEdge
+     * const flowEdge = await prisma.flowEdge.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FlowEdgeFindUniqueArgs>(args: SelectSubset<T, FlowEdgeFindUniqueArgs<ExtArgs>>): Prisma__FlowEdgeClient<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FlowEdge that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FlowEdgeFindUniqueOrThrowArgs} args - Arguments to find a FlowEdge
+     * @example
+     * // Get one FlowEdge
+     * const flowEdge = await prisma.flowEdge.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FlowEdgeFindUniqueOrThrowArgs>(args: SelectSubset<T, FlowEdgeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FlowEdgeClient<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FlowEdge that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowEdgeFindFirstArgs} args - Arguments to find a FlowEdge
+     * @example
+     * // Get one FlowEdge
+     * const flowEdge = await prisma.flowEdge.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FlowEdgeFindFirstArgs>(args?: SelectSubset<T, FlowEdgeFindFirstArgs<ExtArgs>>): Prisma__FlowEdgeClient<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FlowEdge that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowEdgeFindFirstOrThrowArgs} args - Arguments to find a FlowEdge
+     * @example
+     * // Get one FlowEdge
+     * const flowEdge = await prisma.flowEdge.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FlowEdgeFindFirstOrThrowArgs>(args?: SelectSubset<T, FlowEdgeFindFirstOrThrowArgs<ExtArgs>>): Prisma__FlowEdgeClient<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FlowEdges that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowEdgeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FlowEdges
+     * const flowEdges = await prisma.flowEdge.findMany()
+     * 
+     * // Get first 10 FlowEdges
+     * const flowEdges = await prisma.flowEdge.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const flowEdgeWithIdOnly = await prisma.flowEdge.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FlowEdgeFindManyArgs>(args?: SelectSubset<T, FlowEdgeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FlowEdge.
+     * @param {FlowEdgeCreateArgs} args - Arguments to create a FlowEdge.
+     * @example
+     * // Create one FlowEdge
+     * const FlowEdge = await prisma.flowEdge.create({
+     *   data: {
+     *     // ... data to create a FlowEdge
+     *   }
+     * })
+     * 
+     */
+    create<T extends FlowEdgeCreateArgs>(args: SelectSubset<T, FlowEdgeCreateArgs<ExtArgs>>): Prisma__FlowEdgeClient<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FlowEdges.
+     * @param {FlowEdgeCreateManyArgs} args - Arguments to create many FlowEdges.
+     * @example
+     * // Create many FlowEdges
+     * const flowEdge = await prisma.flowEdge.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FlowEdgeCreateManyArgs>(args?: SelectSubset<T, FlowEdgeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FlowEdges and returns the data saved in the database.
+     * @param {FlowEdgeCreateManyAndReturnArgs} args - Arguments to create many FlowEdges.
+     * @example
+     * // Create many FlowEdges
+     * const flowEdge = await prisma.flowEdge.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FlowEdges and only return the `id`
+     * const flowEdgeWithIdOnly = await prisma.flowEdge.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FlowEdgeCreateManyAndReturnArgs>(args?: SelectSubset<T, FlowEdgeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FlowEdge.
+     * @param {FlowEdgeDeleteArgs} args - Arguments to delete one FlowEdge.
+     * @example
+     * // Delete one FlowEdge
+     * const FlowEdge = await prisma.flowEdge.delete({
+     *   where: {
+     *     // ... filter to delete one FlowEdge
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FlowEdgeDeleteArgs>(args: SelectSubset<T, FlowEdgeDeleteArgs<ExtArgs>>): Prisma__FlowEdgeClient<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FlowEdge.
+     * @param {FlowEdgeUpdateArgs} args - Arguments to update one FlowEdge.
+     * @example
+     * // Update one FlowEdge
+     * const flowEdge = await prisma.flowEdge.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FlowEdgeUpdateArgs>(args: SelectSubset<T, FlowEdgeUpdateArgs<ExtArgs>>): Prisma__FlowEdgeClient<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FlowEdges.
+     * @param {FlowEdgeDeleteManyArgs} args - Arguments to filter FlowEdges to delete.
+     * @example
+     * // Delete a few FlowEdges
+     * const { count } = await prisma.flowEdge.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FlowEdgeDeleteManyArgs>(args?: SelectSubset<T, FlowEdgeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FlowEdges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowEdgeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FlowEdges
+     * const flowEdge = await prisma.flowEdge.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FlowEdgeUpdateManyArgs>(args: SelectSubset<T, FlowEdgeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FlowEdges and returns the data updated in the database.
+     * @param {FlowEdgeUpdateManyAndReturnArgs} args - Arguments to update many FlowEdges.
+     * @example
+     * // Update many FlowEdges
+     * const flowEdge = await prisma.flowEdge.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FlowEdges and only return the `id`
+     * const flowEdgeWithIdOnly = await prisma.flowEdge.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FlowEdgeUpdateManyAndReturnArgs>(args: SelectSubset<T, FlowEdgeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FlowEdge.
+     * @param {FlowEdgeUpsertArgs} args - Arguments to update or create a FlowEdge.
+     * @example
+     * // Update or create a FlowEdge
+     * const flowEdge = await prisma.flowEdge.upsert({
+     *   create: {
+     *     // ... data to create a FlowEdge
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FlowEdge we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FlowEdgeUpsertArgs>(args: SelectSubset<T, FlowEdgeUpsertArgs<ExtArgs>>): Prisma__FlowEdgeClient<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FlowEdges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowEdgeCountArgs} args - Arguments to filter FlowEdges to count.
+     * @example
+     * // Count the number of FlowEdges
+     * const count = await prisma.flowEdge.count({
+     *   where: {
+     *     // ... the filter for the FlowEdges we want to count
+     *   }
+     * })
+    **/
+    count<T extends FlowEdgeCountArgs>(
+      args?: Subset<T, FlowEdgeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FlowEdgeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FlowEdge.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowEdgeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FlowEdgeAggregateArgs>(args: Subset<T, FlowEdgeAggregateArgs>): Prisma.PrismaPromise<GetFlowEdgeAggregateType<T>>
+
+    /**
+     * Group by FlowEdge.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowEdgeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FlowEdgeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FlowEdgeGroupByArgs['orderBy'] }
+        : { orderBy?: FlowEdgeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FlowEdgeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFlowEdgeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FlowEdge model
+   */
+  readonly fields: FlowEdgeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FlowEdge.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FlowEdgeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    flow<T extends FlowDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FlowDefaultArgs<ExtArgs>>): Prisma__FlowClient<$Result.GetResult<Prisma.$FlowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FlowEdge model
+   */
+  interface FlowEdgeFieldRefs {
+    readonly id: FieldRef<"FlowEdge", 'String'>
+    readonly flowId: FieldRef<"FlowEdge", 'String'>
+    readonly stepIndex: FieldRef<"FlowEdge", 'Int'>
+    readonly fromAddress: FieldRef<"FlowEdge", 'String'>
+    readonly toAddress: FieldRef<"FlowEdge", 'String'>
+    readonly transferSymbol: FieldRef<"FlowEdge", 'String'>
+    readonly transferAmountRaw: FieldRef<"FlowEdge", 'String'>
+    readonly transferAmountDecimal: FieldRef<"FlowEdge", 'String'>
+    readonly txHash: FieldRef<"FlowEdge", 'String'>
+    readonly tokenAddress: FieldRef<"FlowEdge", 'String'>
+    readonly outcome: FieldRef<"FlowEdge", 'FlowEdgeOutcome'>
+    readonly transferTimestamp: FieldRef<"FlowEdge", 'DateTime'>
+    readonly createdAt: FieldRef<"FlowEdge", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FlowEdge findUnique
+   */
+  export type FlowEdgeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowEdge to fetch.
+     */
+    where: FlowEdgeWhereUniqueInput
+  }
+
+  /**
+   * FlowEdge findUniqueOrThrow
+   */
+  export type FlowEdgeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowEdge to fetch.
+     */
+    where: FlowEdgeWhereUniqueInput
+  }
+
+  /**
+   * FlowEdge findFirst
+   */
+  export type FlowEdgeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowEdge to fetch.
+     */
+    where?: FlowEdgeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowEdges to fetch.
+     */
+    orderBy?: FlowEdgeOrderByWithRelationInput | FlowEdgeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlowEdges.
+     */
+    cursor?: FlowEdgeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowEdges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowEdges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlowEdges.
+     */
+    distinct?: FlowEdgeScalarFieldEnum | FlowEdgeScalarFieldEnum[]
+  }
+
+  /**
+   * FlowEdge findFirstOrThrow
+   */
+  export type FlowEdgeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowEdge to fetch.
+     */
+    where?: FlowEdgeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowEdges to fetch.
+     */
+    orderBy?: FlowEdgeOrderByWithRelationInput | FlowEdgeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlowEdges.
+     */
+    cursor?: FlowEdgeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowEdges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowEdges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlowEdges.
+     */
+    distinct?: FlowEdgeScalarFieldEnum | FlowEdgeScalarFieldEnum[]
+  }
+
+  /**
+   * FlowEdge findMany
+   */
+  export type FlowEdgeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowEdges to fetch.
+     */
+    where?: FlowEdgeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowEdges to fetch.
+     */
+    orderBy?: FlowEdgeOrderByWithRelationInput | FlowEdgeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FlowEdges.
+     */
+    cursor?: FlowEdgeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowEdges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowEdges.
+     */
+    skip?: number
+    distinct?: FlowEdgeScalarFieldEnum | FlowEdgeScalarFieldEnum[]
+  }
+
+  /**
+   * FlowEdge create
+   */
+  export type FlowEdgeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FlowEdge.
+     */
+    data: XOR<FlowEdgeCreateInput, FlowEdgeUncheckedCreateInput>
+  }
+
+  /**
+   * FlowEdge createMany
+   */
+  export type FlowEdgeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FlowEdges.
+     */
+    data: FlowEdgeCreateManyInput | FlowEdgeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FlowEdge createManyAndReturn
+   */
+  export type FlowEdgeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * The data used to create many FlowEdges.
+     */
+    data: FlowEdgeCreateManyInput | FlowEdgeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FlowEdge update
+   */
+  export type FlowEdgeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FlowEdge.
+     */
+    data: XOR<FlowEdgeUpdateInput, FlowEdgeUncheckedUpdateInput>
+    /**
+     * Choose, which FlowEdge to update.
+     */
+    where: FlowEdgeWhereUniqueInput
+  }
+
+  /**
+   * FlowEdge updateMany
+   */
+  export type FlowEdgeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FlowEdges.
+     */
+    data: XOR<FlowEdgeUpdateManyMutationInput, FlowEdgeUncheckedUpdateManyInput>
+    /**
+     * Filter which FlowEdges to update
+     */
+    where?: FlowEdgeWhereInput
+    /**
+     * Limit how many FlowEdges to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FlowEdge updateManyAndReturn
+   */
+  export type FlowEdgeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * The data used to update FlowEdges.
+     */
+    data: XOR<FlowEdgeUpdateManyMutationInput, FlowEdgeUncheckedUpdateManyInput>
+    /**
+     * Filter which FlowEdges to update
+     */
+    where?: FlowEdgeWhereInput
+    /**
+     * Limit how many FlowEdges to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FlowEdge upsert
+   */
+  export type FlowEdgeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FlowEdge to update in case it exists.
+     */
+    where: FlowEdgeWhereUniqueInput
+    /**
+     * In case the FlowEdge found by the `where` argument doesn't exist, create a new FlowEdge with this data.
+     */
+    create: XOR<FlowEdgeCreateInput, FlowEdgeUncheckedCreateInput>
+    /**
+     * In case the FlowEdge was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FlowEdgeUpdateInput, FlowEdgeUncheckedUpdateInput>
+  }
+
+  /**
+   * FlowEdge delete
+   */
+  export type FlowEdgeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeInclude<ExtArgs> | null
+    /**
+     * Filter which FlowEdge to delete.
+     */
+    where: FlowEdgeWhereUniqueInput
+  }
+
+  /**
+   * FlowEdge deleteMany
+   */
+  export type FlowEdgeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlowEdges to delete
+     */
+    where?: FlowEdgeWhereInput
+    /**
+     * Limit how many FlowEdges to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FlowEdge without action
+   */
+  export type FlowEdgeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowEdge
+     */
+    select?: FlowEdgeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowEdge
+     */
+    omit?: FlowEdgeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowEdgeInclude<ExtArgs> | null
   }
 
 
@@ -13759,6 +15099,25 @@ export namespace Prisma {
   export type FlowTransactionScalarFieldEnum = (typeof FlowTransactionScalarFieldEnum)[keyof typeof FlowTransactionScalarFieldEnum]
 
 
+  export const FlowEdgeScalarFieldEnum: {
+    id: 'id',
+    flowId: 'flowId',
+    stepIndex: 'stepIndex',
+    fromAddress: 'fromAddress',
+    toAddress: 'toAddress',
+    transferSymbol: 'transferSymbol',
+    transferAmountRaw: 'transferAmountRaw',
+    transferAmountDecimal: 'transferAmountDecimal',
+    txHash: 'txHash',
+    tokenAddress: 'tokenAddress',
+    outcome: 'outcome',
+    transferTimestamp: 'transferTimestamp',
+    createdAt: 'createdAt'
+  };
+
+  export type FlowEdgeScalarFieldEnum = (typeof FlowEdgeScalarFieldEnum)[keyof typeof FlowEdgeScalarFieldEnum]
+
+
   export const FlowTraceLogScalarFieldEnum: {
     id: 'id',
     inputAddress: 'inputAddress',
@@ -13894,6 +15253,20 @@ export namespace Prisma {
    * Reference to a field of type 'FlowEndpointReason[]'
    */
   export type ListEnumFlowEndpointReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlowEndpointReason[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'FlowEdgeOutcome'
+   */
+  export type EnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlowEdgeOutcome'>
+    
+
+
+  /**
+   * Reference to a field of type 'FlowEdgeOutcome[]'
+   */
+  export type ListEnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlowEdgeOutcome[]'>
     
 
 
@@ -14375,6 +15748,7 @@ export namespace Prisma {
     chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
     endpointHotWallet?: XOR<HotWalletNullableScalarRelationFilter, HotWalletWhereInput> | null
     transactions?: FlowTransactionListRelationFilter
+    edges?: FlowEdgeListRelationFilter
   }
 
   export type FlowOrderByWithRelationInput = {
@@ -14398,6 +15772,7 @@ export namespace Prisma {
     chain?: ChainOrderByWithRelationInput
     endpointHotWallet?: HotWalletOrderByWithRelationInput
     transactions?: FlowTransactionOrderByRelationAggregateInput
+    edges?: FlowEdgeOrderByRelationAggregateInput
   }
 
   export type FlowWhereUniqueInput = Prisma.AtLeast<{
@@ -14424,6 +15799,7 @@ export namespace Prisma {
     chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
     endpointHotWallet?: XOR<HotWalletNullableScalarRelationFilter, HotWalletWhereInput> | null
     transactions?: FlowTransactionListRelationFilter
+    edges?: FlowEdgeListRelationFilter
   }, "id">
 
   export type FlowOrderByWithAggregationInput = {
@@ -14574,6 +15950,104 @@ export namespace Prisma {
     timestamp?: DateTimeWithAggregatesFilter<"FlowTransaction"> | Date | string
     isEndpointHop?: BoolWithAggregatesFilter<"FlowTransaction"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"FlowTransaction"> | Date | string
+  }
+
+  export type FlowEdgeWhereInput = {
+    AND?: FlowEdgeWhereInput | FlowEdgeWhereInput[]
+    OR?: FlowEdgeWhereInput[]
+    NOT?: FlowEdgeWhereInput | FlowEdgeWhereInput[]
+    id?: StringFilter<"FlowEdge"> | string
+    flowId?: StringFilter<"FlowEdge"> | string
+    stepIndex?: IntFilter<"FlowEdge"> | number
+    fromAddress?: StringFilter<"FlowEdge"> | string
+    toAddress?: StringFilter<"FlowEdge"> | string
+    transferSymbol?: StringNullableFilter<"FlowEdge"> | string | null
+    transferAmountRaw?: StringNullableFilter<"FlowEdge"> | string | null
+    transferAmountDecimal?: StringNullableFilter<"FlowEdge"> | string | null
+    txHash?: StringNullableFilter<"FlowEdge"> | string | null
+    tokenAddress?: StringNullableFilter<"FlowEdge"> | string | null
+    outcome?: EnumFlowEdgeOutcomeNullableFilter<"FlowEdge"> | $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: DateTimeNullableFilter<"FlowEdge"> | Date | string | null
+    createdAt?: DateTimeFilter<"FlowEdge"> | Date | string
+    flow?: XOR<FlowScalarRelationFilter, FlowWhereInput>
+  }
+
+  export type FlowEdgeOrderByWithRelationInput = {
+    id?: SortOrder
+    flowId?: SortOrder
+    stepIndex?: SortOrder
+    fromAddress?: SortOrder
+    toAddress?: SortOrder
+    transferSymbol?: SortOrderInput | SortOrder
+    transferAmountRaw?: SortOrderInput | SortOrder
+    transferAmountDecimal?: SortOrderInput | SortOrder
+    txHash?: SortOrderInput | SortOrder
+    tokenAddress?: SortOrderInput | SortOrder
+    outcome?: SortOrderInput | SortOrder
+    transferTimestamp?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    flow?: FlowOrderByWithRelationInput
+  }
+
+  export type FlowEdgeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    flowId_stepIndex?: FlowEdgeFlowIdStepIndexCompoundUniqueInput
+    AND?: FlowEdgeWhereInput | FlowEdgeWhereInput[]
+    OR?: FlowEdgeWhereInput[]
+    NOT?: FlowEdgeWhereInput | FlowEdgeWhereInput[]
+    flowId?: StringFilter<"FlowEdge"> | string
+    stepIndex?: IntFilter<"FlowEdge"> | number
+    fromAddress?: StringFilter<"FlowEdge"> | string
+    toAddress?: StringFilter<"FlowEdge"> | string
+    transferSymbol?: StringNullableFilter<"FlowEdge"> | string | null
+    transferAmountRaw?: StringNullableFilter<"FlowEdge"> | string | null
+    transferAmountDecimal?: StringNullableFilter<"FlowEdge"> | string | null
+    txHash?: StringNullableFilter<"FlowEdge"> | string | null
+    tokenAddress?: StringNullableFilter<"FlowEdge"> | string | null
+    outcome?: EnumFlowEdgeOutcomeNullableFilter<"FlowEdge"> | $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: DateTimeNullableFilter<"FlowEdge"> | Date | string | null
+    createdAt?: DateTimeFilter<"FlowEdge"> | Date | string
+    flow?: XOR<FlowScalarRelationFilter, FlowWhereInput>
+  }, "id" | "flowId_stepIndex">
+
+  export type FlowEdgeOrderByWithAggregationInput = {
+    id?: SortOrder
+    flowId?: SortOrder
+    stepIndex?: SortOrder
+    fromAddress?: SortOrder
+    toAddress?: SortOrder
+    transferSymbol?: SortOrderInput | SortOrder
+    transferAmountRaw?: SortOrderInput | SortOrder
+    transferAmountDecimal?: SortOrderInput | SortOrder
+    txHash?: SortOrderInput | SortOrder
+    tokenAddress?: SortOrderInput | SortOrder
+    outcome?: SortOrderInput | SortOrder
+    transferTimestamp?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: FlowEdgeCountOrderByAggregateInput
+    _avg?: FlowEdgeAvgOrderByAggregateInput
+    _max?: FlowEdgeMaxOrderByAggregateInput
+    _min?: FlowEdgeMinOrderByAggregateInput
+    _sum?: FlowEdgeSumOrderByAggregateInput
+  }
+
+  export type FlowEdgeScalarWhereWithAggregatesInput = {
+    AND?: FlowEdgeScalarWhereWithAggregatesInput | FlowEdgeScalarWhereWithAggregatesInput[]
+    OR?: FlowEdgeScalarWhereWithAggregatesInput[]
+    NOT?: FlowEdgeScalarWhereWithAggregatesInput | FlowEdgeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FlowEdge"> | string
+    flowId?: StringWithAggregatesFilter<"FlowEdge"> | string
+    stepIndex?: IntWithAggregatesFilter<"FlowEdge"> | number
+    fromAddress?: StringWithAggregatesFilter<"FlowEdge"> | string
+    toAddress?: StringWithAggregatesFilter<"FlowEdge"> | string
+    transferSymbol?: StringNullableWithAggregatesFilter<"FlowEdge"> | string | null
+    transferAmountRaw?: StringNullableWithAggregatesFilter<"FlowEdge"> | string | null
+    transferAmountDecimal?: StringNullableWithAggregatesFilter<"FlowEdge"> | string | null
+    txHash?: StringNullableWithAggregatesFilter<"FlowEdge"> | string | null
+    tokenAddress?: StringNullableWithAggregatesFilter<"FlowEdge"> | string | null
+    outcome?: EnumFlowEdgeOutcomeNullableWithAggregatesFilter<"FlowEdge"> | $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: DateTimeNullableWithAggregatesFilter<"FlowEdge"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FlowEdge"> | Date | string
   }
 
   export type FlowTraceLogWhereInput = {
@@ -15220,6 +16694,7 @@ export namespace Prisma {
     chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateInput = {
@@ -15239,6 +16714,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUpdateInput = {
@@ -15258,6 +16734,7 @@ export namespace Prisma {
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateInput = {
@@ -15277,6 +16754,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowCreateManyInput = {
@@ -15443,6 +16921,117 @@ export namespace Prisma {
     amountDecimal?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowEdgeCreateInput = {
+    id?: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    tokenAddress?: string | null
+    outcome?: $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: Date | string | null
+    createdAt?: Date | string
+    flow: FlowCreateNestedOneWithoutEdgesInput
+  }
+
+  export type FlowEdgeUncheckedCreateInput = {
+    id?: string
+    flowId: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    tokenAddress?: string | null
+    outcome?: $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type FlowEdgeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flow?: FlowUpdateOneRequiredWithoutEdgesNestedInput
+  }
+
+  export type FlowEdgeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flowId?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowEdgeCreateManyInput = {
+    id?: string
+    flowId: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    tokenAddress?: string | null
+    outcome?: $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type FlowEdgeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowEdgeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flowId?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -16044,6 +17633,16 @@ export namespace Prisma {
     isNot?: HotWalletWhereInput | null
   }
 
+  export type FlowEdgeListRelationFilter = {
+    every?: FlowEdgeWhereInput
+    some?: FlowEdgeWhereInput
+    none?: FlowEdgeWhereInput
+  }
+
+  export type FlowEdgeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type FlowCountOrderByAggregateInput = {
     id?: SortOrder
     caseId?: SortOrder
@@ -16199,6 +17798,109 @@ export namespace Prisma {
 
   export type FlowTransactionSumOrderByAggregateInput = {
     hopIndex?: SortOrder
+  }
+
+  export type EnumFlowEdgeOutcomeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowEdgeOutcome | EnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowEdgeOutcome[] | ListEnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowEdgeOutcome[] | ListEnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowEdgeOutcomeNullableFilter<$PrismaModel> | $Enums.FlowEdgeOutcome | null
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type FlowEdgeFlowIdStepIndexCompoundUniqueInput = {
+    flowId: string
+    stepIndex: number
+  }
+
+  export type FlowEdgeCountOrderByAggregateInput = {
+    id?: SortOrder
+    flowId?: SortOrder
+    stepIndex?: SortOrder
+    fromAddress?: SortOrder
+    toAddress?: SortOrder
+    transferSymbol?: SortOrder
+    transferAmountRaw?: SortOrder
+    transferAmountDecimal?: SortOrder
+    txHash?: SortOrder
+    tokenAddress?: SortOrder
+    outcome?: SortOrder
+    transferTimestamp?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FlowEdgeAvgOrderByAggregateInput = {
+    stepIndex?: SortOrder
+  }
+
+  export type FlowEdgeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    flowId?: SortOrder
+    stepIndex?: SortOrder
+    fromAddress?: SortOrder
+    toAddress?: SortOrder
+    transferSymbol?: SortOrder
+    transferAmountRaw?: SortOrder
+    transferAmountDecimal?: SortOrder
+    txHash?: SortOrder
+    tokenAddress?: SortOrder
+    outcome?: SortOrder
+    transferTimestamp?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FlowEdgeMinOrderByAggregateInput = {
+    id?: SortOrder
+    flowId?: SortOrder
+    stepIndex?: SortOrder
+    fromAddress?: SortOrder
+    toAddress?: SortOrder
+    transferSymbol?: SortOrder
+    transferAmountRaw?: SortOrder
+    transferAmountDecimal?: SortOrder
+    txHash?: SortOrder
+    tokenAddress?: SortOrder
+    outcome?: SortOrder
+    transferTimestamp?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FlowEdgeSumOrderByAggregateInput = {
+    stepIndex?: SortOrder
+  }
+
+  export type EnumFlowEdgeOutcomeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowEdgeOutcome | EnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowEdgeOutcome[] | ListEnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowEdgeOutcome[] | ListEnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowEdgeOutcomeNullableWithAggregatesFilter<$PrismaModel> | $Enums.FlowEdgeOutcome | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumFlowEdgeOutcomeNullableFilter<$PrismaModel>
+    _max?: NestedEnumFlowEdgeOutcomeNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumFlowTraceLogStatusFilter<$PrismaModel = never> = {
@@ -16890,11 +18592,25 @@ export namespace Prisma {
     connect?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
   }
 
+  export type FlowEdgeCreateNestedManyWithoutFlowInput = {
+    create?: XOR<FlowEdgeCreateWithoutFlowInput, FlowEdgeUncheckedCreateWithoutFlowInput> | FlowEdgeCreateWithoutFlowInput[] | FlowEdgeUncheckedCreateWithoutFlowInput[]
+    connectOrCreate?: FlowEdgeCreateOrConnectWithoutFlowInput | FlowEdgeCreateOrConnectWithoutFlowInput[]
+    createMany?: FlowEdgeCreateManyFlowInputEnvelope
+    connect?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
+  }
+
   export type FlowTransactionUncheckedCreateNestedManyWithoutFlowInput = {
     create?: XOR<FlowTransactionCreateWithoutFlowInput, FlowTransactionUncheckedCreateWithoutFlowInput> | FlowTransactionCreateWithoutFlowInput[] | FlowTransactionUncheckedCreateWithoutFlowInput[]
     connectOrCreate?: FlowTransactionCreateOrConnectWithoutFlowInput | FlowTransactionCreateOrConnectWithoutFlowInput[]
     createMany?: FlowTransactionCreateManyFlowInputEnvelope
     connect?: FlowTransactionWhereUniqueInput | FlowTransactionWhereUniqueInput[]
+  }
+
+  export type FlowEdgeUncheckedCreateNestedManyWithoutFlowInput = {
+    create?: XOR<FlowEdgeCreateWithoutFlowInput, FlowEdgeUncheckedCreateWithoutFlowInput> | FlowEdgeCreateWithoutFlowInput[] | FlowEdgeUncheckedCreateWithoutFlowInput[]
+    connectOrCreate?: FlowEdgeCreateOrConnectWithoutFlowInput | FlowEdgeCreateOrConnectWithoutFlowInput[]
+    createMany?: FlowEdgeCreateManyFlowInputEnvelope
+    connect?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -16957,6 +18673,20 @@ export namespace Prisma {
     deleteMany?: FlowTransactionScalarWhereInput | FlowTransactionScalarWhereInput[]
   }
 
+  export type FlowEdgeUpdateManyWithoutFlowNestedInput = {
+    create?: XOR<FlowEdgeCreateWithoutFlowInput, FlowEdgeUncheckedCreateWithoutFlowInput> | FlowEdgeCreateWithoutFlowInput[] | FlowEdgeUncheckedCreateWithoutFlowInput[]
+    connectOrCreate?: FlowEdgeCreateOrConnectWithoutFlowInput | FlowEdgeCreateOrConnectWithoutFlowInput[]
+    upsert?: FlowEdgeUpsertWithWhereUniqueWithoutFlowInput | FlowEdgeUpsertWithWhereUniqueWithoutFlowInput[]
+    createMany?: FlowEdgeCreateManyFlowInputEnvelope
+    set?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
+    disconnect?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
+    delete?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
+    connect?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
+    update?: FlowEdgeUpdateWithWhereUniqueWithoutFlowInput | FlowEdgeUpdateWithWhereUniqueWithoutFlowInput[]
+    updateMany?: FlowEdgeUpdateManyWithWhereWithoutFlowInput | FlowEdgeUpdateManyWithWhereWithoutFlowInput[]
+    deleteMany?: FlowEdgeScalarWhereInput | FlowEdgeScalarWhereInput[]
+  }
+
   export type FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput = {
     create?: XOR<FlowTransactionCreateWithoutFlowInput, FlowTransactionUncheckedCreateWithoutFlowInput> | FlowTransactionCreateWithoutFlowInput[] | FlowTransactionUncheckedCreateWithoutFlowInput[]
     connectOrCreate?: FlowTransactionCreateOrConnectWithoutFlowInput | FlowTransactionCreateOrConnectWithoutFlowInput[]
@@ -16969,6 +18699,20 @@ export namespace Prisma {
     update?: FlowTransactionUpdateWithWhereUniqueWithoutFlowInput | FlowTransactionUpdateWithWhereUniqueWithoutFlowInput[]
     updateMany?: FlowTransactionUpdateManyWithWhereWithoutFlowInput | FlowTransactionUpdateManyWithWhereWithoutFlowInput[]
     deleteMany?: FlowTransactionScalarWhereInput | FlowTransactionScalarWhereInput[]
+  }
+
+  export type FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput = {
+    create?: XOR<FlowEdgeCreateWithoutFlowInput, FlowEdgeUncheckedCreateWithoutFlowInput> | FlowEdgeCreateWithoutFlowInput[] | FlowEdgeUncheckedCreateWithoutFlowInput[]
+    connectOrCreate?: FlowEdgeCreateOrConnectWithoutFlowInput | FlowEdgeCreateOrConnectWithoutFlowInput[]
+    upsert?: FlowEdgeUpsertWithWhereUniqueWithoutFlowInput | FlowEdgeUpsertWithWhereUniqueWithoutFlowInput[]
+    createMany?: FlowEdgeCreateManyFlowInputEnvelope
+    set?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
+    disconnect?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
+    delete?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
+    connect?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
+    update?: FlowEdgeUpdateWithWhereUniqueWithoutFlowInput | FlowEdgeUpdateWithWhereUniqueWithoutFlowInput[]
+    updateMany?: FlowEdgeUpdateManyWithWhereWithoutFlowInput | FlowEdgeUpdateManyWithWhereWithoutFlowInput[]
+    deleteMany?: FlowEdgeScalarWhereInput | FlowEdgeScalarWhereInput[]
   }
 
   export type FlowCreateNestedOneWithoutTransactionsInput = {
@@ -16997,6 +18741,28 @@ export namespace Prisma {
     upsert?: ChainUpsertWithoutFlowTransactionsInput
     connect?: ChainWhereUniqueInput
     update?: XOR<XOR<ChainUpdateToOneWithWhereWithoutFlowTransactionsInput, ChainUpdateWithoutFlowTransactionsInput>, ChainUncheckedUpdateWithoutFlowTransactionsInput>
+  }
+
+  export type FlowCreateNestedOneWithoutEdgesInput = {
+    create?: XOR<FlowCreateWithoutEdgesInput, FlowUncheckedCreateWithoutEdgesInput>
+    connectOrCreate?: FlowCreateOrConnectWithoutEdgesInput
+    connect?: FlowWhereUniqueInput
+  }
+
+  export type NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput = {
+    set?: $Enums.FlowEdgeOutcome | null
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type FlowUpdateOneRequiredWithoutEdgesNestedInput = {
+    create?: XOR<FlowCreateWithoutEdgesInput, FlowUncheckedCreateWithoutEdgesInput>
+    connectOrCreate?: FlowCreateOrConnectWithoutEdgesInput
+    upsert?: FlowUpsertWithoutEdgesInput
+    connect?: FlowWhereUniqueInput
+    update?: XOR<XOR<FlowUpdateToOneWithWhereWithoutEdgesInput, FlowUpdateWithoutEdgesInput>, FlowUncheckedUpdateWithoutEdgesInput>
   }
 
   export type FlowTraceLogStepCreateNestedManyWithoutFlowTraceLogInput = {
@@ -17246,6 +19012,48 @@ export namespace Prisma {
     _max?: NestedEnumFlowEndpointReasonFilter<$PrismaModel>
   }
 
+  export type NestedEnumFlowEdgeOutcomeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowEdgeOutcome | EnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowEdgeOutcome[] | ListEnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowEdgeOutcome[] | ListEnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowEdgeOutcomeNullableFilter<$PrismaModel> | $Enums.FlowEdgeOutcome | null
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedEnumFlowEdgeOutcomeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlowEdgeOutcome | EnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.FlowEdgeOutcome[] | ListEnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.FlowEdgeOutcome[] | ListEnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumFlowEdgeOutcomeNullableWithAggregatesFilter<$PrismaModel> | $Enums.FlowEdgeOutcome | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumFlowEdgeOutcomeNullableFilter<$PrismaModel>
+    _max?: NestedEnumFlowEdgeOutcomeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumFlowTraceLogStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.FlowTraceLogStatus | EnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
     in?: $Enums.FlowTraceLogStatus[] | ListEnumFlowTraceLogStatusFieldRefInput<$PrismaModel>
@@ -17364,6 +19172,7 @@ export namespace Prisma {
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateWithoutChainInput = {
@@ -17382,6 +19191,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowCreateOrConnectWithoutChainInput = {
@@ -17750,6 +19560,7 @@ export namespace Prisma {
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
     chain: ChainCreateNestedOneWithoutFlowsInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateWithoutEndpointHotWalletInput = {
@@ -17768,6 +19579,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowCreateOrConnectWithoutEndpointHotWalletInput = {
@@ -17931,6 +19743,7 @@ export namespace Prisma {
     chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateWithoutCaseInput = {
@@ -17949,6 +19762,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowCreateOrConnectWithoutCaseInput = {
@@ -18096,6 +19910,7 @@ export namespace Prisma {
     chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateWithoutSeedInput = {
@@ -18114,6 +19929,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowCreateOrConnectWithoutSeedInput = {
@@ -18370,6 +20186,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FlowEdgeCreateWithoutFlowInput = {
+    id?: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    tokenAddress?: string | null
+    outcome?: $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type FlowEdgeUncheckedCreateWithoutFlowInput = {
+    id?: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    tokenAddress?: string | null
+    outcome?: $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type FlowEdgeCreateOrConnectWithoutFlowInput = {
+    where: FlowEdgeWhereUniqueInput
+    create: XOR<FlowEdgeCreateWithoutFlowInput, FlowEdgeUncheckedCreateWithoutFlowInput>
+  }
+
+  export type FlowEdgeCreateManyFlowInputEnvelope = {
+    data: FlowEdgeCreateManyFlowInput | FlowEdgeCreateManyFlowInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CaseUpsertWithoutFlowsInput = {
     update: XOR<CaseUpdateWithoutFlowsInput, CaseUncheckedUpdateWithoutFlowsInput>
     create: XOR<CaseCreateWithoutFlowsInput, CaseUncheckedCreateWithoutFlowsInput>
@@ -18526,6 +20382,41 @@ export namespace Prisma {
     data: XOR<FlowTransactionUpdateManyMutationInput, FlowTransactionUncheckedUpdateManyWithoutFlowInput>
   }
 
+  export type FlowEdgeUpsertWithWhereUniqueWithoutFlowInput = {
+    where: FlowEdgeWhereUniqueInput
+    update: XOR<FlowEdgeUpdateWithoutFlowInput, FlowEdgeUncheckedUpdateWithoutFlowInput>
+    create: XOR<FlowEdgeCreateWithoutFlowInput, FlowEdgeUncheckedCreateWithoutFlowInput>
+  }
+
+  export type FlowEdgeUpdateWithWhereUniqueWithoutFlowInput = {
+    where: FlowEdgeWhereUniqueInput
+    data: XOR<FlowEdgeUpdateWithoutFlowInput, FlowEdgeUncheckedUpdateWithoutFlowInput>
+  }
+
+  export type FlowEdgeUpdateManyWithWhereWithoutFlowInput = {
+    where: FlowEdgeScalarWhereInput
+    data: XOR<FlowEdgeUpdateManyMutationInput, FlowEdgeUncheckedUpdateManyWithoutFlowInput>
+  }
+
+  export type FlowEdgeScalarWhereInput = {
+    AND?: FlowEdgeScalarWhereInput | FlowEdgeScalarWhereInput[]
+    OR?: FlowEdgeScalarWhereInput[]
+    NOT?: FlowEdgeScalarWhereInput | FlowEdgeScalarWhereInput[]
+    id?: StringFilter<"FlowEdge"> | string
+    flowId?: StringFilter<"FlowEdge"> | string
+    stepIndex?: IntFilter<"FlowEdge"> | number
+    fromAddress?: StringFilter<"FlowEdge"> | string
+    toAddress?: StringFilter<"FlowEdge"> | string
+    transferSymbol?: StringNullableFilter<"FlowEdge"> | string | null
+    transferAmountRaw?: StringNullableFilter<"FlowEdge"> | string | null
+    transferAmountDecimal?: StringNullableFilter<"FlowEdge"> | string | null
+    txHash?: StringNullableFilter<"FlowEdge"> | string | null
+    tokenAddress?: StringNullableFilter<"FlowEdge"> | string | null
+    outcome?: EnumFlowEdgeOutcomeNullableFilter<"FlowEdge"> | $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: DateTimeNullableFilter<"FlowEdge"> | Date | string | null
+    createdAt?: DateTimeFilter<"FlowEdge"> | Date | string
+  }
+
   export type FlowCreateWithoutTransactionsInput = {
     id?: string
     tokenAddress?: string | null
@@ -18542,6 +20433,7 @@ export namespace Prisma {
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
     chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
+    edges?: FlowEdgeCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateWithoutTransactionsInput = {
@@ -18560,6 +20452,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowCreateOrConnectWithoutTransactionsInput = {
@@ -18621,6 +20514,7 @@ export namespace Prisma {
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
+    edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateWithoutTransactionsInput = {
@@ -18639,6 +20533,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type ChainUpsertWithoutFlowTransactionsInput = {
@@ -18672,6 +20567,98 @@ export namespace Prisma {
     hotWallets?: HotWalletUncheckedUpdateManyWithoutChainNestedInput
     caseSeedTransactions?: CaseSeedTransactionUncheckedUpdateManyWithoutChainNestedInput
     flows?: FlowUncheckedUpdateManyWithoutChainNestedInput
+  }
+
+  export type FlowCreateWithoutEdgesInput = {
+    id?: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    totalAmountRaw: string
+    totalAmountDecimal: string
+    hopsCount: number
+    endpointAddress: string
+    endpointReason: $Enums.FlowEndpointReason
+    isEndpointExchange?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    case: CaseCreateNestedOneWithoutFlowsInput
+    seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
+    chain: ChainCreateNestedOneWithoutFlowsInput
+    endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
+    transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
+  }
+
+  export type FlowUncheckedCreateWithoutEdgesInput = {
+    id?: string
+    caseId: string
+    seedId: string
+    chainId: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    totalAmountRaw: string
+    totalAmountDecimal: string
+    hopsCount: number
+    endpointAddress: string
+    endpointReason: $Enums.FlowEndpointReason
+    endpointHotWalletId?: string | null
+    isEndpointExchange?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
+  }
+
+  export type FlowCreateOrConnectWithoutEdgesInput = {
+    where: FlowWhereUniqueInput
+    create: XOR<FlowCreateWithoutEdgesInput, FlowUncheckedCreateWithoutEdgesInput>
+  }
+
+  export type FlowUpsertWithoutEdgesInput = {
+    update: XOR<FlowUpdateWithoutEdgesInput, FlowUncheckedUpdateWithoutEdgesInput>
+    create: XOR<FlowCreateWithoutEdgesInput, FlowUncheckedCreateWithoutEdgesInput>
+    where?: FlowWhereInput
+  }
+
+  export type FlowUpdateToOneWithWhereWithoutEdgesInput = {
+    where?: FlowWhereInput
+    data: XOR<FlowUpdateWithoutEdgesInput, FlowUncheckedUpdateWithoutEdgesInput>
+  }
+
+  export type FlowUpdateWithoutEdgesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmountRaw?: StringFieldUpdateOperationsInput | string
+    totalAmountDecimal?: StringFieldUpdateOperationsInput | string
+    hopsCount?: IntFieldUpdateOperationsInput | number
+    endpointAddress?: StringFieldUpdateOperationsInput | string
+    endpointReason?: EnumFlowEndpointReasonFieldUpdateOperationsInput | $Enums.FlowEndpointReason
+    isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
+    seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
+    endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
+    transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
+  }
+
+  export type FlowUncheckedUpdateWithoutEdgesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    caseId?: StringFieldUpdateOperationsInput | string
+    seedId?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmountRaw?: StringFieldUpdateOperationsInput | string
+    totalAmountDecimal?: StringFieldUpdateOperationsInput | string
+    hopsCount?: IntFieldUpdateOperationsInput | number
+    endpointAddress?: StringFieldUpdateOperationsInput | string
+    endpointReason?: EnumFlowEndpointReasonFieldUpdateOperationsInput | $Enums.FlowEndpointReason
+    endpointHotWalletId?: NullableStringFieldUpdateOperationsInput | string | null
+    isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowTraceLogStepCreateWithoutFlowTraceLogInput = {
@@ -18948,6 +20935,7 @@ export namespace Prisma {
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateWithoutChainInput = {
@@ -18966,6 +20954,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateManyWithoutChainInput = {
@@ -19156,6 +21145,7 @@ export namespace Prisma {
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateWithoutEndpointHotWalletInput = {
@@ -19174,6 +21164,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateManyWithoutEndpointHotWalletInput = {
@@ -19276,6 +21267,7 @@ export namespace Prisma {
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateWithoutCaseInput = {
@@ -19294,6 +21286,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateManyWithoutCaseInput = {
@@ -19346,6 +21339,7 @@ export namespace Prisma {
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateWithoutSeedInput = {
@@ -19364,6 +21358,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateManyWithoutSeedInput = {
@@ -19396,6 +21391,21 @@ export namespace Prisma {
     amountDecimal: string
     timestamp: Date | string
     isEndpointHop?: boolean
+    createdAt?: Date | string
+  }
+
+  export type FlowEdgeCreateManyFlowInput = {
+    id?: string
+    stepIndex: number
+    fromAddress: string
+    toAddress: string
+    transferSymbol?: string | null
+    transferAmountRaw?: string | null
+    transferAmountDecimal?: string | null
+    txHash?: string | null
+    tokenAddress?: string | null
+    outcome?: $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -19444,6 +21454,51 @@ export namespace Prisma {
     amountDecimal?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowEdgeUpdateWithoutFlowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowEdgeUncheckedUpdateWithoutFlowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowEdgeUncheckedUpdateManyWithoutFlowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    fromAddress?: StringFieldUpdateOperationsInput | string
+    toAddress?: StringFieldUpdateOperationsInput | string
+    transferSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountRaw?: NullableStringFieldUpdateOperationsInput | string | null
+    transferAmountDecimal?: NullableStringFieldUpdateOperationsInput | string | null
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
+    transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

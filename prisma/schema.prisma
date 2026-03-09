@@ -28,6 +28,8 @@ enum FlowEndpointReason {
   MAX_HOPS_REACHED
   NO_OUTGOING_ABOVE_THRESHOLD
   CYCLE_DETECTED
+  NO_OUTBOUND
+  EXHAUSTED_OPTIONS
 }
 
 model User {
@@ -131,6 +133,7 @@ model Flow {
   updatedAt             DateTime            @updatedAt
 
   transactions FlowTransaction[]
+  edges       FlowEdge[]
 }
 
 model FlowTransaction {
@@ -152,6 +155,32 @@ model FlowTransaction {
   createdAt     DateTime   @default(now())
 
   @@unique([flowId, hopIndex])
+}
+
+model FlowEdge {
+  id                    String              @id @default(cuid())
+  flowId                String
+  flow                  Flow                @relation(fields: [flowId], references: [id], onDelete: Cascade)
+  stepIndex             Int
+  fromAddress           String
+  toAddress             String
+  transferSymbol        String?
+  transferAmountRaw     String?
+  transferAmountDecimal String?
+  txHash                String?
+  tokenAddress          String?
+  outcome               FlowEdgeOutcome?
+  transferTimestamp     DateTime?
+  createdAt             DateTime            @default(now())
+
+  @@unique([flowId, stepIndex])
+}
+
+enum FlowEdgeOutcome {
+  SUCCESS
+  NO_OUTBOUND
+  MAX_WALLETS_REACHED
+  EXHAUSTED_OPTIONS
 }
 
 enum FlowTraceLogStatus {

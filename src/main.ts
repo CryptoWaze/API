@@ -19,6 +19,10 @@ async function bootstrap() {
       .setTitle('API Rastreio Forense Cripto')
       .setDescription('API para rastreio forense de criptomoedas.')
       .setVersion('1.0')
+      .addBearerAuth(
+        { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
+        'JWT',
+      )
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document);

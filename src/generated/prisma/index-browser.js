@@ -216,6 +216,22 @@ exports.Prisma.FlowTransactionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.FlowEdgeScalarFieldEnum = {
+  id: 'id',
+  flowId: 'flowId',
+  stepIndex: 'stepIndex',
+  fromAddress: 'fromAddress',
+  toAddress: 'toAddress',
+  transferSymbol: 'transferSymbol',
+  transferAmountRaw: 'transferAmountRaw',
+  transferAmountDecimal: 'transferAmountDecimal',
+  txHash: 'txHash',
+  tokenAddress: 'tokenAddress',
+  outcome: 'outcome',
+  transferTimestamp: 'transferTimestamp',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.FlowTraceLogScalarFieldEnum = {
   id: 'id',
   inputAddress: 'inputAddress',
@@ -268,7 +284,16 @@ exports.FlowEndpointReason = exports.$Enums.FlowEndpointReason = {
   EXCHANGE_HOT_WALLET: 'EXCHANGE_HOT_WALLET',
   MAX_HOPS_REACHED: 'MAX_HOPS_REACHED',
   NO_OUTGOING_ABOVE_THRESHOLD: 'NO_OUTGOING_ABOVE_THRESHOLD',
-  CYCLE_DETECTED: 'CYCLE_DETECTED'
+  CYCLE_DETECTED: 'CYCLE_DETECTED',
+  NO_OUTBOUND: 'NO_OUTBOUND',
+  EXHAUSTED_OPTIONS: 'EXHAUSTED_OPTIONS'
+};
+
+exports.FlowEdgeOutcome = exports.$Enums.FlowEdgeOutcome = {
+  SUCCESS: 'SUCCESS',
+  NO_OUTBOUND: 'NO_OUTBOUND',
+  MAX_WALLETS_REACHED: 'MAX_WALLETS_REACHED',
+  EXHAUSTED_OPTIONS: 'EXHAUSTED_OPTIONS'
 };
 
 exports.FlowTraceLogStatus = exports.$Enums.FlowTraceLogStatus = {
@@ -287,6 +312,7 @@ exports.Prisma.ModelName = {
   CaseSeedTransaction: 'CaseSeedTransaction',
   Flow: 'Flow',
   FlowTransaction: 'FlowTransaction',
+  FlowEdge: 'FlowEdge',
   FlowTraceLog: 'FlowTraceLog',
   FlowTraceLogStep: 'FlowTraceLogStep'
 };

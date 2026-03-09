@@ -1,4 +1,5 @@
 import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../infrastructure/database';
 import { LoginUserInput } from '../../application/schemas/login-user.schema';
@@ -11,11 +12,15 @@ export type UserResponse = {
   email: string;
   name: string | null;
   createdAt: Date;
+  accessToken?: string;
 };
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async register(input: RegisterUserInput): Promise<UserResponse> {
     const existing = await this.prisma.user.findUnique({
@@ -46,7 +51,9 @@ export class UsersService {
     if (!passwordMatch) {
       throw new UnauthorizedException('E-mail ou senha inválidos.');
     }
-    return this.toResponse(user);
+    const response = this.toResponse(user);
+    response.accessToken = this.jwtService.sign({ sub: user.id });
+    return response;
   }
 
   private toResponse(user: { id: string; email: string; name: string | null; createdAt: Date }): UserResponse {

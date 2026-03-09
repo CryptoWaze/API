@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   Get,
   HttpCode,
   HttpStatus,
@@ -13,6 +14,7 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } 
 import { createCaseSchema } from '../../application/schemas/create-case.schema';
 import { CreateCaseUseCase } from '../../application/use-cases/create-case.use-case';
 import { GetCaseByIdUseCase } from '../../application/use-cases/get-case-by-id.use-case';
+import { GetCasesHistoryByUserIdUseCase } from '../../application/use-cases/get-cases-history-by-user-id.use-case';
 import { CurrentUser, JwtAuthGuard } from '../../infrastructure/auth';
 
 @ApiTags('cases')
@@ -23,6 +25,7 @@ export class CasesController {
   constructor(
     private readonly createCaseUseCase: CreateCaseUseCase,
     private readonly getCaseByIdUseCase: GetCaseByIdUseCase,
+    private readonly getCasesHistoryByUserIdUseCase: GetCasesHistoryByUserIdUseCase,
   ) {}
 
   @Post()
@@ -77,6 +80,35 @@ export class CasesController {
       throw new BadRequestException(messages);
     }
     return this.createCaseUseCase.execute(result.data, user.userId);
+  }
+
+  @Get('history/:userId')
+  @ApiOperation({
+    summary: 'Histórico de casos do usuário',
+    description:
+      'Retorna nome e valor total perdido de cada caso do usuário, ordenado por data de criação (mais recente primeiro). Só é possível consultar o próprio histórico (userId do path deve ser o do token).',
+  })
+  @ApiParam({ name: 'userId', description: 'ID do usuário (deve ser o mesmo do token)' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Lista de casos com id, name, totalAmountLostRaw e totalAmountLostDecimal.',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Só é permitido consultar o histórico do próprio usuário.',
+  })
+  @ApiResponse({ status: 401, description: 'Não autorizado. Envie o token no header Authorization.' })
+  async getHistory(
+    @Param('userId') userId: string,
+    @CurrentUser() user: { userId: string },
+  ) {
+    if (userId !== user.userId) {
+      throw new ForbiddenException(
+        'Só é permitido consultar o histórico do próprio usuário.',
+      );
+    }
+    return this.getCasesHistoryByUserIdUseCase.execute(user.userId);
   }
 
   @Get(':id')

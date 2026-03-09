@@ -5,11 +5,16 @@ import { TransactionsModule } from '../transactions/transactions.module';
 import { SocketModule } from '../socket/socket.module';
 import { CreateCaseUseCase } from '../../application/use-cases/create-case.use-case';
 import { GetCaseByIdUseCase } from '../../application/use-cases/get-case-by-id.use-case';
+import { GetCasesHistoryByUserIdUseCase } from '../../application/use-cases/get-cases-history-by-user-id.use-case';
 import { CasesController } from './cases.controller';
 
 @Module({
   imports: [AuthModule, AddressesModule, TransactionsModule, SocketModule],
   controllers: [CasesController],
-  providers: [CreateCaseUseCase, GetCaseByIdUseCase],
+  providers: [
+    CreateCaseUseCase,
+    GetCaseByIdUseCase,
+    GetCasesHistoryByUserIdUseCase,
+  ],
 })
 export class CasesModule {}

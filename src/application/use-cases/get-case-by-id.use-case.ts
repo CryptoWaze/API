@@ -37,6 +37,7 @@ export type FlowEdgeDto = {
   transferAmountDecimal: string | null;
   txHash: string | null;
   tokenAddress: string | null;
+  transferTimestamp: string | null;
   outcome: string | null;
 };
 
@@ -137,9 +138,7 @@ export class GetCaseByIdUseCase {
         const exchange = f.endpointHotWallet?.exchange;
         const endpointIsHotWallet = f.endpointHotWallet != null;
         const endpointHotWalletLabel =
-          exchange != null
-            ? `Hot wallet da exchange ${exchange.name}`
-            : null;
+          endpointIsHotWallet ? 'Hot Wallet' : null;
         return {
           id: f.id,
           seedId: f.seedId,
@@ -179,6 +178,9 @@ export class GetCaseByIdUseCase {
             transferAmountDecimal: e.transferAmountDecimal,
             txHash: e.txHash,
             tokenAddress: e.tokenAddress,
+            transferTimestamp: e.transferTimestamp
+              ? e.transferTimestamp.toISOString()
+              : null,
             outcome: e.outcome,
           })),
         };

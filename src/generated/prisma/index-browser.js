@@ -124,6 +124,7 @@ exports.Prisma.ChainScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
   name: 'name',
+  iconUrl: 'iconUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -141,6 +142,7 @@ exports.Prisma.ExchangeScalarFieldEnum = {
   id: 'id',
   name: 'name',
   slug: 'slug',
+  iconUrl: 'iconUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

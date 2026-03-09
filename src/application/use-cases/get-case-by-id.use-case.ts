@@ -7,6 +7,8 @@ export type CaseSeedTransactionDto = {
   initialWalletAddresses: string[];
   flowIds: string[];
   chainSlug: string;
+  chainName: string | null;
+  chainIconUrl: string | null;
   tokenAddress: string | null;
   tokenSymbol: string | null;
   amountRaw: string;
@@ -46,6 +48,8 @@ export type FlowDto = {
   id: string;
   seedId: string;
   chainSlug: string;
+  chainName: string | null;
+  chainIconUrl: string | null;
   initialWalletAddress: string;
   tokenAddress: string | null;
   tokenSymbol: string | null;
@@ -57,6 +61,7 @@ export type FlowDto = {
   endpointIsHotWallet: boolean;
   endpointExchangeName: string | null;
   endpointExchangeSlug: string | null;
+  endpointExchangeIconUrl: string | null;
   endpointHotWalletLabel: string | null;
   transactions: FlowTransactionDto[];
   edges: FlowEdgeDto[];
@@ -106,14 +111,20 @@ export class GetCaseByIdUseCase {
     const caseRecord = await this.prisma.case.findUnique({
       where: { id },
       include: {
-        seeds: { include: { chain: { select: { slug: true } } } },
+        seeds: {
+          include: {
+            chain: { select: { slug: true, name: true, iconUrl: true } },
+          },
+        },
         flows: {
           include: {
-            chain: { select: { slug: true } },
+            chain: { select: { slug: true, name: true, iconUrl: true } },
             seed: true,
             endpointHotWallet: {
               include: {
-                exchange: { select: { name: true, slug: true } },
+                exchange: {
+                  select: { name: true, slug: true, iconUrl: true },
+                },
               },
             },
             transactions: { orderBy: { hopIndex: 'asc' } },
@@ -157,6 +168,8 @@ export class GetCaseByIdUseCase {
           initialWalletAddresses,
           flowIds,
           chainSlug: s.chain.slug,
+          chainName: s.chain.name,
+          chainIconUrl: s.chain.iconUrl,
           tokenAddress: s.tokenAddress,
           tokenSymbol: s.tokenSymbol,
           amountRaw: s.amountRaw,
@@ -174,6 +187,8 @@ export class GetCaseByIdUseCase {
           id: f.id,
           seedId: f.seedId,
           chainSlug: f.chain.slug,
+          chainName: f.chain.name,
+          chainIconUrl: f.chain.iconUrl,
           initialWalletAddress: initialWallet,
           tokenAddress: f.tokenAddress,
           tokenSymbol: f.tokenSymbol,
@@ -185,6 +200,7 @@ export class GetCaseByIdUseCase {
           endpointIsHotWallet,
           endpointExchangeName: exchange?.name ?? null,
           endpointExchangeSlug: exchange?.slug ?? null,
+          endpointExchangeIconUrl: exchange?.iconUrl ?? null,
           endpointHotWalletLabel,
           transactions: f.transactions.map((t) => ({
             id: t.id,

@@ -1,6 +1,6 @@
-export const CHAINS: { slug: string; name: string }[] = [
-  { slug: 'eth', name: 'Ethereum' },
-  { slug: 'bsc', name: 'BNB Smart Chain' },
+export const CHAINS: { slug: string; name: string; iconUrl?: string }[] = [
+  { slug: 'eth', name: 'Ethereum', iconUrl: '/assets/eth-logo.svg' },
+  { slug: 'bsc', name: 'BNB Smart Chain', iconUrl: '/assets/bnb-logo.svg' },
   { slug: 'polygon', name: 'Polygon' },
   { slug: 'avalanche', name: 'Avalanche' },
   { slug: 'tron', name: 'TRON' },

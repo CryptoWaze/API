@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../infrastructure/database/prisma.service';
 
+export type CaseHistorySeedDto = {
+  id: string;
+  txHash: string;
+};
+
 export type CaseHistoryItemDto = {
   id: string;
   name: string;
   totalAmountLostRaw: string;
   totalAmountLostDecimal: string;
+  createdAt: string;
+  seeds: CaseHistorySeedDto[];
 };
 
 @Injectable()
@@ -21,8 +28,17 @@ export class GetCasesHistoryByUserIdUseCase {
         name: true,
         totalAmountLostRaw: true,
         totalAmountLostDecimal: true,
+        createdAt: true,
+        seeds: { select: { id: true, txHash: true } },
       },
     });
-    return cases;
+    return cases.map((c) => ({
+      id: c.id,
+      name: c.name,
+      totalAmountLostRaw: c.totalAmountLostRaw,
+      totalAmountLostDecimal: c.totalAmountLostDecimal,
+      createdAt: c.createdAt.toISOString(),
+      seeds: c.seeds.map((s) => ({ id: s.id, txHash: s.txHash })),
+    }));
   }
 }

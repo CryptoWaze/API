@@ -12,6 +12,7 @@ model Chain {
   id        String   @id @default(cuid())
   slug      String   @unique
   name      String?
+  iconUrl   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -45,6 +46,7 @@ model Exchange {
   id        String   @id @default(cuid())
   name      String
   slug      String   @unique
+  iconUrl   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -2146,6 +2146,7 @@ export namespace Prisma {
     id: string | null
     slug: string | null
     name: string | null
+    iconUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2154,6 +2155,7 @@ export namespace Prisma {
     id: string | null
     slug: string | null
     name: string | null
+    iconUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2162,6 +2164,7 @@ export namespace Prisma {
     id: number
     slug: number
     name: number
+    iconUrl: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2172,6 +2175,7 @@ export namespace Prisma {
     id?: true
     slug?: true
     name?: true
+    iconUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2180,6 +2184,7 @@ export namespace Prisma {
     id?: true
     slug?: true
     name?: true
+    iconUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2188,6 +2193,7 @@ export namespace Prisma {
     id?: true
     slug?: true
     name?: true
+    iconUrl?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2269,6 +2275,7 @@ export namespace Prisma {
     id: string
     slug: string
     name: string | null
+    iconUrl: string | null
     createdAt: Date
     updatedAt: Date
     _count: ChainCountAggregateOutputType | null
@@ -2294,6 +2301,7 @@ export namespace Prisma {
     id?: boolean
     slug?: boolean
     name?: boolean
+    iconUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     hotWallets?: boolean | Chain$hotWalletsArgs<ExtArgs>
@@ -2307,6 +2315,7 @@ export namespace Prisma {
     id?: boolean
     slug?: boolean
     name?: boolean
+    iconUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["chain"]>
@@ -2315,6 +2324,7 @@ export namespace Prisma {
     id?: boolean
     slug?: boolean
     name?: boolean
+    iconUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["chain"]>
@@ -2323,11 +2333,12 @@ export namespace Prisma {
     id?: boolean
     slug?: boolean
     name?: boolean
+    iconUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ChainOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["chain"]>
+  export type ChainOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "name" | "iconUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["chain"]>
   export type ChainInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     hotWallets?: boolean | Chain$hotWalletsArgs<ExtArgs>
     caseSeedTransactions?: boolean | Chain$caseSeedTransactionsArgs<ExtArgs>
@@ -2350,6 +2361,7 @@ export namespace Prisma {
       id: string
       slug: string
       name: string | null
+      iconUrl: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["chain"]>
@@ -2782,6 +2794,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Chain", 'String'>
     readonly slug: FieldRef<"Chain", 'String'>
     readonly name: FieldRef<"Chain", 'String'>
+    readonly iconUrl: FieldRef<"Chain", 'String'>
     readonly createdAt: FieldRef<"Chain", 'DateTime'>
     readonly updatedAt: FieldRef<"Chain", 'DateTime'>
   }
@@ -4383,6 +4396,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     slug: string | null
+    iconUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4391,6 +4405,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     slug: string | null
+    iconUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4399,6 +4414,7 @@ export namespace Prisma {
     id: number
     name: number
     slug: number
+    iconUrl: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4409,6 +4425,7 @@ export namespace Prisma {
     id?: true
     name?: true
     slug?: true
+    iconUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4417,6 +4434,7 @@ export namespace Prisma {
     id?: true
     name?: true
     slug?: true
+    iconUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4425,6 +4443,7 @@ export namespace Prisma {
     id?: true
     name?: true
     slug?: true
+    iconUrl?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4506,6 +4525,7 @@ export namespace Prisma {
     id: string
     name: string
     slug: string
+    iconUrl: string | null
     createdAt: Date
     updatedAt: Date
     _count: ExchangeCountAggregateOutputType | null
@@ -4531,6 +4551,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     slug?: boolean
+    iconUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     hotWallets?: boolean | Exchange$hotWalletsArgs<ExtArgs>
@@ -4541,6 +4562,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     slug?: boolean
+    iconUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["exchange"]>
@@ -4549,6 +4571,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     slug?: boolean
+    iconUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["exchange"]>
@@ -4557,11 +4580,12 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     slug?: boolean
+    iconUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ExchangeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "createdAt" | "updatedAt", ExtArgs["result"]["exchange"]>
+  export type ExchangeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "iconUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["exchange"]>
   export type ExchangeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     hotWallets?: boolean | Exchange$hotWalletsArgs<ExtArgs>
     _count?: boolean | ExchangeCountOutputTypeDefaultArgs<ExtArgs>
@@ -4578,6 +4602,7 @@ export namespace Prisma {
       id: string
       name: string
       slug: string
+      iconUrl: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["exchange"]>
@@ -5007,6 +5032,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Exchange", 'String'>
     readonly name: FieldRef<"Exchange", 'String'>
     readonly slug: FieldRef<"Exchange", 'String'>
+    readonly iconUrl: FieldRef<"Exchange", 'String'>
     readonly createdAt: FieldRef<"Exchange", 'DateTime'>
     readonly updatedAt: FieldRef<"Exchange", 'DateTime'>
   }
@@ -14983,6 +15009,7 @@ export namespace Prisma {
     id: 'id',
     slug: 'slug',
     name: 'name',
+    iconUrl: 'iconUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -15006,6 +15033,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     slug: 'slug',
+    iconUrl: 'iconUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -15308,6 +15336,7 @@ export namespace Prisma {
     id?: StringFilter<"Chain"> | string
     slug?: StringFilter<"Chain"> | string
     name?: StringNullableFilter<"Chain"> | string | null
+    iconUrl?: StringNullableFilter<"Chain"> | string | null
     createdAt?: DateTimeFilter<"Chain"> | Date | string
     updatedAt?: DateTimeFilter<"Chain"> | Date | string
     hotWallets?: HotWalletListRelationFilter
@@ -15320,6 +15349,7 @@ export namespace Prisma {
     id?: SortOrder
     slug?: SortOrder
     name?: SortOrderInput | SortOrder
+    iconUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     hotWallets?: HotWalletOrderByRelationAggregateInput
@@ -15335,6 +15365,7 @@ export namespace Prisma {
     OR?: ChainWhereInput[]
     NOT?: ChainWhereInput | ChainWhereInput[]
     name?: StringNullableFilter<"Chain"> | string | null
+    iconUrl?: StringNullableFilter<"Chain"> | string | null
     createdAt?: DateTimeFilter<"Chain"> | Date | string
     updatedAt?: DateTimeFilter<"Chain"> | Date | string
     hotWallets?: HotWalletListRelationFilter
@@ -15347,6 +15378,7 @@ export namespace Prisma {
     id?: SortOrder
     slug?: SortOrder
     name?: SortOrderInput | SortOrder
+    iconUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ChainCountOrderByAggregateInput
@@ -15361,6 +15393,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Chain"> | string
     slug?: StringWithAggregatesFilter<"Chain"> | string
     name?: StringNullableWithAggregatesFilter<"Chain"> | string | null
+    iconUrl?: StringNullableWithAggregatesFilter<"Chain"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Chain"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Chain"> | Date | string
   }
@@ -15432,6 +15465,7 @@ export namespace Prisma {
     id?: StringFilter<"Exchange"> | string
     name?: StringFilter<"Exchange"> | string
     slug?: StringFilter<"Exchange"> | string
+    iconUrl?: StringNullableFilter<"Exchange"> | string | null
     createdAt?: DateTimeFilter<"Exchange"> | Date | string
     updatedAt?: DateTimeFilter<"Exchange"> | Date | string
     hotWallets?: HotWalletListRelationFilter
@@ -15441,6 +15475,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    iconUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     hotWallets?: HotWalletOrderByRelationAggregateInput
@@ -15453,6 +15488,7 @@ export namespace Prisma {
     OR?: ExchangeWhereInput[]
     NOT?: ExchangeWhereInput | ExchangeWhereInput[]
     name?: StringFilter<"Exchange"> | string
+    iconUrl?: StringNullableFilter<"Exchange"> | string | null
     createdAt?: DateTimeFilter<"Exchange"> | Date | string
     updatedAt?: DateTimeFilter<"Exchange"> | Date | string
     hotWallets?: HotWalletListRelationFilter
@@ -15462,6 +15498,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    iconUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ExchangeCountOrderByAggregateInput
@@ -15476,6 +15513,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Exchange"> | string
     name?: StringWithAggregatesFilter<"Exchange"> | string
     slug?: StringWithAggregatesFilter<"Exchange"> | string
+    iconUrl?: StringNullableWithAggregatesFilter<"Exchange"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Exchange"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Exchange"> | Date | string
   }
@@ -16219,6 +16257,7 @@ export namespace Prisma {
     id?: string
     slug: string
     name?: string | null
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     hotWallets?: HotWalletCreateNestedManyWithoutChainInput
@@ -16231,6 +16270,7 @@ export namespace Prisma {
     id?: string
     slug: string
     name?: string | null
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     hotWallets?: HotWalletUncheckedCreateNestedManyWithoutChainInput
@@ -16243,6 +16283,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hotWallets?: HotWalletUpdateManyWithoutChainNestedInput
@@ -16255,6 +16296,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hotWallets?: HotWalletUncheckedUpdateManyWithoutChainNestedInput
@@ -16267,6 +16309,7 @@ export namespace Prisma {
     id?: string
     slug: string
     name?: string | null
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16275,6 +16318,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16283,6 +16327,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16358,6 +16403,7 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     hotWallets?: HotWalletCreateNestedManyWithoutExchangeInput
@@ -16367,6 +16413,7 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     hotWallets?: HotWalletUncheckedCreateNestedManyWithoutExchangeInput
@@ -16376,6 +16423,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hotWallets?: HotWalletUpdateManyWithoutExchangeNestedInput
@@ -16385,6 +16433,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hotWallets?: HotWalletUncheckedUpdateManyWithoutExchangeNestedInput
@@ -16394,6 +16443,7 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16402,6 +16452,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16410,6 +16461,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17310,6 +17362,7 @@ export namespace Prisma {
     id?: SortOrder
     slug?: SortOrder
     name?: SortOrder
+    iconUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17318,6 +17371,7 @@ export namespace Prisma {
     id?: SortOrder
     slug?: SortOrder
     name?: SortOrder
+    iconUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17326,6 +17380,7 @@ export namespace Prisma {
     id?: SortOrder
     slug?: SortOrder
     name?: SortOrder
+    iconUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17421,6 +17476,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    iconUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17429,6 +17485,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    iconUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17437,6 +17494,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    iconUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19500,6 +19558,7 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19508,6 +19567,7 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19521,6 +19581,7 @@ export namespace Prisma {
     id?: string
     slug: string
     name?: string | null
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     caseSeedTransactions?: CaseSeedTransactionCreateNestedManyWithoutChainInput
@@ -19532,6 +19593,7 @@ export namespace Prisma {
     id?: string
     slug: string
     name?: string | null
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     caseSeedTransactions?: CaseSeedTransactionUncheckedCreateNestedManyWithoutChainInput
@@ -19607,6 +19669,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19615,6 +19678,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19634,6 +19698,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     caseSeedTransactions?: CaseSeedTransactionUpdateManyWithoutChainNestedInput
@@ -19645,6 +19710,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     caseSeedTransactions?: CaseSeedTransactionUncheckedUpdateManyWithoutChainNestedInput
@@ -19871,6 +19937,7 @@ export namespace Prisma {
     id?: string
     slug: string
     name?: string | null
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     hotWallets?: HotWalletCreateNestedManyWithoutChainInput
@@ -19882,6 +19949,7 @@ export namespace Prisma {
     id?: string
     slug: string
     name?: string | null
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     hotWallets?: HotWalletUncheckedCreateNestedManyWithoutChainInput
@@ -19994,6 +20062,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hotWallets?: HotWalletUpdateManyWithoutChainNestedInput
@@ -20005,6 +20074,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hotWallets?: HotWalletUncheckedUpdateManyWithoutChainNestedInput
@@ -20094,6 +20164,7 @@ export namespace Prisma {
     id?: string
     slug: string
     name?: string | null
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     hotWallets?: HotWalletCreateNestedManyWithoutChainInput
@@ -20105,6 +20176,7 @@ export namespace Prisma {
     id?: string
     slug: string
     name?: string | null
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     hotWallets?: HotWalletUncheckedCreateNestedManyWithoutChainInput
@@ -20315,6 +20387,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hotWallets?: HotWalletUpdateManyWithoutChainNestedInput
@@ -20326,6 +20399,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hotWallets?: HotWalletUncheckedUpdateManyWithoutChainNestedInput
@@ -20464,6 +20538,7 @@ export namespace Prisma {
     id?: string
     slug: string
     name?: string | null
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     hotWallets?: HotWalletCreateNestedManyWithoutChainInput
@@ -20475,6 +20550,7 @@ export namespace Prisma {
     id?: string
     slug: string
     name?: string | null
+    iconUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     hotWallets?: HotWalletUncheckedCreateNestedManyWithoutChainInput
@@ -20551,6 +20627,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hotWallets?: HotWalletUpdateManyWithoutChainNestedInput
@@ -20562,6 +20639,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    iconUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     hotWallets?: HotWalletUncheckedUpdateManyWithoutChainNestedInput

@@ -23,7 +23,9 @@
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "prisma:seed": "npx tsx prisma/seed.ts",
-    "prisma:seed-case-kauan": "npx tsx prisma/seed-case-kauan.ts"
+    "prisma:seed-case-kauan": "npx tsx prisma/seed-case-kauan.ts",
+    "prisma:seed-case-diversificado": "npx tsx prisma/seed-case-diversificado.ts",
+    "prisma:seed-icons-base64": "npx tsx prisma/seed-icons-base64.ts"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"

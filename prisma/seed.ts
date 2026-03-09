@@ -61,11 +61,11 @@ async function processAddressList(
 
 async function main() {
   const chainIdsBySlug = new Map<string, string>();
-  for (const { slug, name } of CHAINS) {
+  for (const { slug, name, iconUrl } of CHAINS) {
     const chain = await prisma.chain.upsert({
       where: { slug },
-      create: { slug, name },
-      update: { name },
+      create: { slug, name, iconUrl: iconUrl ?? null },
+      update: { name, iconUrl: iconUrl ?? null },
     });
     chainIdsBySlug.set(chain.slug, chain.id);
   }
@@ -75,8 +75,12 @@ async function main() {
     create: {
       name: BINANCE_EXCHANGE.name,
       slug: BINANCE_EXCHANGE.slug,
+      iconUrl: BINANCE_EXCHANGE.iconUrl ?? null,
     },
-    update: { name: BINANCE_EXCHANGE.name },
+    update: {
+      name: BINANCE_EXCHANGE.name,
+      iconUrl: BINANCE_EXCHANGE.iconUrl ?? null,
+    },
   });
 
   let totalCreated = 0;

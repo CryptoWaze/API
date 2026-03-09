@@ -1,6 +1,7 @@
 export const BINANCE_EXCHANGE = {
   name: 'Binance',
   slug: 'binance',
+  iconUrl: '/assets/b-logo.svg',
 } as const;
 
 export const BINANCE_HOT_WALLETS_BY_CHAIN: Record<string, string[]> = {

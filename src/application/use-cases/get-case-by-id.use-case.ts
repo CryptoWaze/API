@@ -4,7 +4,8 @@ import { PrismaService } from '../../infrastructure/database/prisma.service';
 export type CaseSeedTransactionDto = {
   id: string;
   txHash: string;
-  initialWalletAddress: string;
+  initialWalletAddresses: string[];
+  flowIds: string[];
   chainSlug: string;
   tokenAddress: string | null;
   tokenSymbol: string | null;
@@ -61,6 +62,29 @@ export type FlowDto = {
   edges: FlowEdgeDto[];
 };
 
+export type MappingRootBranchDto = {
+  flowId: string;
+  initialWalletAddress: string;
+};
+
+export type MappingRootDto = {
+  seedId: string;
+  txHash: string;
+  branches: MappingRootBranchDto[];
+};
+
+export type MappingConnectionDto = {
+  flowId: string;
+  fromAddress: string;
+  toAddress: string;
+  stepIndex: number;
+};
+
+export type CaseMappingDto = {
+  roots: MappingRootDto[];
+  connections: MappingConnectionDto[];
+};
+
 export type GetCaseByIdResult = {
   id: string;
   name: string;
@@ -71,6 +95,7 @@ export type GetCaseByIdResult = {
   updatedAt: string;
   seeds: CaseSeedTransactionDto[];
   flows: FlowDto[];
+  mapping: CaseMappingDto;
 };
 
 @Injectable()
@@ -105,9 +130,12 @@ export class GetCaseByIdUseCase {
       throw new NotFoundException('Caso não encontrado.');
     }
 
-    const flowBySeedId = new Map(
-      caseRecord.flows.map((f) => [f.seedId, f]),
-    );
+    const flowsBySeedId = new Map<string, typeof caseRecord.flows>();
+    for (const f of caseRecord.flows) {
+      const list = flowsBySeedId.get(f.seedId) ?? [];
+      list.push(f);
+      flowsBySeedId.set(f.seedId, list);
+    }
 
     return {
       id: caseRecord.id,
@@ -118,13 +146,16 @@ export class GetCaseByIdUseCase {
       createdAt: caseRecord.createdAt.toISOString(),
       updatedAt: caseRecord.updatedAt.toISOString(),
       seeds: caseRecord.seeds.map((s) => {
-        const flow = flowBySeedId.get(s.id);
-        const initialWallet =
-          flow?.transactions[0]?.fromAddress ?? '';
+        const seedFlows = flowsBySeedId.get(s.id) ?? [];
+        const initialWalletAddresses = seedFlows
+          .map((f) => f.transactions[0]?.fromAddress)
+          .filter((addr): addr is string => addr != null && addr !== '');
+        const flowIds = seedFlows.map((f) => f.id);
         return {
           id: s.id,
           txHash: s.txHash,
-          initialWalletAddress: initialWallet,
+          initialWalletAddresses,
+          flowIds,
           chainSlug: s.chain.slug,
           tokenAddress: s.tokenAddress,
           tokenSymbol: s.tokenSymbol,
@@ -185,6 +216,30 @@ export class GetCaseByIdUseCase {
           })),
         };
       }),
+      mapping: {
+        roots: caseRecord.seeds.map((s) => {
+          const seedFlows = flowsBySeedId.get(s.id) ?? [];
+          const branches: MappingRootBranchDto[] = seedFlows
+            .map((f) => ({
+              flowId: f.id,
+              initialWalletAddress: f.transactions[0]?.fromAddress ?? '',
+            }))
+            .filter((b) => b.initialWalletAddress !== '');
+          return {
+            seedId: s.id,
+            txHash: s.txHash,
+            branches,
+          };
+        }),
+        connections: caseRecord.flows.flatMap((f) =>
+          f.edges.map((e) => ({
+            flowId: f.id,
+            fromAddress: e.fromAddress,
+            toAddress: e.toAddress,
+            stepIndex: e.stepIndex,
+          })),
+        ),
+      },
     };
   }
 }

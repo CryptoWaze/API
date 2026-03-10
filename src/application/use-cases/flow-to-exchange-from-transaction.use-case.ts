@@ -41,6 +41,7 @@ export class FlowToExchangeFromTransactionUseCase {
       address: startAddress,
       chain: chainSlug,
       traceId: input.traceId,
+      minTimestamp: seedTransfer.timestamp ?? undefined,
     });
   }
 }

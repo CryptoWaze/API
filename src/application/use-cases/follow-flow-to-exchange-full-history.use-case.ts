@@ -184,6 +184,10 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     const startAddress = normalizeAddress(input.address);
     const traceId = input.traceId;
 
+    const rawMin = (input as { minTimestamp?: string }).minTimestamp;
+    const minTimestamp: string | undefined =
+      typeof rawMin === 'string' && rawMin ? rawMin.trim() : undefined;
+
     this.progress(traceId, {
       message: `Iniciando rastreio do fluxo na rede ${chainSlug}. Carteira de partida: ${startAddress}`,
       address: startAddress,
@@ -195,6 +199,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         chainSlug,
         startAddress,
         traceId,
+        minTimestamp,
       );
 
       const logSteps = edgesToLogInput(edges);
@@ -279,14 +284,24 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     }
   }
 
+  private parseTimestampToMs(ts: string): number | null {
+    if (!ts || typeof ts !== 'string') return null;
+    const ms = new Date(ts.trim()).getTime();
+    return Number.isNaN(ms) ? null : ms;
+  }
+
   private async getFullHistoryTopOutbounds(
     covalentChainId: string,
     address: string,
     limit: number,
     traceId: string | undefined,
+    minTimestamp: string | undefined,
   ): Promise<WalletTransfer[]> {
     const all: WalletTransfer[] = [];
+    const minTimeMs =
+      minTimestamp != null ? this.parseTimestampToMs(minTimestamp) : null;
     const PAGE_LOG_INTERVAL = 20;
+
     for (let page = 0; page < MAX_PAGES_PER_WALLET; page++) {
       /* eslint-disable @typescript-eslint/no-unsafe-call */
       const pageTransfers =
@@ -297,7 +312,15 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         )) as WalletTransfer[];
       /* eslint-enable @typescript-eslint/no-unsafe-call */
       if (pageTransfers.length === 0) break;
-      all.push(...pageTransfers);
+
+      for (const t of pageTransfers) {
+        if (minTimeMs != null) {
+          const tMs = this.parseTimestampToMs(t.timestamp);
+          if (tMs == null || tMs < minTimeMs) continue;
+        }
+        all.push(t);
+      }
+
       if (page > 0 && page % PAGE_LOG_INTERVAL === 0) {
         this.progress(traceId, {
           message: `Buscando histórico de transferências da carteira... (página ${page + 1}, ${all.length} transferências encontradas até agora)`,
@@ -365,6 +388,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     chainSlug: string,
     startAddress: string,
     traceId: string | undefined,
+    minTimestamp: string | undefined,
   ): Promise<{
     result: TraceSuccess | TraceFailure;
     edges: EdgeRecord[];
@@ -469,6 +493,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           frame.currentAddress,
           HOT_WALLET_SCAN_LIMIT,
           traceId,
+          minTimestamp,
         );
         this.progress(traceId, {
           message: `Foram encontradas ${frame.outbounds.length} transferências de saída. Verificando destinos...`,
@@ -501,20 +526,29 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           counterparty,
         );
         if (isCounterpartyHot) {
-          const step: FlowStep = {
+          const allToHot = frame.outbounds.filter(
+            (t) => normalizeAddress(t.counterparty) === counterparty,
+          );
+          allToHot.sort(
+            (a, b) =>
+              new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+          );
+          const stepsToHot: FlowStep[] = allToHot.map((t) => ({
             fromAddress: frame.currentAddress,
             toAddress: counterparty,
-            transfer,
-          };
-          edges.push({
-            fromAddress: frame.currentAddress,
-            toAddress: counterparty,
-            transfer,
-            outcome: 'SUCCESS',
-          });
+            transfer: t,
+          }));
+          for (const t of allToHot) {
+            edges.push({
+              fromAddress: frame.currentAddress,
+              toAddress: counterparty,
+              transfer: t,
+              outcome: 'SUCCESS',
+            });
+          }
           markPathEdgesSuccess(edges, frame.path);
           this.progress(traceId, {
-            message: `Exchange encontrada. Uma das transferências desta carteira vai direto para uma exchange cadastrada.`,
+            message: `Exchange encontrada. ${allToHot.length} transferência(s) desta carteira para exchange cadastrada.`,
             depth: depth + 1,
             address: counterparty,
           });
@@ -522,7 +556,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
             result: {
               success: true,
               chain: chainSlug,
-              steps: frame.path.concat(step),
+              steps: frame.path.concat(stepsToHot),
               endpointAddress: counterparty,
             },
             edges,
@@ -536,35 +570,58 @@ export class FollowFlowToExchangeFullHistoryUseCase {
       let pushed = false;
       while (frame.outboundIndex < frame.outbounds.length) {
         const transfer = frame.outbounds[frame.outboundIndex];
-        frame.outboundIndex++;
         const nextAddress = normalizeAddress(transfer.counterparty);
-        if (visited.has(nextAddress)) continue;
-
-        const newStep: FlowStep = {
+        if (visited.has(nextAddress)) {
+          frame.outboundIndex++;
+          continue;
+        }
+        let maxIdx = frame.outboundIndex;
+        const allToB: WalletTransfer[] = [];
+        for (let i = frame.outboundIndex; i < frame.outbounds.length; i++) {
+          if (
+            normalizeAddress(frame.outbounds[i].counterparty) === nextAddress
+          ) {
+            allToB.push(frame.outbounds[i]);
+            maxIdx = i;
+          }
+        }
+        allToB.sort(
+          (a, b) =>
+            new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+        );
+        const stepsToB: FlowStep[] = allToB.map((t) => ({
           fromAddress: frame.currentAddress,
           toAddress: nextAddress,
-          transfer,
-        };
-        const newPath = frame.path.concat(newStep);
-        edges.push({
-          fromAddress: frame.currentAddress,
-          toAddress: nextAddress,
-          transfer,
-          outcome: null,
-        });
+          transfer: t,
+        }));
+        const newPath = frame.path.concat(stepsToB);
+        for (const t of allToB) {
+          edges.push({
+            fromAddress: frame.currentAddress,
+            toAddress: nextAddress,
+            transfer: t,
+            outcome: null,
+          });
+        }
         const edgeIndex = edges.length - 1;
+        const totalAmount = allToB.reduce((sum, t) => sum + t.amount, 0);
+        const symbol = allToB[0]?.symbol ?? transfer.symbol;
         this.progress(traceId, {
-          message: `Seguindo transferência de ${transfer.amount} ${transfer.symbol} para a próxima carteira...`,
+          message:
+            allToB.length > 1
+              ? `Seguindo ${allToB.length} transferências (total ${totalAmount} ${symbol}) para a próxima carteira...`
+              : `Seguindo transferência de ${transfer.amount} ${transfer.symbol} para a próxima carteira...`,
           depth: depth + 1,
           nextAddress,
-          symbol: transfer.symbol,
-          amount: transfer.amount,
+          symbol,
+          amount: totalAmount,
         });
+        const nextOutboundIndex = maxIdx + 1;
         stack.push({
           path: frame.path,
           currentAddress: frame.currentAddress,
           outbounds: frame.outbounds,
-          outboundIndex: frame.outboundIndex,
+          outboundIndex: nextOutboundIndex,
         });
         stack.push({
           path: newPath,
@@ -573,6 +630,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           outboundIndex: 0,
           edgeIndex,
         });
+        frame.outboundIndex = nextOutboundIndex;
         pushed = true;
         break;
       }

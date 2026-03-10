@@ -4,7 +4,7 @@ import { PrismaService } from '../../infrastructure/database/prisma.service';
 import { CoingeckoApiService } from '../../infrastructure/coingecko/coingecko-api.service';
 import type { CoinGeckoMarketItem } from '../../infrastructure/coingecko/coingecko-api.types';
 
-const PAGES_TOTAL = 8;
+const PAGES_TOTAL = 20;
 const DELAY_MS = 6000;
 const RUN_ON_STARTUP_DELAY_MS = 5000;
 const RATE_LIMIT_WAIT_MS = 65_000;

@@ -144,6 +144,7 @@ export class CreateCaseUseCase {
             address: startAddress,
             chain: chainSlug,
             traceId: `${traceId}-${seedIndex}`,
+            minTimestamp: res.result.seedTransfer.timestamp ?? undefined,
           });
           return {
             seedIndex,

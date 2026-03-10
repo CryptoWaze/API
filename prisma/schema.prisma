@@ -55,6 +55,21 @@ model Exchange {
   hotWallets HotWallet[]
 }
 
+model Token {
+  id              String    @id @default(cuid())
+  coingeckoId     String    @unique
+  name            String
+  symbol          String
+  imageUrl        String?
+  currentPrice    String?
+  marketCap       String?
+  marketCapRank   Int?
+  totalVolume     String?
+  lastUpdatedAt   DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
 model HotWallet {
   id         String   @id @default(cuid())
   exchangeId String

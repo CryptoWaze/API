@@ -31,11 +31,17 @@ import {
   type IFlowTraceProgressEmitter,
   type FlowTraceProgressPayload,
 } from '../ports/flow-trace-progress-emitter.port';
+import {
+  TOKEN_PRICE_PROVIDER,
+  type ITokenPriceProvider,
+  type TokenInfo,
+} from '../ports/token-price-provider.port';
 
 const MAX_WALLETS = 50;
 const MAX_PAGES_PER_WALLET = 50;
 const TOP_OUTBOUNDS_PER_WALLET = 10;
 const HOT_WALLET_SCAN_LIMIT = 100;
+const MIN_TRANSFER_AMOUNT = 0.01;
 
 function toCovalentChainId(slug: string): string {
   return `${slug}-mainnet`;
@@ -47,16 +53,12 @@ function normalizeAddress(address: string): string {
   return a;
 }
 
-function pickTopOutbounds(
+function filterOutboundsAboveMin(
   transfers: WalletTransfer[],
-  limit: number,
 ): WalletTransfer[] {
-  const out = transfers.filter((t) => t.direction === 'OUT');
-  if (out.length === 0) return [];
-  const sorted = [...out].sort((a, b) =>
-    Number(BigInt(b.rawAmount) - BigInt(a.rawAmount)),
+  return transfers.filter(
+    (t) => t.direction === 'OUT' && t.amount >= MIN_TRANSFER_AMOUNT,
   );
-  return sorted.slice(0, limit);
 }
 
 type TraceSuccess = {
@@ -138,6 +140,7 @@ function buildGraph(edges: EdgeRecord[]): FlowGraph {
     amount: e.transfer.amount,
     amountRaw: e.transfer.rawAmount,
     txHash: e.transfer.txHash,
+    timestamp: e.transfer.timestamp,
     outcome: e.outcome ?? undefined,
   }));
   return { nodes, edges: graphEdges };
@@ -156,6 +159,8 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     private readonly hotWalletChecker: IHotWalletChecker,
     @Inject(FLOW_TRACE_LOG_WRITER)
     private readonly flowTraceLogWriter: IFlowTraceLogWriter,
+    @Inject(TOKEN_PRICE_PROVIDER)
+    private readonly tokenPriceProvider: ITokenPriceProvider,
     @Optional()
     @Inject(FLOW_TRACE_PROGRESS_EMITTER)
     private readonly flowTraceProgressEmitter: IFlowTraceProgressEmitter | null,
@@ -194,6 +199,29 @@ export class FollowFlowToExchangeFullHistoryUseCase {
 
       const logSteps = edgesToLogInput(edges);
       const graph = buildGraph(edges);
+      /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
+      const tokenInfoBySymbol: Map<string, TokenInfo> =
+        await this.enrichTokenInfo(result.steps, graph.edges);
+      const enrichedSteps = result.steps.map((s) => {
+        const info = tokenInfoBySymbol.get(
+          s.transfer.symbol.trim().toLowerCase(),
+        );
+        return {
+          ...s,
+          tokenPriceUsd: info?.priceUsd ?? null,
+          tokenImageUrl: info?.imageUrl ?? null,
+        };
+      });
+      const enrichedEdges = graph.edges.map((e) => {
+        const info = tokenInfoBySymbol.get(e.symbol.trim().toLowerCase());
+        return {
+          ...e,
+          tokenPriceUsd: info?.priceUsd ?? null,
+          tokenImageUrl: info?.imageUrl ?? null,
+        };
+      });
+      /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
+
       if (result.success) {
         await this.flowTraceLogWriter.write({
           inputAddress: startAddress,
@@ -205,9 +233,9 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         return {
           success: true,
           chain: result.chain,
-          steps: result.steps,
+          steps: enrichedSteps,
           endpointAddress: result.endpointAddress,
-          graph,
+          graph: { nodes: graph.nodes, edges: enrichedEdges },
         };
       }
 
@@ -230,8 +258,8 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         chain: chainSlug,
         reason: result.reason,
         lastWallet: result.lastWallet,
-        steps: result.steps,
-        graph,
+        steps: enrichedSteps,
+        graph: { nodes: graph.nodes, edges: enrichedEdges },
       };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -279,7 +307,45 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         });
       }
     }
-    return pickTopOutbounds(all, limit);
+    return this.pickTopOutboundsByUsd(all, limit);
+  }
+
+  private async enrichTokenInfo(
+    steps: FlowStep[],
+    edges: { symbol: string }[],
+  ): Promise<Map<string, TokenInfo>> {
+    const symbols = new Set<string>();
+    for (const s of steps) {
+      symbols.add(s.transfer.symbol.trim().toLowerCase());
+    }
+    for (const e of edges) {
+      symbols.add(e.symbol.trim().toLowerCase());
+    }
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
+    const map = await this.tokenPriceProvider.getTokenInfoBatch([...symbols]);
+    /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
+    return map as Map<string, TokenInfo>;
+  }
+
+  private async pickTopOutboundsByUsd(
+    transfers: WalletTransfer[],
+    limit: number,
+  ): Promise<WalletTransfer[]> {
+    const out = filterOutboundsAboveMin(transfers);
+    if (out.length === 0) return [];
+    const symbols = [...new Set(out.map((t) => t.symbol.trim().toLowerCase()))];
+    const priceBySymbol = new Map<string, number>();
+    for (const symbol of symbols) {
+      const price = await this.tokenPriceProvider.getPriceInUsd(symbol);
+      priceBySymbol.set(symbol, price ?? 0);
+    }
+    const withUsd = out.map((t) => {
+      const price = priceBySymbol.get(t.symbol.trim().toLowerCase()) ?? 0;
+      const valueUsd = t.amount * price;
+      return { transfer: t, valueUsd };
+    });
+    withUsd.sort((a, b) => b.valueUsd - a.valueUsd);
+    return withUsd.slice(0, limit).map((x) => x.transfer);
   }
 
   private visitedAddresses(

@@ -147,6 +147,21 @@ exports.Prisma.ExchangeScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.TokenScalarFieldEnum = {
+  id: 'id',
+  coingeckoId: 'coingeckoId',
+  name: 'name',
+  symbol: 'symbol',
+  imageUrl: 'imageUrl',
+  currentPrice: 'currentPrice',
+  marketCap: 'marketCap',
+  marketCapRank: 'marketCapRank',
+  totalVolume: 'totalVolume',
+  lastUpdatedAt: 'lastUpdatedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.HotWalletScalarFieldEnum = {
   id: 'id',
   exchangeId: 'exchangeId',
@@ -309,6 +324,7 @@ exports.Prisma.ModelName = {
   Chain: 'Chain',
   User: 'User',
   Exchange: 'Exchange',
+  Token: 'Token',
   HotWallet: 'HotWallet',
   Case: 'Case',
   CaseSeedTransaction: 'CaseSeedTransaction',

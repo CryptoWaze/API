@@ -258,6 +258,9 @@ export class CreateCaseUseCase {
             transferAmountDecimal: edge.amount.toString(),
             txHash: edge.txHash,
             outcome: edge.outcome ?? null,
+            transferTimestamp: edge.timestamp
+              ? parseTimestamp(edge.timestamp)
+              : null,
           }),
         );
         await this.prisma.flowEdge.createMany({ data: edgeData });

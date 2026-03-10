@@ -11,6 +11,8 @@ export type CaseSeedTransactionDto = {
   chainIconUrl: string | null;
   tokenAddress: string | null;
   tokenSymbol: string | null;
+  tokenPriceUsd: number | null;
+  tokenImageUrl: string | null;
   amountRaw: string;
   amountDecimal: string;
   timestamp: string;
@@ -24,6 +26,8 @@ export type FlowTransactionDto = {
   toAddress: string;
   tokenAddress: string | null;
   tokenSymbol: string | null;
+  tokenPriceUsd: number | null;
+  tokenImageUrl: string | null;
   amountRaw: string;
   amountDecimal: string;
   timestamp: string;
@@ -42,6 +46,8 @@ export type FlowEdgeDto = {
   tokenAddress: string | null;
   transferTimestamp: string | null;
   outcome: string | null;
+  tokenPriceUsd: number | null;
+  tokenImageUrl: string | null;
 };
 
 export type FlowDto = {
@@ -53,6 +59,8 @@ export type FlowDto = {
   initialWalletAddress: string;
   tokenAddress: string | null;
   tokenSymbol: string | null;
+  tokenPriceUsd: number | null;
+  tokenImageUrl: string | null;
   totalAmountRaw: string;
   totalAmountDecimal: string;
   hopsCount: number;
@@ -103,9 +111,36 @@ export type GetCaseByIdResult = {
   mapping: CaseMappingDto;
 };
 
+type TokenInfoEntry = { priceUsd: number | null; imageUrl: string | null };
+
 @Injectable()
 export class GetCaseByIdUseCase {
   constructor(private readonly prisma: PrismaService) {}
+
+  private async loadTokenInfoMap(
+    symbols: string[],
+  ): Promise<Map<string, TokenInfoEntry>> {
+    const normalized = [...new Set(symbols.map((s) => s.trim().toLowerCase()))];
+    if (normalized.length === 0) return new Map();
+    const tokens = await this.prisma.token.findMany({
+      where: { symbol: { in: normalized } },
+      select: { symbol: true, currentPrice: true, imageUrl: true },
+    });
+    const map = new Map<string, TokenInfoEntry>();
+    for (const sym of normalized) {
+      const token = tokens.find((t) => t.symbol === sym);
+      const priceUsd =
+        token?.currentPrice != null && token.currentPrice !== ''
+          ? Number.parseFloat(token.currentPrice)
+          : null;
+      map.set(sym, {
+        priceUsd:
+          priceUsd != null && !Number.isNaN(priceUsd) ? priceUsd : null,
+        imageUrl: token?.imageUrl ?? null,
+      });
+    }
+    return map;
+  }
 
   async execute(id: string, userId: string): Promise<GetCaseByIdResult> {
     const caseRecord = await this.prisma.case.findUnique({
@@ -141,6 +176,24 @@ export class GetCaseByIdUseCase {
       throw new NotFoundException('Caso não encontrado.');
     }
 
+    const symbols = new Set<string>();
+    for (const s of caseRecord.seeds) {
+      if (s.tokenSymbol) symbols.add(s.tokenSymbol.trim().toLowerCase());
+    }
+    for (const f of caseRecord.flows) {
+      if (f.tokenSymbol) symbols.add(f.tokenSymbol.trim().toLowerCase());
+      for (const t of f.transactions) {
+        if (t.tokenSymbol) symbols.add(t.tokenSymbol.trim().toLowerCase());
+      }
+      for (const e of f.edges) {
+        if (e.transferSymbol)
+          symbols.add(e.transferSymbol.trim().toLowerCase());
+      }
+    }
+    const tokenInfoBySymbol = await this.loadTokenInfoMap([
+      ...symbols,
+    ]);
+
     const flowsBySeedId = new Map<string, typeof caseRecord.flows>();
     for (const f of caseRecord.flows) {
       const list = flowsBySeedId.get(f.seedId) ?? [];
@@ -162,6 +215,8 @@ export class GetCaseByIdUseCase {
           .map((f) => f.transactions[0]?.fromAddress)
           .filter((addr): addr is string => addr != null && addr !== '');
         const flowIds = seedFlows.map((f) => f.id);
+        const sym = s.tokenSymbol?.trim().toLowerCase();
+        const tokenInfo = sym ? tokenInfoBySymbol.get(sym) : null;
         return {
           id: s.id,
           txHash: s.txHash,
@@ -172,6 +227,8 @@ export class GetCaseByIdUseCase {
           chainIconUrl: s.chain.iconUrl,
           tokenAddress: s.tokenAddress,
           tokenSymbol: s.tokenSymbol,
+          tokenPriceUsd: tokenInfo?.priceUsd ?? null,
+          tokenImageUrl: tokenInfo?.imageUrl ?? null,
           amountRaw: s.amountRaw,
           amountDecimal: s.amountDecimal,
           timestamp: s.timestamp.toISOString(),
@@ -183,6 +240,8 @@ export class GetCaseByIdUseCase {
         const endpointIsHotWallet = f.endpointHotWallet != null;
         const endpointHotWalletLabel =
           endpointIsHotWallet ? 'Hot Wallet' : null;
+        const flowSym = f.tokenSymbol?.trim().toLowerCase();
+        const flowTokenInfo = flowSym ? tokenInfoBySymbol.get(flowSym) : null;
         return {
           id: f.id,
           seedId: f.seedId,
@@ -192,6 +251,8 @@ export class GetCaseByIdUseCase {
           initialWalletAddress: initialWallet,
           tokenAddress: f.tokenAddress,
           tokenSymbol: f.tokenSymbol,
+          tokenPriceUsd: flowTokenInfo?.priceUsd ?? null,
+          tokenImageUrl: flowTokenInfo?.imageUrl ?? null,
           totalAmountRaw: f.totalAmountRaw,
           totalAmountDecimal: f.totalAmountDecimal,
           hopsCount: f.hopsCount,
@@ -202,34 +263,46 @@ export class GetCaseByIdUseCase {
           endpointExchangeSlug: exchange?.slug ?? null,
           endpointExchangeIconUrl: exchange?.iconUrl ?? null,
           endpointHotWalletLabel,
-          transactions: f.transactions.map((t) => ({
-            id: t.id,
-            hopIndex: t.hopIndex,
-            txHash: t.txHash,
-            fromAddress: t.fromAddress,
-            toAddress: t.toAddress,
-            tokenAddress: t.tokenAddress,
-            tokenSymbol: t.tokenSymbol,
-            amountRaw: t.amountRaw,
-            amountDecimal: t.amountDecimal,
-            timestamp: t.timestamp.toISOString(),
-            isEndpointHop: t.isEndpointHop,
-          })),
-          edges: f.edges.map((e) => ({
-            id: e.id,
-            stepIndex: e.stepIndex,
-            fromAddress: e.fromAddress,
-            toAddress: e.toAddress,
-            transferSymbol: e.transferSymbol,
-            transferAmountRaw: e.transferAmountRaw,
-            transferAmountDecimal: e.transferAmountDecimal,
-            txHash: e.txHash,
-            tokenAddress: e.tokenAddress,
-            transferTimestamp: e.transferTimestamp
-              ? e.transferTimestamp.toISOString()
-              : null,
-            outcome: e.outcome,
-          })),
+          transactions: f.transactions.map((t) => {
+            const tSym = t.tokenSymbol?.trim().toLowerCase();
+            const tInfo = tSym ? tokenInfoBySymbol.get(tSym) : null;
+            return {
+              id: t.id,
+              hopIndex: t.hopIndex,
+              txHash: t.txHash,
+              fromAddress: t.fromAddress,
+              toAddress: t.toAddress,
+              tokenAddress: t.tokenAddress,
+              tokenSymbol: t.tokenSymbol,
+              tokenPriceUsd: tInfo?.priceUsd ?? null,
+              tokenImageUrl: tInfo?.imageUrl ?? null,
+              amountRaw: t.amountRaw,
+              amountDecimal: t.amountDecimal,
+              timestamp: t.timestamp.toISOString(),
+              isEndpointHop: t.isEndpointHop,
+            };
+          }),
+          edges: f.edges.map((e) => {
+            const eSym = e.transferSymbol?.trim().toLowerCase();
+            const eInfo = eSym ? tokenInfoBySymbol.get(eSym) : null;
+            return {
+              id: e.id,
+              stepIndex: e.stepIndex,
+              fromAddress: e.fromAddress,
+              toAddress: e.toAddress,
+              transferSymbol: e.transferSymbol,
+              transferAmountRaw: e.transferAmountRaw,
+              transferAmountDecimal: e.transferAmountDecimal,
+              txHash: e.txHash,
+              tokenAddress: e.tokenAddress,
+              transferTimestamp: e.transferTimestamp
+                ? e.transferTimestamp.toISOString()
+                : null,
+              outcome: e.outcome,
+              tokenPriceUsd: eInfo?.priceUsd ?? null,
+              tokenImageUrl: eInfo?.imageUrl ?? null,
+            };
+          }),
         };
       }),
       mapping: {

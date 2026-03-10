@@ -53,6 +53,8 @@ export type FlowStep = {
   fromAddress: string;
   toAddress: string;
   transfer: WalletTransfer;
+  tokenPriceUsd?: number | null;
+  tokenImageUrl?: string | null;
 };
 
 export type FollowFlowToExchangeResult = {
@@ -73,11 +75,14 @@ export type FlowGraphEdge = {
   amount: number;
   amountRaw: string;
   txHash: string;
+  timestamp?: string;
   outcome?:
     | 'SUCCESS'
     | 'NO_OUTBOUND'
     | 'MAX_WALLETS_REACHED'
     | 'EXHAUSTED_OPTIONS';
+  tokenPriceUsd?: number | null;
+  tokenImageUrl?: string | null;
 };
 
 export type FlowGraph = {

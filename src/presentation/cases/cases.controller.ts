@@ -15,6 +15,7 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } 
 import { createCaseSchema } from '../../application/schemas/create-case.schema';
 import { updateFlowWalletSchema } from '../../application/schemas/update-flow-wallet.schema';
 import { updateCaseSchema } from '../../application/schemas/update-case.schema';
+import { editCaseSchema } from '../../application/schemas/edit-case.schema';
 import { CreateCaseUseCase } from '../../application/use-cases/create-case.use-case';
 import { GetCaseByIdUseCase } from '../../application/use-cases/get-case-by-id.use-case';
 import { GetCasesHistoryByUserIdUseCase } from '../../application/use-cases/get-cases-history-by-user-id.use-case';
@@ -22,6 +23,7 @@ import { UpdateFlowWalletUseCase } from '../../application/use-cases/update-flow
 import { UpdateCaseUseCase } from '../../application/use-cases/update-case.use-case';
 import { SoftDeleteFlowUseCase } from '../../application/use-cases/soft-delete-flow.use-case';
 import { SoftDeleteFlowTransactionUseCase } from '../../application/use-cases/soft-delete-flow-transaction.use-case';
+import { EditCaseUseCase } from '../../application/use-cases/edit-case.use-case';
 import { CurrentUser, JwtAuthGuard } from '../../infrastructure/auth';
 
 @ApiTags('cases')
@@ -37,6 +39,7 @@ export class CasesController {
     private readonly updateCaseUseCase: UpdateCaseUseCase,
     private readonly softDeleteFlowUseCase: SoftDeleteFlowUseCase,
     private readonly softDeleteFlowTransactionUseCase: SoftDeleteFlowTransactionUseCase,
+    private readonly editCaseUseCase: EditCaseUseCase,
   ) {}
 
   @Post()
@@ -155,6 +158,94 @@ export class CasesController {
       throw new BadRequestException(messages);
     }
     return this.updateCaseUseCase.execute(id, user.userId, result.data);
+  }
+
+  @Patch(':id/edit')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Editar caso (bulk)',
+    description:
+      'Endpoint único para edição em lote do caso: renomear caso, editar carteiras (nickname/position) e apagar fluxos/transações via soft delete.',
+  })
+  @ApiParam({ name: 'id', description: 'ID do caso (cuid)' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', description: 'Novo nome do caso' },
+        wallets: {
+          type: 'array',
+          items: {
+            type: 'object',
+            required: ['walletId'],
+            properties: {
+              walletId: { type: 'string' },
+              nickname: {
+                type: 'string',
+                nullable: true,
+                description: 'Apelido da carteira (null para limpar)',
+              },
+              position: {
+                oneOf: [
+                  { type: 'string', enum: ['default'] },
+                  {
+                    type: 'object',
+                    properties: {
+                      x: { type: 'number' },
+                      y: { type: 'number' },
+                    },
+                    required: ['x', 'y'],
+                  },
+                ],
+                description: 'Posição no fluxograma: "default" ou { x, y }',
+              },
+            },
+          },
+        },
+        softDeleteFlows: {
+          type: 'array',
+          items: {
+            type: 'object',
+            required: ['flowId'],
+            properties: {
+              flowId: { type: 'string' },
+            },
+          },
+        },
+        softDeleteTransactions: {
+          type: 'array',
+          items: {
+            type: 'object',
+            required: ['flowId', 'transactionId'],
+            properties: {
+              flowId: { type: 'string' },
+              transactionId: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Edição aplicada. Retorna ids de carteiras/fluxos/transações tocados.',
+  })
+  @ApiResponse({ status: 400, description: 'Body inválido.' })
+  @ApiResponse({ status: 401, description: 'Não autorizado.' })
+  async editCase(
+    @Param('id') id: string,
+    @Body() body: unknown,
+    @CurrentUser() user: { userId: string },
+  ) {
+    const result = editCaseSchema.safeParse(body);
+    if (!result.success) {
+      const messages = result.error.errors
+        .map((e) => `${e.path.join('.')}: ${e.message}`)
+        .join('; ');
+      throw new BadRequestException(messages);
+    }
+    return this.editCaseUseCase.execute(id, user.userId, result.data);
   }
 
   @Patch(':caseId/wallets/:walletId')

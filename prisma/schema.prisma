@@ -148,6 +148,7 @@ model Flow {
   isEndpointExchange    Boolean             @default(false)
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
+  deletedAt             DateTime?
 
   transactions FlowTransaction[]
   edges       FlowEdge[]
@@ -185,6 +186,7 @@ model FlowTransaction {
   timestamp     DateTime
   isEndpointHop Boolean    @default(false)
   createdAt     DateTime   @default(now())
+  deletedAt     DateTime?
 
   @@unique([flowId, hopIndex])
 }
@@ -204,6 +206,7 @@ model FlowEdge {
   outcome               FlowEdgeOutcome?
   transferTimestamp     DateTime?
   createdAt             DateTime            @default(now())
+  deletedAt             DateTime?
 
   @@unique([flowId, stepIndex])
 }

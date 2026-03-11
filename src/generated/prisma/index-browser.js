@@ -213,7 +213,8 @@ exports.Prisma.FlowScalarFieldEnum = {
   endpointHotWalletId: 'endpointHotWalletId',
   isEndpointExchange: 'isEndpointExchange',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.FlowWalletScalarFieldEnum = {
@@ -241,7 +242,8 @@ exports.Prisma.FlowTransactionScalarFieldEnum = {
   amountDecimal: 'amountDecimal',
   timestamp: 'timestamp',
   isEndpointHop: 'isEndpointHop',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.FlowEdgeScalarFieldEnum = {
@@ -257,7 +259,8 @@ exports.Prisma.FlowEdgeScalarFieldEnum = {
   tokenAddress: 'tokenAddress',
   outcome: 'outcome',
   transferTimestamp: 'transferTimestamp',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.FlowTraceLogScalarFieldEnum = {

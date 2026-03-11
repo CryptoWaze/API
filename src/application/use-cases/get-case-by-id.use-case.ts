@@ -162,6 +162,7 @@ export class GetCaseByIdUseCase {
           },
         },
         flows: {
+          where: { deletedAt: null },
           include: {
             chain: { select: { slug: true, name: true, iconUrl: true } },
             seed: true,
@@ -172,8 +173,14 @@ export class GetCaseByIdUseCase {
                 },
               },
             },
-            transactions: { orderBy: { hopIndex: 'asc' } },
-            edges: { orderBy: { stepIndex: 'asc' } },
+            transactions: {
+              where: { deletedAt: null },
+              orderBy: { hopIndex: 'asc' },
+            },
+            edges: {
+              where: { deletedAt: null },
+              orderBy: { stepIndex: 'asc' },
+            },
             wallets: { orderBy: { nodeIndex: 'asc' } },
           },
         },

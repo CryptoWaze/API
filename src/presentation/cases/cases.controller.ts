@@ -14,10 +14,14 @@ import {
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { createCaseSchema } from '../../application/schemas/create-case.schema';
 import { updateFlowWalletSchema } from '../../application/schemas/update-flow-wallet.schema';
+import { updateCaseSchema } from '../../application/schemas/update-case.schema';
 import { CreateCaseUseCase } from '../../application/use-cases/create-case.use-case';
 import { GetCaseByIdUseCase } from '../../application/use-cases/get-case-by-id.use-case';
 import { GetCasesHistoryByUserIdUseCase } from '../../application/use-cases/get-cases-history-by-user-id.use-case';
 import { UpdateFlowWalletUseCase } from '../../application/use-cases/update-flow-wallet.use-case';
+import { UpdateCaseUseCase } from '../../application/use-cases/update-case.use-case';
+import { SoftDeleteFlowUseCase } from '../../application/use-cases/soft-delete-flow.use-case';
+import { SoftDeleteFlowTransactionUseCase } from '../../application/use-cases/soft-delete-flow-transaction.use-case';
 import { CurrentUser, JwtAuthGuard } from '../../infrastructure/auth';
 
 @ApiTags('cases')
@@ -30,6 +34,9 @@ export class CasesController {
     private readonly getCaseByIdUseCase: GetCaseByIdUseCase,
     private readonly getCasesHistoryByUserIdUseCase: GetCasesHistoryByUserIdUseCase,
     private readonly updateFlowWalletUseCase: UpdateFlowWalletUseCase,
+    private readonly updateCaseUseCase: UpdateCaseUseCase,
+    private readonly softDeleteFlowUseCase: SoftDeleteFlowUseCase,
+    private readonly softDeleteFlowTransactionUseCase: SoftDeleteFlowTransactionUseCase,
   ) {}
 
   @Post()
@@ -115,6 +122,41 @@ export class CasesController {
     return this.getCasesHistoryByUserIdUseCase.execute(user.userId);
   }
 
+  @Patch(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Editar caso (metadados)',
+    description:
+      'Permite editar propriedades do caso, como o nome. Apenas o dono do caso pode editar.',
+  })
+  @ApiParam({ name: 'id', description: 'ID do caso (cuid)' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', description: 'Novo nome do caso' },
+      },
+    },
+  })
+  @ApiResponse({ status: 200, description: 'Caso atualizado.' })
+  @ApiResponse({ status: 400, description: 'Body inválido.' })
+  @ApiResponse({ status: 404, description: 'Caso não encontrado.' })
+  @ApiResponse({ status: 401, description: 'Não autorizado.' })
+  async updateCase(
+    @Param('id') id: string,
+    @Body() body: unknown,
+    @CurrentUser() user: { userId: string },
+  ) {
+    const result = updateCaseSchema.safeParse(body);
+    if (!result.success) {
+      const messages = result.error.errors
+        .map((e) => `${e.path.join('.')}: ${e.message}`)
+        .join('; ');
+      throw new BadRequestException(messages);
+    }
+    return this.updateCaseUseCase.execute(id, user.userId, result.data);
+  }
+
   @Patch(':caseId/wallets/:walletId')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -170,6 +212,56 @@ export class CasesController {
       walletId,
       user.userId,
       result.data,
+    );
+  }
+
+  @Patch(':caseId/flows/:flowId/soft-delete')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Apagar fluxo (soft delete)',
+    description:
+      'Marca um fluxo inteiro como removido (soft delete), incluindo suas transações e arestas. Apenas o dono do caso pode apagar.',
+  })
+  @ApiParam({ name: 'caseId', description: 'ID do caso' })
+  @ApiParam({ name: 'flowId', description: 'ID do fluxo' })
+  @ApiResponse({ status: 200, description: 'Fluxo apagado (soft delete).' })
+  @ApiResponse({ status: 404, description: 'Fluxo ou caso não encontrado.' })
+  @ApiResponse({ status: 401, description: 'Não autorizado.' })
+  async softDeleteFlow(
+    @Param('caseId') caseId: string,
+    @Param('flowId') flowId: string,
+    @CurrentUser() user: { userId: string },
+  ) {
+    return this.softDeleteFlowUseCase.execute(caseId, flowId, user.userId);
+  }
+
+  @Patch(':caseId/flows/:flowId/transactions/:transactionId/soft-delete')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Apagar transação de fluxo (soft delete)',
+    description:
+      'Marca uma transação específica de um fluxo como removida (soft delete) e, opcionalmente, as arestas associadas. Apenas o dono do caso pode apagar.',
+  })
+  @ApiParam({ name: 'caseId', description: 'ID do caso' })
+  @ApiParam({ name: 'flowId', description: 'ID do fluxo' })
+  @ApiParam({ name: 'transactionId', description: 'ID da transação do fluxo' })
+  @ApiResponse({ status: 200, description: 'Transação apagada (soft delete).' })
+  @ApiResponse({
+    status: 404,
+    description: 'Transação, fluxo ou caso não encontrados.',
+  })
+  @ApiResponse({ status: 401, description: 'Não autorizado.' })
+  async softDeleteFlowTransaction(
+    @Param('caseId') caseId: string,
+    @Param('flowId') flowId: string,
+    @Param('transactionId') transactionId: string,
+    @CurrentUser() user: { userId: string },
+  ) {
+    return this.softDeleteFlowTransactionUseCase.execute(
+      caseId,
+      flowId,
+      transactionId,
+      user.userId,
     );
   }
 

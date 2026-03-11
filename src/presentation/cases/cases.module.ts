@@ -7,6 +7,9 @@ import { CreateCaseUseCase } from '../../application/use-cases/create-case.use-c
 import { GetCaseByIdUseCase } from '../../application/use-cases/get-case-by-id.use-case';
 import { GetCasesHistoryByUserIdUseCase } from '../../application/use-cases/get-cases-history-by-user-id.use-case';
 import { UpdateFlowWalletUseCase } from '../../application/use-cases/update-flow-wallet.use-case';
+import { UpdateCaseUseCase } from '../../application/use-cases/update-case.use-case';
+import { SoftDeleteFlowUseCase } from '../../application/use-cases/soft-delete-flow.use-case';
+import { SoftDeleteFlowTransactionUseCase } from '../../application/use-cases/soft-delete-flow-transaction.use-case';
 import { CasesController } from './cases.controller';
 
 @Module({
@@ -17,6 +20,9 @@ import { CasesController } from './cases.controller';
     GetCaseByIdUseCase,
     GetCasesHistoryByUserIdUseCase,
     UpdateFlowWalletUseCase,
+    UpdateCaseUseCase,
+    SoftDeleteFlowUseCase,
+    SoftDeleteFlowTransactionUseCase,
   ],
 })
 export class CasesModule {}

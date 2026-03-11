@@ -146,6 +146,7 @@ model Flow {
   isEndpointExchange  Boolean             @default(false)
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
+  deletedAt           DateTime?
 
   transactions FlowTransaction[]
   edges        FlowEdge[]
@@ -167,11 +168,11 @@ model FlowWallet {
 }
 
 model FlowTransaction {
-  id            String   @id @default(cuid())
+  id            String    @id @default(cuid())
   flowId        String
-  flow          Flow     @relation(fields: [flowId], references: [id])
+  flow          Flow      @relation(fields: [flowId], references: [id])
   chainId       String
-  chain         Chain    @relation(fields: [chainId], references: [id])
+  chain         Chain     @relation(fields: [chainId], references: [id])
   hopIndex      Int
   txHash        String
   fromAddress   String
@@ -181,8 +182,9 @@ model FlowTransaction {
   amountRaw     String
   amountDecimal String
   timestamp     DateTime
-  isEndpointHop Boolean  @default(false)
-  createdAt     DateTime @default(now())
+  isEndpointHop Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  deletedAt     DateTime?
 
   @@unique([flowId, hopIndex])
 }
@@ -202,6 +204,7 @@ model FlowEdge {
   outcome               FlowEdgeOutcome?
   transferTimestamp     DateTime?
   createdAt             DateTime         @default(now())
+  deletedAt             DateTime?
 
   @@unique([flowId, stepIndex])
 }

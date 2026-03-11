@@ -10276,6 +10276,7 @@ export namespace Prisma {
     isEndpointExchange: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
   }
 
   export type FlowMaxAggregateOutputType = {
@@ -10294,6 +10295,7 @@ export namespace Prisma {
     isEndpointExchange: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
   }
 
   export type FlowCountAggregateOutputType = {
@@ -10312,6 +10314,7 @@ export namespace Prisma {
     isEndpointExchange: number
     createdAt: number
     updatedAt: number
+    deletedAt: number
     _all: number
   }
 
@@ -10340,6 +10343,7 @@ export namespace Prisma {
     isEndpointExchange?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
   }
 
   export type FlowMaxAggregateInputType = {
@@ -10358,6 +10362,7 @@ export namespace Prisma {
     isEndpointExchange?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
   }
 
   export type FlowCountAggregateInputType = {
@@ -10376,6 +10381,7 @@ export namespace Prisma {
     isEndpointExchange?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
     _all?: true
   }
 
@@ -10481,6 +10487,7 @@ export namespace Prisma {
     isEndpointExchange: boolean
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
     _count: FlowCountAggregateOutputType | null
     _avg: FlowAvgAggregateOutputType | null
     _sum: FlowSumAggregateOutputType | null
@@ -10518,6 +10525,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
     case?: boolean | CaseDefaultArgs<ExtArgs>
     seed?: boolean | CaseSeedTransactionDefaultArgs<ExtArgs>
     chain?: boolean | ChainDefaultArgs<ExtArgs>
@@ -10544,6 +10552,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
     case?: boolean | CaseDefaultArgs<ExtArgs>
     seed?: boolean | CaseSeedTransactionDefaultArgs<ExtArgs>
     chain?: boolean | ChainDefaultArgs<ExtArgs>
@@ -10566,6 +10575,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
     case?: boolean | CaseDefaultArgs<ExtArgs>
     seed?: boolean | CaseSeedTransactionDefaultArgs<ExtArgs>
     chain?: boolean | ChainDefaultArgs<ExtArgs>
@@ -10588,9 +10598,10 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
   }
 
-  export type FlowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caseId" | "seedId" | "chainId" | "tokenAddress" | "tokenSymbol" | "totalAmountRaw" | "totalAmountDecimal" | "hopsCount" | "endpointAddress" | "endpointReason" | "endpointHotWalletId" | "isEndpointExchange" | "createdAt" | "updatedAt", ExtArgs["result"]["flow"]>
+  export type FlowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caseId" | "seedId" | "chainId" | "tokenAddress" | "tokenSymbol" | "totalAmountRaw" | "totalAmountDecimal" | "hopsCount" | "endpointAddress" | "endpointReason" | "endpointHotWalletId" | "isEndpointExchange" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["flow"]>
   export type FlowInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     case?: boolean | CaseDefaultArgs<ExtArgs>
     seed?: boolean | CaseSeedTransactionDefaultArgs<ExtArgs>
@@ -10641,6 +10652,7 @@ export namespace Prisma {
       isEndpointExchange: boolean
       createdAt: Date
       updatedAt: Date
+      deletedAt: Date | null
     }, ExtArgs["result"]["flow"]>
     composites: {}
   }
@@ -11086,6 +11098,7 @@ export namespace Prisma {
     readonly isEndpointExchange: FieldRef<"Flow", 'Boolean'>
     readonly createdAt: FieldRef<"Flow", 'DateTime'>
     readonly updatedAt: FieldRef<"Flow", 'DateTime'>
+    readonly deletedAt: FieldRef<"Flow", 'DateTime'>
   }
     
 
@@ -12753,6 +12766,7 @@ export namespace Prisma {
     timestamp: Date | null
     isEndpointHop: boolean | null
     createdAt: Date | null
+    deletedAt: Date | null
   }
 
   export type FlowTransactionMaxAggregateOutputType = {
@@ -12770,6 +12784,7 @@ export namespace Prisma {
     timestamp: Date | null
     isEndpointHop: boolean | null
     createdAt: Date | null
+    deletedAt: Date | null
   }
 
   export type FlowTransactionCountAggregateOutputType = {
@@ -12787,6 +12802,7 @@ export namespace Prisma {
     timestamp: number
     isEndpointHop: number
     createdAt: number
+    deletedAt: number
     _all: number
   }
 
@@ -12814,6 +12830,7 @@ export namespace Prisma {
     timestamp?: true
     isEndpointHop?: true
     createdAt?: true
+    deletedAt?: true
   }
 
   export type FlowTransactionMaxAggregateInputType = {
@@ -12831,6 +12848,7 @@ export namespace Prisma {
     timestamp?: true
     isEndpointHop?: true
     createdAt?: true
+    deletedAt?: true
   }
 
   export type FlowTransactionCountAggregateInputType = {
@@ -12848,6 +12866,7 @@ export namespace Prisma {
     timestamp?: true
     isEndpointHop?: true
     createdAt?: true
+    deletedAt?: true
     _all?: true
   }
 
@@ -12952,6 +12971,7 @@ export namespace Prisma {
     timestamp: Date
     isEndpointHop: boolean
     createdAt: Date
+    deletedAt: Date | null
     _count: FlowTransactionCountAggregateOutputType | null
     _avg: FlowTransactionAvgAggregateOutputType | null
     _sum: FlowTransactionSumAggregateOutputType | null
@@ -12988,6 +13008,7 @@ export namespace Prisma {
     timestamp?: boolean
     isEndpointHop?: boolean
     createdAt?: boolean
+    deletedAt?: boolean
     flow?: boolean | FlowDefaultArgs<ExtArgs>
     chain?: boolean | ChainDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowTransaction"]>
@@ -13007,6 +13028,7 @@ export namespace Prisma {
     timestamp?: boolean
     isEndpointHop?: boolean
     createdAt?: boolean
+    deletedAt?: boolean
     flow?: boolean | FlowDefaultArgs<ExtArgs>
     chain?: boolean | ChainDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowTransaction"]>
@@ -13026,6 +13048,7 @@ export namespace Prisma {
     timestamp?: boolean
     isEndpointHop?: boolean
     createdAt?: boolean
+    deletedAt?: boolean
     flow?: boolean | FlowDefaultArgs<ExtArgs>
     chain?: boolean | ChainDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowTransaction"]>
@@ -13045,9 +13068,10 @@ export namespace Prisma {
     timestamp?: boolean
     isEndpointHop?: boolean
     createdAt?: boolean
+    deletedAt?: boolean
   }
 
-  export type FlowTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flowId" | "chainId" | "hopIndex" | "txHash" | "fromAddress" | "toAddress" | "tokenAddress" | "tokenSymbol" | "amountRaw" | "amountDecimal" | "timestamp" | "isEndpointHop" | "createdAt", ExtArgs["result"]["flowTransaction"]>
+  export type FlowTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flowId" | "chainId" | "hopIndex" | "txHash" | "fromAddress" | "toAddress" | "tokenAddress" | "tokenSymbol" | "amountRaw" | "amountDecimal" | "timestamp" | "isEndpointHop" | "createdAt" | "deletedAt", ExtArgs["result"]["flowTransaction"]>
   export type FlowTransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     flow?: boolean | FlowDefaultArgs<ExtArgs>
     chain?: boolean | ChainDefaultArgs<ExtArgs>
@@ -13082,6 +13106,7 @@ export namespace Prisma {
       timestamp: Date
       isEndpointHop: boolean
       createdAt: Date
+      deletedAt: Date | null
     }, ExtArgs["result"]["flowTransaction"]>
     composites: {}
   }
@@ -13521,6 +13546,7 @@ export namespace Prisma {
     readonly timestamp: FieldRef<"FlowTransaction", 'DateTime'>
     readonly isEndpointHop: FieldRef<"FlowTransaction", 'Boolean'>
     readonly createdAt: FieldRef<"FlowTransaction", 'DateTime'>
+    readonly deletedAt: FieldRef<"FlowTransaction", 'DateTime'>
   }
     
 
@@ -13969,6 +13995,7 @@ export namespace Prisma {
     outcome: $Enums.FlowEdgeOutcome | null
     transferTimestamp: Date | null
     createdAt: Date | null
+    deletedAt: Date | null
   }
 
   export type FlowEdgeMaxAggregateOutputType = {
@@ -13985,6 +14012,7 @@ export namespace Prisma {
     outcome: $Enums.FlowEdgeOutcome | null
     transferTimestamp: Date | null
     createdAt: Date | null
+    deletedAt: Date | null
   }
 
   export type FlowEdgeCountAggregateOutputType = {
@@ -14001,6 +14029,7 @@ export namespace Prisma {
     outcome: number
     transferTimestamp: number
     createdAt: number
+    deletedAt: number
     _all: number
   }
 
@@ -14027,6 +14056,7 @@ export namespace Prisma {
     outcome?: true
     transferTimestamp?: true
     createdAt?: true
+    deletedAt?: true
   }
 
   export type FlowEdgeMaxAggregateInputType = {
@@ -14043,6 +14073,7 @@ export namespace Prisma {
     outcome?: true
     transferTimestamp?: true
     createdAt?: true
+    deletedAt?: true
   }
 
   export type FlowEdgeCountAggregateInputType = {
@@ -14059,6 +14090,7 @@ export namespace Prisma {
     outcome?: true
     transferTimestamp?: true
     createdAt?: true
+    deletedAt?: true
     _all?: true
   }
 
@@ -14162,6 +14194,7 @@ export namespace Prisma {
     outcome: $Enums.FlowEdgeOutcome | null
     transferTimestamp: Date | null
     createdAt: Date
+    deletedAt: Date | null
     _count: FlowEdgeCountAggregateOutputType | null
     _avg: FlowEdgeAvgAggregateOutputType | null
     _sum: FlowEdgeSumAggregateOutputType | null
@@ -14197,6 +14230,7 @@ export namespace Prisma {
     outcome?: boolean
     transferTimestamp?: boolean
     createdAt?: boolean
+    deletedAt?: boolean
     flow?: boolean | FlowDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowEdge"]>
 
@@ -14214,6 +14248,7 @@ export namespace Prisma {
     outcome?: boolean
     transferTimestamp?: boolean
     createdAt?: boolean
+    deletedAt?: boolean
     flow?: boolean | FlowDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowEdge"]>
 
@@ -14231,6 +14266,7 @@ export namespace Prisma {
     outcome?: boolean
     transferTimestamp?: boolean
     createdAt?: boolean
+    deletedAt?: boolean
     flow?: boolean | FlowDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flowEdge"]>
 
@@ -14248,9 +14284,10 @@ export namespace Prisma {
     outcome?: boolean
     transferTimestamp?: boolean
     createdAt?: boolean
+    deletedAt?: boolean
   }
 
-  export type FlowEdgeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flowId" | "stepIndex" | "fromAddress" | "toAddress" | "transferSymbol" | "transferAmountRaw" | "transferAmountDecimal" | "txHash" | "tokenAddress" | "outcome" | "transferTimestamp" | "createdAt", ExtArgs["result"]["flowEdge"]>
+  export type FlowEdgeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flowId" | "stepIndex" | "fromAddress" | "toAddress" | "transferSymbol" | "transferAmountRaw" | "transferAmountDecimal" | "txHash" | "tokenAddress" | "outcome" | "transferTimestamp" | "createdAt" | "deletedAt", ExtArgs["result"]["flowEdge"]>
   export type FlowEdgeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     flow?: boolean | FlowDefaultArgs<ExtArgs>
   }
@@ -14280,6 +14317,7 @@ export namespace Prisma {
       outcome: $Enums.FlowEdgeOutcome | null
       transferTimestamp: Date | null
       createdAt: Date
+      deletedAt: Date | null
     }, ExtArgs["result"]["flowEdge"]>
     composites: {}
   }
@@ -14717,6 +14755,7 @@ export namespace Prisma {
     readonly outcome: FieldRef<"FlowEdge", 'FlowEdgeOutcome'>
     readonly transferTimestamp: FieldRef<"FlowEdge", 'DateTime'>
     readonly createdAt: FieldRef<"FlowEdge", 'DateTime'>
+    readonly deletedAt: FieldRef<"FlowEdge", 'DateTime'>
   }
     
 
@@ -17585,7 +17624,8 @@ export namespace Prisma {
     endpointHotWalletId: 'endpointHotWalletId',
     isEndpointExchange: 'isEndpointExchange',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
   };
 
   export type FlowScalarFieldEnum = (typeof FlowScalarFieldEnum)[keyof typeof FlowScalarFieldEnum]
@@ -17619,7 +17659,8 @@ export namespace Prisma {
     amountDecimal: 'amountDecimal',
     timestamp: 'timestamp',
     isEndpointHop: 'isEndpointHop',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    deletedAt: 'deletedAt'
   };
 
   export type FlowTransactionScalarFieldEnum = (typeof FlowTransactionScalarFieldEnum)[keyof typeof FlowTransactionScalarFieldEnum]
@@ -17638,7 +17679,8 @@ export namespace Prisma {
     tokenAddress: 'tokenAddress',
     outcome: 'outcome',
     transferTimestamp: 'transferTimestamp',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    deletedAt: 'deletedAt'
   };
 
   export type FlowEdgeScalarFieldEnum = (typeof FlowEdgeScalarFieldEnum)[keyof typeof FlowEdgeScalarFieldEnum]
@@ -18399,6 +18441,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFilter<"Flow"> | boolean
     createdAt?: DateTimeFilter<"Flow"> | Date | string
     updatedAt?: DateTimeFilter<"Flow"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Flow"> | Date | string | null
     case?: XOR<CaseScalarRelationFilter, CaseWhereInput>
     seed?: XOR<CaseSeedTransactionScalarRelationFilter, CaseSeedTransactionWhereInput>
     chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
@@ -18424,6 +18467,7 @@ export namespace Prisma {
     isEndpointExchange?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     case?: CaseOrderByWithRelationInput
     seed?: CaseSeedTransactionOrderByWithRelationInput
     chain?: ChainOrderByWithRelationInput
@@ -18452,6 +18496,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFilter<"Flow"> | boolean
     createdAt?: DateTimeFilter<"Flow"> | Date | string
     updatedAt?: DateTimeFilter<"Flow"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Flow"> | Date | string | null
     case?: XOR<CaseScalarRelationFilter, CaseWhereInput>
     seed?: XOR<CaseSeedTransactionScalarRelationFilter, CaseSeedTransactionWhereInput>
     chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
@@ -18477,6 +18522,7 @@ export namespace Prisma {
     isEndpointExchange?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     _count?: FlowCountOrderByAggregateInput
     _avg?: FlowAvgOrderByAggregateInput
     _max?: FlowMaxOrderByAggregateInput
@@ -18503,6 +18549,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolWithAggregatesFilter<"Flow"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Flow"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Flow"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"Flow"> | Date | string | null
   }
 
   export type FlowWalletWhereInput = {
@@ -18596,6 +18643,7 @@ export namespace Prisma {
     timestamp?: DateTimeFilter<"FlowTransaction"> | Date | string
     isEndpointHop?: BoolFilter<"FlowTransaction"> | boolean
     createdAt?: DateTimeFilter<"FlowTransaction"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"FlowTransaction"> | Date | string | null
     flow?: XOR<FlowScalarRelationFilter, FlowWhereInput>
     chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
   }
@@ -18615,6 +18663,7 @@ export namespace Prisma {
     timestamp?: SortOrder
     isEndpointHop?: SortOrder
     createdAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     flow?: FlowOrderByWithRelationInput
     chain?: ChainOrderByWithRelationInput
   }
@@ -18638,6 +18687,7 @@ export namespace Prisma {
     timestamp?: DateTimeFilter<"FlowTransaction"> | Date | string
     isEndpointHop?: BoolFilter<"FlowTransaction"> | boolean
     createdAt?: DateTimeFilter<"FlowTransaction"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"FlowTransaction"> | Date | string | null
     flow?: XOR<FlowScalarRelationFilter, FlowWhereInput>
     chain?: XOR<ChainScalarRelationFilter, ChainWhereInput>
   }, "id" | "flowId_hopIndex">
@@ -18657,6 +18707,7 @@ export namespace Prisma {
     timestamp?: SortOrder
     isEndpointHop?: SortOrder
     createdAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     _count?: FlowTransactionCountOrderByAggregateInput
     _avg?: FlowTransactionAvgOrderByAggregateInput
     _max?: FlowTransactionMaxOrderByAggregateInput
@@ -18682,6 +18733,7 @@ export namespace Prisma {
     timestamp?: DateTimeWithAggregatesFilter<"FlowTransaction"> | Date | string
     isEndpointHop?: BoolWithAggregatesFilter<"FlowTransaction"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"FlowTransaction"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"FlowTransaction"> | Date | string | null
   }
 
   export type FlowEdgeWhereInput = {
@@ -18701,6 +18753,7 @@ export namespace Prisma {
     outcome?: EnumFlowEdgeOutcomeNullableFilter<"FlowEdge"> | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: DateTimeNullableFilter<"FlowEdge"> | Date | string | null
     createdAt?: DateTimeFilter<"FlowEdge"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"FlowEdge"> | Date | string | null
     flow?: XOR<FlowScalarRelationFilter, FlowWhereInput>
   }
 
@@ -18718,6 +18771,7 @@ export namespace Prisma {
     outcome?: SortOrderInput | SortOrder
     transferTimestamp?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     flow?: FlowOrderByWithRelationInput
   }
 
@@ -18739,6 +18793,7 @@ export namespace Prisma {
     outcome?: EnumFlowEdgeOutcomeNullableFilter<"FlowEdge"> | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: DateTimeNullableFilter<"FlowEdge"> | Date | string | null
     createdAt?: DateTimeFilter<"FlowEdge"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"FlowEdge"> | Date | string | null
     flow?: XOR<FlowScalarRelationFilter, FlowWhereInput>
   }, "id" | "flowId_stepIndex">
 
@@ -18756,6 +18811,7 @@ export namespace Prisma {
     outcome?: SortOrderInput | SortOrder
     transferTimestamp?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     _count?: FlowEdgeCountOrderByAggregateInput
     _avg?: FlowEdgeAvgOrderByAggregateInput
     _max?: FlowEdgeMaxOrderByAggregateInput
@@ -18780,6 +18836,7 @@ export namespace Prisma {
     outcome?: EnumFlowEdgeOutcomeNullableWithAggregatesFilter<"FlowEdge"> | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: DateTimeNullableWithAggregatesFilter<"FlowEdge"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"FlowEdge"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"FlowEdge"> | Date | string | null
   }
 
   export type FlowTraceLogWhereInput = {
@@ -19540,6 +19597,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     case: CaseCreateNestedOneWithoutFlowsInput
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
     chain: ChainCreateNestedOneWithoutFlowsInput
@@ -19565,6 +19623,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
     wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
@@ -19582,6 +19641,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
@@ -19607,6 +19667,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
     wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
@@ -19628,6 +19689,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowUpdateManyMutationInput = {
@@ -19642,6 +19704,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowUncheckedUpdateManyInput = {
@@ -19660,6 +19723,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowWalletCreateInput = {
@@ -19751,6 +19815,7 @@ export namespace Prisma {
     timestamp: Date | string
     isEndpointHop?: boolean
     createdAt?: Date | string
+    deletedAt?: Date | string | null
     flow: FlowCreateNestedOneWithoutTransactionsInput
     chain: ChainCreateNestedOneWithoutFlowTransactionsInput
   }
@@ -19770,6 +19835,7 @@ export namespace Prisma {
     timestamp: Date | string
     isEndpointHop?: boolean
     createdAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowTransactionUpdateInput = {
@@ -19785,6 +19851,7 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     flow?: FlowUpdateOneRequiredWithoutTransactionsNestedInput
     chain?: ChainUpdateOneRequiredWithoutFlowTransactionsNestedInput
   }
@@ -19804,6 +19871,7 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowTransactionCreateManyInput = {
@@ -19821,6 +19889,7 @@ export namespace Prisma {
     timestamp: Date | string
     isEndpointHop?: boolean
     createdAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowTransactionUpdateManyMutationInput = {
@@ -19836,6 +19905,7 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowTransactionUncheckedUpdateManyInput = {
@@ -19853,6 +19923,7 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowEdgeCreateInput = {
@@ -19868,6 +19939,7 @@ export namespace Prisma {
     outcome?: $Enums.FlowEdgeOutcome | null
     transferTimestamp?: Date | string | null
     createdAt?: Date | string
+    deletedAt?: Date | string | null
     flow: FlowCreateNestedOneWithoutEdgesInput
   }
 
@@ -19885,6 +19957,7 @@ export namespace Prisma {
     outcome?: $Enums.FlowEdgeOutcome | null
     transferTimestamp?: Date | string | null
     createdAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowEdgeUpdateInput = {
@@ -19900,6 +19973,7 @@ export namespace Prisma {
     outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     flow?: FlowUpdateOneRequiredWithoutEdgesNestedInput
   }
 
@@ -19917,6 +19991,7 @@ export namespace Prisma {
     outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowEdgeCreateManyInput = {
@@ -19933,6 +20008,7 @@ export namespace Prisma {
     outcome?: $Enums.FlowEdgeOutcome | null
     transferTimestamp?: Date | string | null
     createdAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowEdgeUpdateManyMutationInput = {
@@ -19948,6 +20024,7 @@ export namespace Prisma {
     outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowEdgeUncheckedUpdateManyInput = {
@@ -19964,6 +20041,7 @@ export namespace Prisma {
     outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowTraceLogCreateInput = {
@@ -20711,6 +20789,7 @@ export namespace Prisma {
     isEndpointExchange?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type FlowAvgOrderByAggregateInput = {
@@ -20733,6 +20812,7 @@ export namespace Prisma {
     isEndpointExchange?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type FlowMinOrderByAggregateInput = {
@@ -20751,6 +20831,7 @@ export namespace Prisma {
     isEndpointExchange?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type FlowSumOrderByAggregateInput = {
@@ -20901,6 +20982,7 @@ export namespace Prisma {
     timestamp?: SortOrder
     isEndpointHop?: SortOrder
     createdAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type FlowTransactionAvgOrderByAggregateInput = {
@@ -20922,6 +21004,7 @@ export namespace Prisma {
     timestamp?: SortOrder
     isEndpointHop?: SortOrder
     createdAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type FlowTransactionMinOrderByAggregateInput = {
@@ -20939,6 +21022,7 @@ export namespace Prisma {
     timestamp?: SortOrder
     isEndpointHop?: SortOrder
     createdAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type FlowTransactionSumOrderByAggregateInput = {
@@ -20971,6 +21055,7 @@ export namespace Prisma {
     outcome?: SortOrder
     transferTimestamp?: SortOrder
     createdAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type FlowEdgeAvgOrderByAggregateInput = {
@@ -20991,6 +21076,7 @@ export namespace Prisma {
     outcome?: SortOrder
     transferTimestamp?: SortOrder
     createdAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type FlowEdgeMinOrderByAggregateInput = {
@@ -21007,6 +21093,7 @@ export namespace Prisma {
     outcome?: SortOrder
     transferTimestamp?: SortOrder
     createdAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type FlowEdgeSumOrderByAggregateInput = {
@@ -22402,6 +22489,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     case: CaseCreateNestedOneWithoutFlowsInput
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
@@ -22425,6 +22513,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
     wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
@@ -22453,6 +22542,7 @@ export namespace Prisma {
     timestamp: Date | string
     isEndpointHop?: boolean
     createdAt?: Date | string
+    deletedAt?: Date | string | null
     flow: FlowCreateNestedOneWithoutTransactionsInput
   }
 
@@ -22470,6 +22560,7 @@ export namespace Prisma {
     timestamp: Date | string
     isEndpointHop?: boolean
     createdAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowTransactionCreateOrConnectWithoutChainInput = {
@@ -22579,6 +22670,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFilter<"Flow"> | boolean
     createdAt?: DateTimeFilter<"Flow"> | Date | string
     updatedAt?: DateTimeFilter<"Flow"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Flow"> | Date | string | null
   }
 
   export type FlowTransactionUpsertWithWhereUniqueWithoutChainInput = {
@@ -22615,6 +22707,7 @@ export namespace Prisma {
     timestamp?: DateTimeFilter<"FlowTransaction"> | Date | string
     isEndpointHop?: BoolFilter<"FlowTransaction"> | boolean
     createdAt?: DateTimeFilter<"FlowTransaction"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"FlowTransaction"> | Date | string | null
   }
 
   export type CaseCreateWithoutCreatedByUserInput = {
@@ -22796,6 +22889,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     case: CaseCreateNestedOneWithoutFlowsInput
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
     chain: ChainCreateNestedOneWithoutFlowsInput
@@ -22819,6 +22913,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
     wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
@@ -22985,6 +23080,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
     chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
@@ -23008,6 +23104,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
     wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
@@ -23156,6 +23253,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     case: CaseCreateNestedOneWithoutFlowsInput
     chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
@@ -23179,6 +23277,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
     wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
@@ -23413,6 +23512,7 @@ export namespace Prisma {
     timestamp: Date | string
     isEndpointHop?: boolean
     createdAt?: Date | string
+    deletedAt?: Date | string | null
     chain: ChainCreateNestedOneWithoutFlowTransactionsInput
   }
 
@@ -23430,6 +23530,7 @@ export namespace Prisma {
     timestamp: Date | string
     isEndpointHop?: boolean
     createdAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowTransactionCreateOrConnectWithoutFlowInput = {
@@ -23455,6 +23556,7 @@ export namespace Prisma {
     outcome?: $Enums.FlowEdgeOutcome | null
     transferTimestamp?: Date | string | null
     createdAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowEdgeUncheckedCreateWithoutFlowInput = {
@@ -23470,6 +23572,7 @@ export namespace Prisma {
     outcome?: $Enums.FlowEdgeOutcome | null
     transferTimestamp?: Date | string | null
     createdAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowEdgeCreateOrConnectWithoutFlowInput = {
@@ -23703,6 +23806,7 @@ export namespace Prisma {
     outcome?: EnumFlowEdgeOutcomeNullableFilter<"FlowEdge"> | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: DateTimeNullableFilter<"FlowEdge"> | Date | string | null
     createdAt?: DateTimeFilter<"FlowEdge"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"FlowEdge"> | Date | string | null
   }
 
   export type FlowWalletUpsertWithWhereUniqueWithoutFlowInput = {
@@ -23747,6 +23851,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     case: CaseCreateNestedOneWithoutFlowsInput
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
     chain: ChainCreateNestedOneWithoutFlowsInput
@@ -23771,6 +23876,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
   }
@@ -23803,6 +23909,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
@@ -23827,6 +23934,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
   }
@@ -23843,6 +23951,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     case: CaseCreateNestedOneWithoutFlowsInput
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
     chain: ChainCreateNestedOneWithoutFlowsInput
@@ -23867,6 +23976,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
     wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
   }
@@ -23928,6 +24038,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
@@ -23952,6 +24063,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
     wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
   }
@@ -24003,6 +24115,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     case: CaseCreateNestedOneWithoutFlowsInput
     seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
     chain: ChainCreateNestedOneWithoutFlowsInput
@@ -24027,6 +24140,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
   }
@@ -24059,6 +24173,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
@@ -24083,6 +24198,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
   }
@@ -24257,6 +24373,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowTransactionCreateManyChainInput = {
@@ -24273,6 +24390,7 @@ export namespace Prisma {
     timestamp: Date | string
     isEndpointHop?: boolean
     createdAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type HotWalletUpdateWithoutChainInput = {
@@ -24357,6 +24475,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
@@ -24380,6 +24499,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
     wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
@@ -24400,6 +24520,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowTransactionUpdateWithoutChainInput = {
@@ -24415,6 +24536,7 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     flow?: FlowUpdateOneRequiredWithoutTransactionsNestedInput
   }
 
@@ -24432,6 +24554,7 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowTransactionUncheckedUpdateManyWithoutChainInput = {
@@ -24448,6 +24571,7 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CaseCreateManyCreatedByUserInput = {
@@ -24555,6 +24679,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowUpdateWithoutEndpointHotWalletInput = {
@@ -24569,6 +24694,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
@@ -24592,6 +24718,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
     wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
@@ -24612,6 +24739,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CaseSeedTransactionCreateManyCaseInput = {
@@ -24641,6 +24769,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type CaseSeedTransactionUpdateWithoutCaseInput = {
@@ -24693,6 +24822,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
@@ -24716,6 +24846,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
     wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
@@ -24736,6 +24867,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowCreateManySeedInput = {
@@ -24753,6 +24885,7 @@ export namespace Prisma {
     isEndpointExchange?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowUpdateWithoutSeedInput = {
@@ -24767,6 +24900,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
@@ -24790,6 +24924,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
     wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
@@ -24810,6 +24945,7 @@ export namespace Prisma {
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowTransactionCreateManyFlowInput = {
@@ -24826,6 +24962,7 @@ export namespace Prisma {
     timestamp: Date | string
     isEndpointHop?: boolean
     createdAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowEdgeCreateManyFlowInput = {
@@ -24841,6 +24978,7 @@ export namespace Prisma {
     outcome?: $Enums.FlowEdgeOutcome | null
     transferTimestamp?: Date | string | null
     createdAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type FlowWalletCreateManyFlowInput = {
@@ -24866,6 +25004,7 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chain?: ChainUpdateOneRequiredWithoutFlowTransactionsNestedInput
   }
 
@@ -24883,6 +25022,7 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowTransactionUncheckedUpdateManyWithoutFlowInput = {
@@ -24899,6 +25039,7 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isEndpointHop?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowEdgeUpdateWithoutFlowInput = {
@@ -24914,6 +25055,7 @@ export namespace Prisma {
     outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowEdgeUncheckedUpdateWithoutFlowInput = {
@@ -24929,6 +25071,7 @@ export namespace Prisma {
     outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowEdgeUncheckedUpdateManyWithoutFlowInput = {
@@ -24944,6 +25087,7 @@ export namespace Prisma {
     outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FlowWalletUpdateWithoutFlowInput = {

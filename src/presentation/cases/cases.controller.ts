@@ -7,14 +7,17 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { createCaseSchema } from '../../application/schemas/create-case.schema';
+import { updateFlowWalletSchema } from '../../application/schemas/update-flow-wallet.schema';
 import { CreateCaseUseCase } from '../../application/use-cases/create-case.use-case';
 import { GetCaseByIdUseCase } from '../../application/use-cases/get-case-by-id.use-case';
 import { GetCasesHistoryByUserIdUseCase } from '../../application/use-cases/get-cases-history-by-user-id.use-case';
+import { UpdateFlowWalletUseCase } from '../../application/use-cases/update-flow-wallet.use-case';
 import { CurrentUser, JwtAuthGuard } from '../../infrastructure/auth';
 
 @ApiTags('cases')
@@ -26,6 +29,7 @@ export class CasesController {
     private readonly createCaseUseCase: CreateCaseUseCase,
     private readonly getCaseByIdUseCase: GetCaseByIdUseCase,
     private readonly getCasesHistoryByUserIdUseCase: GetCasesHistoryByUserIdUseCase,
+    private readonly updateFlowWalletUseCase: UpdateFlowWalletUseCase,
   ) {}
 
   @Post()
@@ -109,6 +113,64 @@ export class CasesController {
       );
     }
     return this.getCasesHistoryByUserIdUseCase.execute(user.userId);
+  }
+
+  @Patch(':caseId/wallets/:walletId')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Editar carteira de um fluxo',
+    description:
+      'Atualiza nickname e/ou position de uma carteira (FlowWallet) de um fluxo do caso. Só o dono do caso pode editar.',
+  })
+  @ApiParam({ name: 'caseId', description: 'ID do caso' })
+  @ApiParam({ name: 'walletId', description: 'ID da carteira do fluxo (FlowWallet)' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        nickname: {
+          type: 'string',
+          nullable: true,
+          description: 'Apelido da carteira (null para limpar)',
+        },
+        position: {
+          oneOf: [
+            { type: 'string', enum: ['default'] },
+            {
+              type: 'object',
+              properties: { x: { type: 'number' }, y: { type: 'number' } },
+              required: ['x', 'y'],
+            },
+          ],
+          description: 'Posição no fluxograma: "default" ou { x, y }',
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 200, description: 'Carteira atualizada.' })
+  @ApiResponse({ status: 400, description: 'Body inválido.' })
+  @ApiResponse({ status: 403, description: 'Caso não pertence ao usuário.' })
+  @ApiResponse({ status: 404, description: 'Caso ou carteira não encontrados.' })
+  @ApiResponse({ status: 401, description: 'Não autorizado.' })
+  async updateFlowWallet(
+    @Param('caseId') caseId: string,
+    @Param('walletId') walletId: string,
+    @Body() body: unknown,
+    @CurrentUser() user: { userId: string },
+  ) {
+    const result = updateFlowWalletSchema.safeParse(body);
+    if (!result.success) {
+      const messages = result.error.errors
+        .map((e) => `${e.path.join('.')}: ${e.message}`)
+        .join('; ');
+      throw new BadRequestException(messages);
+    }
+    return this.updateFlowWalletUseCase.execute(
+      caseId,
+      walletId,
+      user.userId,
+      result.data,
+    );
   }
 
   @Get(':id')

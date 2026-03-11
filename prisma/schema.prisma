@@ -151,6 +151,21 @@ model Flow {
 
   transactions FlowTransaction[]
   edges       FlowEdge[]
+  wallets     FlowWallet[]
+}
+
+model FlowWallet {
+  id        String   @id @default(cuid())
+  flowId    String
+  flow      Flow     @relation(fields: [flowId], references: [id], onDelete: Cascade)
+  nodeIndex Int
+  address   String
+  nickname  String?
+  position  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([flowId, nodeIndex])
 }
 
 model FlowTransaction {

@@ -204,7 +204,6 @@ export class FollowFlowToExchangeFullHistoryUseCase {
 
       const logSteps = edgesToLogInput(edges);
       const graph = buildGraph(edges);
-      /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
       const tokenInfoBySymbol: Map<string, TokenInfo> =
         await this.enrichTokenInfo(result.steps, graph.edges);
       const enrichedSteps = result.steps.map((s) => {
@@ -225,7 +224,6 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           tokenImageUrl: info?.imageUrl ?? null,
         };
       });
-      /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
 
       if (result.success) {
         await this.flowTraceLogWriter.write({
@@ -303,14 +301,12 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     const PAGE_LOG_INTERVAL = 20;
 
     for (let page = 0; page < MAX_PAGES_PER_WALLET; page++) {
-      /* eslint-disable @typescript-eslint/no-unsafe-call */
       const pageTransfers =
-        (await this.addressTransfersFetcher.getAddressTransfersPage(
+        await this.addressTransfersFetcher.getAddressTransfersPage(
           covalentChainId,
           address,
           page,
-        )) as WalletTransfer[];
-      /* eslint-enable @typescript-eslint/no-unsafe-call */
+        );
       if (pageTransfers.length === 0) break;
 
       for (const t of pageTransfers) {
@@ -333,6 +329,31 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     return this.pickTopOutboundsByUsd(all, limit);
   }
 
+  async getTopOutboundsForWallet(input: {
+    chain: string;
+    address: string;
+    limit: number;
+    traceId?: string;
+    minTimestamp?: string;
+  }): Promise<WalletTransfer[]> {
+    const chainSlug = input.chain.trim();
+    const covalentChainId = toCovalentChainId(chainSlug);
+    const address = normalizeAddress(input.address);
+    const limit = input.limit;
+    const traceId = input.traceId;
+    const minTimestamp =
+      typeof input.minTimestamp === 'string' && input.minTimestamp
+        ? input.minTimestamp.trim()
+        : undefined;
+    return this.getFullHistoryTopOutbounds(
+      covalentChainId,
+      address,
+      limit,
+      traceId,
+      minTimestamp,
+    );
+  }
+
   private async enrichTokenInfo(
     steps: FlowStep[],
     edges: { symbol: string }[],
@@ -344,10 +365,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     for (const e of edges) {
       symbols.add(e.symbol.trim().toLowerCase());
     }
-    /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
-    const map = await this.tokenPriceProvider.getTokenInfoBatch([...symbols]);
-    /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
-    return map as Map<string, TokenInfo>;
+    return this.tokenPriceProvider.getTokenInfoBatch([...symbols]);
   }
 
   private async pickTopOutboundsByUsd(

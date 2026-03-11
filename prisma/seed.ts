@@ -6,6 +6,10 @@ import {
   BINANCE_EXCHANGE,
   BINANCE_HOT_WALLETS_BY_CHAIN,
 } from './seeds/binance-hot-wallets';
+import {
+  GATE_EXCHANGE,
+  GATE_HOT_WALLETS_BY_CHAIN,
+} from './seeds/gate-hot-wallets';
 
 const connectionString = process.env.DATABASE_URL ?? '';
 const adapter = new PrismaPg({ connectionString });
@@ -70,7 +74,7 @@ async function main() {
     chainIdsBySlug.set(chain.slug, chain.id);
   }
 
-  const exchange = await prisma.exchange.upsert({
+  const binanceExchange = await prisma.exchange.upsert({
     where: { slug: BINANCE_EXCHANGE.slug },
     create: {
       name: BINANCE_EXCHANGE.name,
@@ -97,7 +101,7 @@ async function main() {
     }
     const result = await processAddressList(
       addresses,
-      exchange.id,
+      binanceExchange.id,
       chainId,
     );
     totalCreated += result.created;
@@ -106,7 +110,47 @@ async function main() {
 
   if (process.env.NODE_ENV !== 'production') {
     console.log(
-      `Seed: chains upserted; Binance hot wallets: ${totalCreated} created, ${totalSkipped} already existed.`,
+      `Seed: Binance hot wallets: ${totalCreated} created, ${totalSkipped} already existed.`,
+    );
+  }
+
+  const gateExchange = await prisma.exchange.upsert({
+    where: { slug: GATE_EXCHANGE.slug },
+    create: {
+      name: GATE_EXCHANGE.name,
+      slug: GATE_EXCHANGE.slug,
+      iconUrl: GATE_EXCHANGE.iconUrl ?? null,
+    },
+    update: {
+      name: GATE_EXCHANGE.name,
+      iconUrl: GATE_EXCHANGE.iconUrl ?? null,
+    },
+  });
+
+  let gateCreated = 0;
+  let gateSkipped = 0;
+
+  for (const [chainSlug, addresses] of Object.entries(
+    GATE_HOT_WALLETS_BY_CHAIN,
+  )) {
+    const chainId = chainIdsBySlug.get(chainSlug);
+    if (!chainId) {
+      throw new Error(
+        `Chain slug "${chainSlug}" not found. Add it to prisma/seeds/chains.ts.`,
+      );
+    }
+    const result = await processAddressList(
+      addresses,
+      gateExchange.id,
+      chainId,
+    );
+    gateCreated += result.created;
+    gateSkipped += result.skipped;
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(
+      `Seed: Gate hot wallets: ${gateCreated} created, ${gateSkipped} already existed.`,
     );
   }
 }

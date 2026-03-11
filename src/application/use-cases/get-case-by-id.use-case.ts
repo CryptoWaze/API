@@ -50,6 +50,15 @@ export type FlowEdgeDto = {
   tokenImageUrl: string | null;
 };
 
+export type FlowWalletDto = {
+  id: string;
+  nodeIndex: number;
+  address: string;
+  nickname: string | null;
+  displayLabel: string;
+  position: { x: number; y: number } | 'default';
+};
+
 export type FlowDto = {
   id: string;
   seedId: string;
@@ -71,6 +80,7 @@ export type FlowDto = {
   endpointExchangeSlug: string | null;
   endpointExchangeIconUrl: string | null;
   endpointHotWalletLabel: string | null;
+  wallets: FlowWalletDto[];
   transactions: FlowTransactionDto[];
   edges: FlowEdgeDto[];
 };
@@ -164,6 +174,7 @@ export class GetCaseByIdUseCase {
             },
             transactions: { orderBy: { hopIndex: 'asc' } },
             edges: { orderBy: { stepIndex: 'asc' } },
+            wallets: { orderBy: { nodeIndex: 'asc' } },
           },
         },
       },
@@ -240,8 +251,48 @@ export class GetCaseByIdUseCase {
         const endpointIsHotWallet = f.endpointHotWallet != null;
         const endpointHotWalletLabel =
           endpointIsHotWallet ? 'Hot Wallet' : null;
+        const exchangeName = exchange?.name ?? null;
         const flowSym = f.tokenSymbol?.trim().toLowerCase();
         const flowTokenInfo = flowSym ? tokenInfoBySymbol.get(flowSym) : null;
+        const pathAddresses =
+          (f.wallets ?? []).length > 0
+            ? (f.wallets ?? []).sort((a, b) => a.nodeIndex - b.nodeIndex).map((w) => w.address)
+            : [
+                f.transactions[0]?.fromAddress ?? '',
+                ...f.transactions.map((t) => t.toAddress),
+              ].filter((a) => a !== '');
+        const walletRecords = (f.wallets ?? []).length > 0 ? (f.wallets ?? []).sort((a, b) => a.nodeIndex - b.nodeIndex) : null;
+        const walletsDto: FlowWalletDto[] = pathAddresses.map((address, nodeIndex) => {
+          const w = walletRecords?.[nodeIndex];
+          const isEndpoint = nodeIndex === f.hopsCount;
+          const isDepositAddress =
+            endpointIsHotWallet && nodeIndex === f.hopsCount - 1;
+          let displayLabel: string;
+          if (isEndpoint && exchangeName) displayLabel = `${exchangeName}: Hot Wallet`;
+          else if (isDepositAddress && exchangeName)
+            displayLabel = `${exchangeName}: Deposit Address`;
+          else displayLabel = w?.nickname ?? '';
+          const positionRaw = w?.position;
+          const position: { x: number; y: number } | 'default' =
+            positionRaw == null ||
+            positionRaw === 'default' ||
+            typeof positionRaw !== 'object' ||
+            typeof (positionRaw as { x?: unknown }).x !== 'number' ||
+            typeof (positionRaw as { y?: unknown }).y !== 'number'
+              ? 'default'
+              : {
+                  x: (positionRaw as { x: number }).x,
+                  y: (positionRaw as { y: number }).y,
+                };
+          return {
+            id: w?.id ?? `_virtual_${f.id}_${nodeIndex}`,
+            nodeIndex,
+            address,
+            nickname: w?.nickname ?? null,
+            displayLabel,
+            position,
+          };
+        });
         return {
           id: f.id,
           seedId: f.seedId,
@@ -263,6 +314,7 @@ export class GetCaseByIdUseCase {
           endpointExchangeSlug: exchange?.slug ?? null,
           endpointExchangeIconUrl: exchange?.iconUrl ?? null,
           endpointHotWalletLabel,
+          wallets: walletsDto,
           transactions: f.transactions.map((t) => {
             const tSym = t.tokenSymbol?.trim().toLowerCase();
             const tInfo = tSym ? tokenInfoBySymbol.get(tSym) : null;

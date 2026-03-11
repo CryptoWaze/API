@@ -54,6 +54,11 @@ export type CaseSeedTransaction = $Result.DefaultSelection<Prisma.$CaseSeedTrans
  */
 export type Flow = $Result.DefaultSelection<Prisma.$FlowPayload>
 /**
+ * Model FlowWallet
+ * 
+ */
+export type FlowWallet = $Result.DefaultSelection<Prisma.$FlowWalletPayload>
+/**
  * Model FlowTransaction
  * 
  */
@@ -338,6 +343,16 @@ export class PrismaClient<
     * ```
     */
   get flow(): Prisma.FlowDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.flowWallet`: Exposes CRUD operations for the **FlowWallet** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FlowWallets
+    * const flowWallets = await prisma.flowWallet.findMany()
+    * ```
+    */
+  get flowWallet(): Prisma.FlowWalletDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.flowTransaction`: Exposes CRUD operations for the **FlowTransaction** model.
@@ -820,6 +835,7 @@ export namespace Prisma {
     Case: 'Case',
     CaseSeedTransaction: 'CaseSeedTransaction',
     Flow: 'Flow',
+    FlowWallet: 'FlowWallet',
     FlowTransaction: 'FlowTransaction',
     FlowEdge: 'FlowEdge',
     FlowTraceLog: 'FlowTraceLog',
@@ -839,7 +855,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "chain" | "user" | "exchange" | "token" | "hotWallet" | "case" | "caseSeedTransaction" | "flow" | "flowTransaction" | "flowEdge" | "flowTraceLog" | "flowTraceLogStep"
+      modelProps: "chain" | "user" | "exchange" | "token" | "hotWallet" | "case" | "caseSeedTransaction" | "flow" | "flowWallet" | "flowTransaction" | "flowEdge" | "flowTraceLog" | "flowTraceLogStep"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1435,6 +1451,80 @@ export namespace Prisma {
           }
         }
       }
+      FlowWallet: {
+        payload: Prisma.$FlowWalletPayload<ExtArgs>
+        fields: Prisma.FlowWalletFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FlowWalletFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowWalletPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FlowWalletFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowWalletPayload>
+          }
+          findFirst: {
+            args: Prisma.FlowWalletFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowWalletPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FlowWalletFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowWalletPayload>
+          }
+          findMany: {
+            args: Prisma.FlowWalletFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowWalletPayload>[]
+          }
+          create: {
+            args: Prisma.FlowWalletCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowWalletPayload>
+          }
+          createMany: {
+            args: Prisma.FlowWalletCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FlowWalletCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowWalletPayload>[]
+          }
+          delete: {
+            args: Prisma.FlowWalletDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowWalletPayload>
+          }
+          update: {
+            args: Prisma.FlowWalletUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowWalletPayload>
+          }
+          deleteMany: {
+            args: Prisma.FlowWalletDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FlowWalletUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FlowWalletUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowWalletPayload>[]
+          }
+          upsert: {
+            args: Prisma.FlowWalletUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlowWalletPayload>
+          }
+          aggregate: {
+            args: Prisma.FlowWalletAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFlowWallet>
+          }
+          groupBy: {
+            args: Prisma.FlowWalletGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FlowWalletGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FlowWalletCountArgs<ExtArgs>
+            result: $Utils.Optional<FlowWalletCountAggregateOutputType> | number
+          }
+        }
+      }
       FlowTransaction: {
         payload: Prisma.$FlowTransactionPayload<ExtArgs>
         fields: Prisma.FlowTransactionFieldRefs
@@ -1847,6 +1937,7 @@ export namespace Prisma {
     case?: CaseOmit
     caseSeedTransaction?: CaseSeedTransactionOmit
     flow?: FlowOmit
+    flowWallet?: FlowWalletOmit
     flowTransaction?: FlowTransactionOmit
     flowEdge?: FlowEdgeOmit
     flowTraceLog?: FlowTraceLogOmit
@@ -2155,11 +2246,13 @@ export namespace Prisma {
   export type FlowCountOutputType = {
     transactions: number
     edges: number
+    wallets: number
   }
 
   export type FlowCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transactions?: boolean | FlowCountOutputTypeCountTransactionsArgs
     edges?: boolean | FlowCountOutputTypeCountEdgesArgs
+    wallets?: boolean | FlowCountOutputTypeCountWalletsArgs
   }
 
   // Custom InputTypes
@@ -2185,6 +2278,13 @@ export namespace Prisma {
    */
   export type FlowCountOutputTypeCountEdgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FlowEdgeWhereInput
+  }
+
+  /**
+   * FlowCountOutputType without action
+   */
+  export type FlowCountOutputTypeCountWalletsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlowWalletWhereInput
   }
 
 
@@ -10424,6 +10524,7 @@ export namespace Prisma {
     endpointHotWallet?: boolean | Flow$endpointHotWalletArgs<ExtArgs>
     transactions?: boolean | Flow$transactionsArgs<ExtArgs>
     edges?: boolean | Flow$edgesArgs<ExtArgs>
+    wallets?: boolean | Flow$walletsArgs<ExtArgs>
     _count?: boolean | FlowCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flow"]>
 
@@ -10497,6 +10598,7 @@ export namespace Prisma {
     endpointHotWallet?: boolean | Flow$endpointHotWalletArgs<ExtArgs>
     transactions?: boolean | Flow$transactionsArgs<ExtArgs>
     edges?: boolean | Flow$edgesArgs<ExtArgs>
+    wallets?: boolean | Flow$walletsArgs<ExtArgs>
     _count?: boolean | FlowCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FlowIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10521,6 +10623,7 @@ export namespace Prisma {
       endpointHotWallet: Prisma.$HotWalletPayload<ExtArgs> | null
       transactions: Prisma.$FlowTransactionPayload<ExtArgs>[]
       edges: Prisma.$FlowEdgePayload<ExtArgs>[]
+      wallets: Prisma.$FlowWalletPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10938,6 +11041,7 @@ export namespace Prisma {
     endpointHotWallet<T extends Flow$endpointHotWalletArgs<ExtArgs> = {}>(args?: Subset<T, Flow$endpointHotWalletArgs<ExtArgs>>): Prisma__HotWalletClient<$Result.GetResult<Prisma.$HotWalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     transactions<T extends Flow$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Flow$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     edges<T extends Flow$edgesArgs<ExtArgs> = {}>(args?: Subset<T, Flow$edgesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowEdgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    wallets<T extends Flow$walletsArgs<ExtArgs> = {}>(args?: Subset<T, Flow$walletsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11445,6 +11549,30 @@ export namespace Prisma {
   }
 
   /**
+   * Flow.wallets
+   */
+  export type Flow$walletsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletInclude<ExtArgs> | null
+    where?: FlowWalletWhereInput
+    orderBy?: FlowWalletOrderByWithRelationInput | FlowWalletOrderByWithRelationInput[]
+    cursor?: FlowWalletWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlowWalletScalarFieldEnum | FlowWalletScalarFieldEnum[]
+  }
+
+  /**
    * Flow without action
    */
   export type FlowDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11460,6 +11588,1133 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FlowInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FlowWallet
+   */
+
+  export type AggregateFlowWallet = {
+    _count: FlowWalletCountAggregateOutputType | null
+    _avg: FlowWalletAvgAggregateOutputType | null
+    _sum: FlowWalletSumAggregateOutputType | null
+    _min: FlowWalletMinAggregateOutputType | null
+    _max: FlowWalletMaxAggregateOutputType | null
+  }
+
+  export type FlowWalletAvgAggregateOutputType = {
+    nodeIndex: number | null
+  }
+
+  export type FlowWalletSumAggregateOutputType = {
+    nodeIndex: number | null
+  }
+
+  export type FlowWalletMinAggregateOutputType = {
+    id: string | null
+    flowId: string | null
+    nodeIndex: number | null
+    address: string | null
+    nickname: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FlowWalletMaxAggregateOutputType = {
+    id: string | null
+    flowId: string | null
+    nodeIndex: number | null
+    address: string | null
+    nickname: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FlowWalletCountAggregateOutputType = {
+    id: number
+    flowId: number
+    nodeIndex: number
+    address: number
+    nickname: number
+    position: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FlowWalletAvgAggregateInputType = {
+    nodeIndex?: true
+  }
+
+  export type FlowWalletSumAggregateInputType = {
+    nodeIndex?: true
+  }
+
+  export type FlowWalletMinAggregateInputType = {
+    id?: true
+    flowId?: true
+    nodeIndex?: true
+    address?: true
+    nickname?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FlowWalletMaxAggregateInputType = {
+    id?: true
+    flowId?: true
+    nodeIndex?: true
+    address?: true
+    nickname?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FlowWalletCountAggregateInputType = {
+    id?: true
+    flowId?: true
+    nodeIndex?: true
+    address?: true
+    nickname?: true
+    position?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FlowWalletAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlowWallet to aggregate.
+     */
+    where?: FlowWalletWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowWallets to fetch.
+     */
+    orderBy?: FlowWalletOrderByWithRelationInput | FlowWalletOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FlowWalletWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowWallets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowWallets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FlowWallets
+    **/
+    _count?: true | FlowWalletCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FlowWalletAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FlowWalletSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FlowWalletMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FlowWalletMaxAggregateInputType
+  }
+
+  export type GetFlowWalletAggregateType<T extends FlowWalletAggregateArgs> = {
+        [P in keyof T & keyof AggregateFlowWallet]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFlowWallet[P]>
+      : GetScalarType<T[P], AggregateFlowWallet[P]>
+  }
+
+
+
+
+  export type FlowWalletGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlowWalletWhereInput
+    orderBy?: FlowWalletOrderByWithAggregationInput | FlowWalletOrderByWithAggregationInput[]
+    by: FlowWalletScalarFieldEnum[] | FlowWalletScalarFieldEnum
+    having?: FlowWalletScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FlowWalletCountAggregateInputType | true
+    _avg?: FlowWalletAvgAggregateInputType
+    _sum?: FlowWalletSumAggregateInputType
+    _min?: FlowWalletMinAggregateInputType
+    _max?: FlowWalletMaxAggregateInputType
+  }
+
+  export type FlowWalletGroupByOutputType = {
+    id: string
+    flowId: string
+    nodeIndex: number
+    address: string
+    nickname: string | null
+    position: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: FlowWalletCountAggregateOutputType | null
+    _avg: FlowWalletAvgAggregateOutputType | null
+    _sum: FlowWalletSumAggregateOutputType | null
+    _min: FlowWalletMinAggregateOutputType | null
+    _max: FlowWalletMaxAggregateOutputType | null
+  }
+
+  type GetFlowWalletGroupByPayload<T extends FlowWalletGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FlowWalletGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FlowWalletGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FlowWalletGroupByOutputType[P]>
+            : GetScalarType<T[P], FlowWalletGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FlowWalletSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flowId?: boolean
+    nodeIndex?: boolean
+    address?: boolean
+    nickname?: boolean
+    position?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flowWallet"]>
+
+  export type FlowWalletSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flowId?: boolean
+    nodeIndex?: boolean
+    address?: boolean
+    nickname?: boolean
+    position?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flowWallet"]>
+
+  export type FlowWalletSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flowId?: boolean
+    nodeIndex?: boolean
+    address?: boolean
+    nickname?: boolean
+    position?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flowWallet"]>
+
+  export type FlowWalletSelectScalar = {
+    id?: boolean
+    flowId?: boolean
+    nodeIndex?: boolean
+    address?: boolean
+    nickname?: boolean
+    position?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FlowWalletOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flowId" | "nodeIndex" | "address" | "nickname" | "position" | "createdAt" | "updatedAt", ExtArgs["result"]["flowWallet"]>
+  export type FlowWalletInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }
+  export type FlowWalletIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }
+  export type FlowWalletIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flow?: boolean | FlowDefaultArgs<ExtArgs>
+  }
+
+  export type $FlowWalletPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FlowWallet"
+    objects: {
+      flow: Prisma.$FlowPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      flowId: string
+      nodeIndex: number
+      address: string
+      nickname: string | null
+      position: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["flowWallet"]>
+    composites: {}
+  }
+
+  type FlowWalletGetPayload<S extends boolean | null | undefined | FlowWalletDefaultArgs> = $Result.GetResult<Prisma.$FlowWalletPayload, S>
+
+  type FlowWalletCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FlowWalletFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FlowWalletCountAggregateInputType | true
+    }
+
+  export interface FlowWalletDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FlowWallet'], meta: { name: 'FlowWallet' } }
+    /**
+     * Find zero or one FlowWallet that matches the filter.
+     * @param {FlowWalletFindUniqueArgs} args - Arguments to find a FlowWallet
+     * @example
+     * // Get one FlowWallet
+     * const flowWallet = await prisma.flowWallet.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FlowWalletFindUniqueArgs>(args: SelectSubset<T, FlowWalletFindUniqueArgs<ExtArgs>>): Prisma__FlowWalletClient<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FlowWallet that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FlowWalletFindUniqueOrThrowArgs} args - Arguments to find a FlowWallet
+     * @example
+     * // Get one FlowWallet
+     * const flowWallet = await prisma.flowWallet.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FlowWalletFindUniqueOrThrowArgs>(args: SelectSubset<T, FlowWalletFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FlowWalletClient<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FlowWallet that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowWalletFindFirstArgs} args - Arguments to find a FlowWallet
+     * @example
+     * // Get one FlowWallet
+     * const flowWallet = await prisma.flowWallet.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FlowWalletFindFirstArgs>(args?: SelectSubset<T, FlowWalletFindFirstArgs<ExtArgs>>): Prisma__FlowWalletClient<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FlowWallet that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowWalletFindFirstOrThrowArgs} args - Arguments to find a FlowWallet
+     * @example
+     * // Get one FlowWallet
+     * const flowWallet = await prisma.flowWallet.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FlowWalletFindFirstOrThrowArgs>(args?: SelectSubset<T, FlowWalletFindFirstOrThrowArgs<ExtArgs>>): Prisma__FlowWalletClient<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FlowWallets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowWalletFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FlowWallets
+     * const flowWallets = await prisma.flowWallet.findMany()
+     * 
+     * // Get first 10 FlowWallets
+     * const flowWallets = await prisma.flowWallet.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const flowWalletWithIdOnly = await prisma.flowWallet.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FlowWalletFindManyArgs>(args?: SelectSubset<T, FlowWalletFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FlowWallet.
+     * @param {FlowWalletCreateArgs} args - Arguments to create a FlowWallet.
+     * @example
+     * // Create one FlowWallet
+     * const FlowWallet = await prisma.flowWallet.create({
+     *   data: {
+     *     // ... data to create a FlowWallet
+     *   }
+     * })
+     * 
+     */
+    create<T extends FlowWalletCreateArgs>(args: SelectSubset<T, FlowWalletCreateArgs<ExtArgs>>): Prisma__FlowWalletClient<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FlowWallets.
+     * @param {FlowWalletCreateManyArgs} args - Arguments to create many FlowWallets.
+     * @example
+     * // Create many FlowWallets
+     * const flowWallet = await prisma.flowWallet.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FlowWalletCreateManyArgs>(args?: SelectSubset<T, FlowWalletCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FlowWallets and returns the data saved in the database.
+     * @param {FlowWalletCreateManyAndReturnArgs} args - Arguments to create many FlowWallets.
+     * @example
+     * // Create many FlowWallets
+     * const flowWallet = await prisma.flowWallet.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FlowWallets and only return the `id`
+     * const flowWalletWithIdOnly = await prisma.flowWallet.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FlowWalletCreateManyAndReturnArgs>(args?: SelectSubset<T, FlowWalletCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FlowWallet.
+     * @param {FlowWalletDeleteArgs} args - Arguments to delete one FlowWallet.
+     * @example
+     * // Delete one FlowWallet
+     * const FlowWallet = await prisma.flowWallet.delete({
+     *   where: {
+     *     // ... filter to delete one FlowWallet
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FlowWalletDeleteArgs>(args: SelectSubset<T, FlowWalletDeleteArgs<ExtArgs>>): Prisma__FlowWalletClient<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FlowWallet.
+     * @param {FlowWalletUpdateArgs} args - Arguments to update one FlowWallet.
+     * @example
+     * // Update one FlowWallet
+     * const flowWallet = await prisma.flowWallet.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FlowWalletUpdateArgs>(args: SelectSubset<T, FlowWalletUpdateArgs<ExtArgs>>): Prisma__FlowWalletClient<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FlowWallets.
+     * @param {FlowWalletDeleteManyArgs} args - Arguments to filter FlowWallets to delete.
+     * @example
+     * // Delete a few FlowWallets
+     * const { count } = await prisma.flowWallet.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FlowWalletDeleteManyArgs>(args?: SelectSubset<T, FlowWalletDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FlowWallets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowWalletUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FlowWallets
+     * const flowWallet = await prisma.flowWallet.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FlowWalletUpdateManyArgs>(args: SelectSubset<T, FlowWalletUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FlowWallets and returns the data updated in the database.
+     * @param {FlowWalletUpdateManyAndReturnArgs} args - Arguments to update many FlowWallets.
+     * @example
+     * // Update many FlowWallets
+     * const flowWallet = await prisma.flowWallet.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FlowWallets and only return the `id`
+     * const flowWalletWithIdOnly = await prisma.flowWallet.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FlowWalletUpdateManyAndReturnArgs>(args: SelectSubset<T, FlowWalletUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FlowWallet.
+     * @param {FlowWalletUpsertArgs} args - Arguments to update or create a FlowWallet.
+     * @example
+     * // Update or create a FlowWallet
+     * const flowWallet = await prisma.flowWallet.upsert({
+     *   create: {
+     *     // ... data to create a FlowWallet
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FlowWallet we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FlowWalletUpsertArgs>(args: SelectSubset<T, FlowWalletUpsertArgs<ExtArgs>>): Prisma__FlowWalletClient<$Result.GetResult<Prisma.$FlowWalletPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FlowWallets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowWalletCountArgs} args - Arguments to filter FlowWallets to count.
+     * @example
+     * // Count the number of FlowWallets
+     * const count = await prisma.flowWallet.count({
+     *   where: {
+     *     // ... the filter for the FlowWallets we want to count
+     *   }
+     * })
+    **/
+    count<T extends FlowWalletCountArgs>(
+      args?: Subset<T, FlowWalletCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FlowWalletCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FlowWallet.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowWalletAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FlowWalletAggregateArgs>(args: Subset<T, FlowWalletAggregateArgs>): Prisma.PrismaPromise<GetFlowWalletAggregateType<T>>
+
+    /**
+     * Group by FlowWallet.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlowWalletGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FlowWalletGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FlowWalletGroupByArgs['orderBy'] }
+        : { orderBy?: FlowWalletGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FlowWalletGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFlowWalletGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FlowWallet model
+   */
+  readonly fields: FlowWalletFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FlowWallet.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FlowWalletClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    flow<T extends FlowDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FlowDefaultArgs<ExtArgs>>): Prisma__FlowClient<$Result.GetResult<Prisma.$FlowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FlowWallet model
+   */
+  interface FlowWalletFieldRefs {
+    readonly id: FieldRef<"FlowWallet", 'String'>
+    readonly flowId: FieldRef<"FlowWallet", 'String'>
+    readonly nodeIndex: FieldRef<"FlowWallet", 'Int'>
+    readonly address: FieldRef<"FlowWallet", 'String'>
+    readonly nickname: FieldRef<"FlowWallet", 'String'>
+    readonly position: FieldRef<"FlowWallet", 'Json'>
+    readonly createdAt: FieldRef<"FlowWallet", 'DateTime'>
+    readonly updatedAt: FieldRef<"FlowWallet", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FlowWallet findUnique
+   */
+  export type FlowWalletFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowWallet to fetch.
+     */
+    where: FlowWalletWhereUniqueInput
+  }
+
+  /**
+   * FlowWallet findUniqueOrThrow
+   */
+  export type FlowWalletFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowWallet to fetch.
+     */
+    where: FlowWalletWhereUniqueInput
+  }
+
+  /**
+   * FlowWallet findFirst
+   */
+  export type FlowWalletFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowWallet to fetch.
+     */
+    where?: FlowWalletWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowWallets to fetch.
+     */
+    orderBy?: FlowWalletOrderByWithRelationInput | FlowWalletOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlowWallets.
+     */
+    cursor?: FlowWalletWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowWallets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowWallets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlowWallets.
+     */
+    distinct?: FlowWalletScalarFieldEnum | FlowWalletScalarFieldEnum[]
+  }
+
+  /**
+   * FlowWallet findFirstOrThrow
+   */
+  export type FlowWalletFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowWallet to fetch.
+     */
+    where?: FlowWalletWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowWallets to fetch.
+     */
+    orderBy?: FlowWalletOrderByWithRelationInput | FlowWalletOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlowWallets.
+     */
+    cursor?: FlowWalletWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowWallets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowWallets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlowWallets.
+     */
+    distinct?: FlowWalletScalarFieldEnum | FlowWalletScalarFieldEnum[]
+  }
+
+  /**
+   * FlowWallet findMany
+   */
+  export type FlowWalletFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletInclude<ExtArgs> | null
+    /**
+     * Filter, which FlowWallets to fetch.
+     */
+    where?: FlowWalletWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlowWallets to fetch.
+     */
+    orderBy?: FlowWalletOrderByWithRelationInput | FlowWalletOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FlowWallets.
+     */
+    cursor?: FlowWalletWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlowWallets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlowWallets.
+     */
+    skip?: number
+    distinct?: FlowWalletScalarFieldEnum | FlowWalletScalarFieldEnum[]
+  }
+
+  /**
+   * FlowWallet create
+   */
+  export type FlowWalletCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FlowWallet.
+     */
+    data: XOR<FlowWalletCreateInput, FlowWalletUncheckedCreateInput>
+  }
+
+  /**
+   * FlowWallet createMany
+   */
+  export type FlowWalletCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FlowWallets.
+     */
+    data: FlowWalletCreateManyInput | FlowWalletCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FlowWallet createManyAndReturn
+   */
+  export type FlowWalletCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * The data used to create many FlowWallets.
+     */
+    data: FlowWalletCreateManyInput | FlowWalletCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FlowWallet update
+   */
+  export type FlowWalletUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FlowWallet.
+     */
+    data: XOR<FlowWalletUpdateInput, FlowWalletUncheckedUpdateInput>
+    /**
+     * Choose, which FlowWallet to update.
+     */
+    where: FlowWalletWhereUniqueInput
+  }
+
+  /**
+   * FlowWallet updateMany
+   */
+  export type FlowWalletUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FlowWallets.
+     */
+    data: XOR<FlowWalletUpdateManyMutationInput, FlowWalletUncheckedUpdateManyInput>
+    /**
+     * Filter which FlowWallets to update
+     */
+    where?: FlowWalletWhereInput
+    /**
+     * Limit how many FlowWallets to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FlowWallet updateManyAndReturn
+   */
+  export type FlowWalletUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * The data used to update FlowWallets.
+     */
+    data: XOR<FlowWalletUpdateManyMutationInput, FlowWalletUncheckedUpdateManyInput>
+    /**
+     * Filter which FlowWallets to update
+     */
+    where?: FlowWalletWhereInput
+    /**
+     * Limit how many FlowWallets to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FlowWallet upsert
+   */
+  export type FlowWalletUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FlowWallet to update in case it exists.
+     */
+    where: FlowWalletWhereUniqueInput
+    /**
+     * In case the FlowWallet found by the `where` argument doesn't exist, create a new FlowWallet with this data.
+     */
+    create: XOR<FlowWalletCreateInput, FlowWalletUncheckedCreateInput>
+    /**
+     * In case the FlowWallet was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FlowWalletUpdateInput, FlowWalletUncheckedUpdateInput>
+  }
+
+  /**
+   * FlowWallet delete
+   */
+  export type FlowWalletDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletInclude<ExtArgs> | null
+    /**
+     * Filter which FlowWallet to delete.
+     */
+    where: FlowWalletWhereUniqueInput
+  }
+
+  /**
+   * FlowWallet deleteMany
+   */
+  export type FlowWalletDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlowWallets to delete
+     */
+    where?: FlowWalletWhereInput
+    /**
+     * Limit how many FlowWallets to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FlowWallet without action
+   */
+  export type FlowWalletDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlowWallet
+     */
+    select?: FlowWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlowWallet
+     */
+    omit?: FlowWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlowWalletInclude<ExtArgs> | null
   }
 
 
@@ -16336,6 +17591,20 @@ export namespace Prisma {
   export type FlowScalarFieldEnum = (typeof FlowScalarFieldEnum)[keyof typeof FlowScalarFieldEnum]
 
 
+  export const FlowWalletScalarFieldEnum: {
+    id: 'id',
+    flowId: 'flowId',
+    nodeIndex: 'nodeIndex',
+    address: 'address',
+    nickname: 'nickname',
+    position: 'position',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FlowWalletScalarFieldEnum = (typeof FlowWalletScalarFieldEnum)[keyof typeof FlowWalletScalarFieldEnum]
+
+
   export const FlowTransactionScalarFieldEnum: {
     id: 'id',
     flowId: 'flowId',
@@ -16415,6 +17684,14 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -16429,6 +17706,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -16510,6 +17796,20 @@ export namespace Prisma {
    * Reference to a field of type 'FlowEndpointReason[]'
    */
   export type ListEnumFlowEndpointReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlowEndpointReason[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -17105,6 +18405,7 @@ export namespace Prisma {
     endpointHotWallet?: XOR<HotWalletNullableScalarRelationFilter, HotWalletWhereInput> | null
     transactions?: FlowTransactionListRelationFilter
     edges?: FlowEdgeListRelationFilter
+    wallets?: FlowWalletListRelationFilter
   }
 
   export type FlowOrderByWithRelationInput = {
@@ -17129,6 +18430,7 @@ export namespace Prisma {
     endpointHotWallet?: HotWalletOrderByWithRelationInput
     transactions?: FlowTransactionOrderByRelationAggregateInput
     edges?: FlowEdgeOrderByRelationAggregateInput
+    wallets?: FlowWalletOrderByRelationAggregateInput
   }
 
   export type FlowWhereUniqueInput = Prisma.AtLeast<{
@@ -17156,6 +18458,7 @@ export namespace Prisma {
     endpointHotWallet?: XOR<HotWalletNullableScalarRelationFilter, HotWalletWhereInput> | null
     transactions?: FlowTransactionListRelationFilter
     edges?: FlowEdgeListRelationFilter
+    wallets?: FlowWalletListRelationFilter
   }, "id">
 
   export type FlowOrderByWithAggregationInput = {
@@ -17200,6 +18503,79 @@ export namespace Prisma {
     isEndpointExchange?: BoolWithAggregatesFilter<"Flow"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Flow"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Flow"> | Date | string
+  }
+
+  export type FlowWalletWhereInput = {
+    AND?: FlowWalletWhereInput | FlowWalletWhereInput[]
+    OR?: FlowWalletWhereInput[]
+    NOT?: FlowWalletWhereInput | FlowWalletWhereInput[]
+    id?: StringFilter<"FlowWallet"> | string
+    flowId?: StringFilter<"FlowWallet"> | string
+    nodeIndex?: IntFilter<"FlowWallet"> | number
+    address?: StringFilter<"FlowWallet"> | string
+    nickname?: StringNullableFilter<"FlowWallet"> | string | null
+    position?: JsonNullableFilter<"FlowWallet">
+    createdAt?: DateTimeFilter<"FlowWallet"> | Date | string
+    updatedAt?: DateTimeFilter<"FlowWallet"> | Date | string
+    flow?: XOR<FlowScalarRelationFilter, FlowWhereInput>
+  }
+
+  export type FlowWalletOrderByWithRelationInput = {
+    id?: SortOrder
+    flowId?: SortOrder
+    nodeIndex?: SortOrder
+    address?: SortOrder
+    nickname?: SortOrderInput | SortOrder
+    position?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    flow?: FlowOrderByWithRelationInput
+  }
+
+  export type FlowWalletWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    flowId_nodeIndex?: FlowWalletFlowIdNodeIndexCompoundUniqueInput
+    AND?: FlowWalletWhereInput | FlowWalletWhereInput[]
+    OR?: FlowWalletWhereInput[]
+    NOT?: FlowWalletWhereInput | FlowWalletWhereInput[]
+    flowId?: StringFilter<"FlowWallet"> | string
+    nodeIndex?: IntFilter<"FlowWallet"> | number
+    address?: StringFilter<"FlowWallet"> | string
+    nickname?: StringNullableFilter<"FlowWallet"> | string | null
+    position?: JsonNullableFilter<"FlowWallet">
+    createdAt?: DateTimeFilter<"FlowWallet"> | Date | string
+    updatedAt?: DateTimeFilter<"FlowWallet"> | Date | string
+    flow?: XOR<FlowScalarRelationFilter, FlowWhereInput>
+  }, "id" | "flowId_nodeIndex">
+
+  export type FlowWalletOrderByWithAggregationInput = {
+    id?: SortOrder
+    flowId?: SortOrder
+    nodeIndex?: SortOrder
+    address?: SortOrder
+    nickname?: SortOrderInput | SortOrder
+    position?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FlowWalletCountOrderByAggregateInput
+    _avg?: FlowWalletAvgOrderByAggregateInput
+    _max?: FlowWalletMaxOrderByAggregateInput
+    _min?: FlowWalletMinOrderByAggregateInput
+    _sum?: FlowWalletSumOrderByAggregateInput
+  }
+
+  export type FlowWalletScalarWhereWithAggregatesInput = {
+    AND?: FlowWalletScalarWhereWithAggregatesInput | FlowWalletScalarWhereWithAggregatesInput[]
+    OR?: FlowWalletScalarWhereWithAggregatesInput[]
+    NOT?: FlowWalletScalarWhereWithAggregatesInput | FlowWalletScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FlowWallet"> | string
+    flowId?: StringWithAggregatesFilter<"FlowWallet"> | string
+    nodeIndex?: IntWithAggregatesFilter<"FlowWallet"> | number
+    address?: StringWithAggregatesFilter<"FlowWallet"> | string
+    nickname?: StringNullableWithAggregatesFilter<"FlowWallet"> | string | null
+    position?: JsonNullableWithAggregatesFilter<"FlowWallet">
+    createdAt?: DateTimeWithAggregatesFilter<"FlowWallet"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FlowWallet"> | Date | string
   }
 
   export type FlowTransactionWhereInput = {
@@ -18170,6 +19546,7 @@ export namespace Prisma {
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateInput = {
@@ -18190,6 +19567,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUpdateInput = {
@@ -18210,6 +19588,7 @@ export namespace Prisma {
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateInput = {
@@ -18230,6 +19609,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowCreateManyInput = {
@@ -18278,6 +19658,82 @@ export namespace Prisma {
     endpointReason?: EnumFlowEndpointReasonFieldUpdateOperationsInput | $Enums.FlowEndpointReason
     endpointHotWalletId?: NullableStringFieldUpdateOperationsInput | string | null
     isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowWalletCreateInput = {
+    id?: string
+    nodeIndex: number
+    address: string
+    nickname?: string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    flow: FlowCreateNestedOneWithoutWalletsInput
+  }
+
+  export type FlowWalletUncheckedCreateInput = {
+    id?: string
+    flowId: string
+    nodeIndex: number
+    address: string
+    nickname?: string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlowWalletUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nodeIndex?: IntFieldUpdateOperationsInput | number
+    address?: StringFieldUpdateOperationsInput | string
+    nickname?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flow?: FlowUpdateOneRequiredWithoutWalletsNestedInput
+  }
+
+  export type FlowWalletUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flowId?: StringFieldUpdateOperationsInput | string
+    nodeIndex?: IntFieldUpdateOperationsInput | number
+    address?: StringFieldUpdateOperationsInput | string
+    nickname?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowWalletCreateManyInput = {
+    id?: string
+    flowId: string
+    nodeIndex: number
+    address: string
+    nickname?: string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlowWalletUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nodeIndex?: IntFieldUpdateOperationsInput | number
+    address?: StringFieldUpdateOperationsInput | string
+    nickname?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowWalletUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flowId?: StringFieldUpdateOperationsInput | string
+    nodeIndex?: IntFieldUpdateOperationsInput | number
+    address?: StringFieldUpdateOperationsInput | string
+    nickname?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19225,7 +20681,17 @@ export namespace Prisma {
     none?: FlowEdgeWhereInput
   }
 
+  export type FlowWalletListRelationFilter = {
+    every?: FlowWalletWhereInput
+    some?: FlowWalletWhereInput
+    none?: FlowWalletWhereInput
+  }
+
   export type FlowEdgeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FlowWalletOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -19316,10 +20782,103 @@ export namespace Prisma {
     _min?: NestedEnumFlowEndpointReasonFilter<$PrismaModel>
     _max?: NestedEnumFlowEndpointReasonFilter<$PrismaModel>
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type FlowScalarRelationFilter = {
     is?: FlowWhereInput
     isNot?: FlowWhereInput
+  }
+
+  export type FlowWalletFlowIdNodeIndexCompoundUniqueInput = {
+    flowId: string
+    nodeIndex: number
+  }
+
+  export type FlowWalletCountOrderByAggregateInput = {
+    id?: SortOrder
+    flowId?: SortOrder
+    nodeIndex?: SortOrder
+    address?: SortOrder
+    nickname?: SortOrder
+    position?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FlowWalletAvgOrderByAggregateInput = {
+    nodeIndex?: SortOrder
+  }
+
+  export type FlowWalletMaxOrderByAggregateInput = {
+    id?: SortOrder
+    flowId?: SortOrder
+    nodeIndex?: SortOrder
+    address?: SortOrder
+    nickname?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FlowWalletMinOrderByAggregateInput = {
+    id?: SortOrder
+    flowId?: SortOrder
+    nodeIndex?: SortOrder
+    address?: SortOrder
+    nickname?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FlowWalletSumOrderByAggregateInput = {
+    nodeIndex?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type FlowTransactionFlowIdHopIndexCompoundUniqueInput = {
@@ -20172,6 +21731,13 @@ export namespace Prisma {
     connect?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
   }
 
+  export type FlowWalletCreateNestedManyWithoutFlowInput = {
+    create?: XOR<FlowWalletCreateWithoutFlowInput, FlowWalletUncheckedCreateWithoutFlowInput> | FlowWalletCreateWithoutFlowInput[] | FlowWalletUncheckedCreateWithoutFlowInput[]
+    connectOrCreate?: FlowWalletCreateOrConnectWithoutFlowInput | FlowWalletCreateOrConnectWithoutFlowInput[]
+    createMany?: FlowWalletCreateManyFlowInputEnvelope
+    connect?: FlowWalletWhereUniqueInput | FlowWalletWhereUniqueInput[]
+  }
+
   export type FlowTransactionUncheckedCreateNestedManyWithoutFlowInput = {
     create?: XOR<FlowTransactionCreateWithoutFlowInput, FlowTransactionUncheckedCreateWithoutFlowInput> | FlowTransactionCreateWithoutFlowInput[] | FlowTransactionUncheckedCreateWithoutFlowInput[]
     connectOrCreate?: FlowTransactionCreateOrConnectWithoutFlowInput | FlowTransactionCreateOrConnectWithoutFlowInput[]
@@ -20184,6 +21750,13 @@ export namespace Prisma {
     connectOrCreate?: FlowEdgeCreateOrConnectWithoutFlowInput | FlowEdgeCreateOrConnectWithoutFlowInput[]
     createMany?: FlowEdgeCreateManyFlowInputEnvelope
     connect?: FlowEdgeWhereUniqueInput | FlowEdgeWhereUniqueInput[]
+  }
+
+  export type FlowWalletUncheckedCreateNestedManyWithoutFlowInput = {
+    create?: XOR<FlowWalletCreateWithoutFlowInput, FlowWalletUncheckedCreateWithoutFlowInput> | FlowWalletCreateWithoutFlowInput[] | FlowWalletUncheckedCreateWithoutFlowInput[]
+    connectOrCreate?: FlowWalletCreateOrConnectWithoutFlowInput | FlowWalletCreateOrConnectWithoutFlowInput[]
+    createMany?: FlowWalletCreateManyFlowInputEnvelope
+    connect?: FlowWalletWhereUniqueInput | FlowWalletWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -20260,6 +21833,20 @@ export namespace Prisma {
     deleteMany?: FlowEdgeScalarWhereInput | FlowEdgeScalarWhereInput[]
   }
 
+  export type FlowWalletUpdateManyWithoutFlowNestedInput = {
+    create?: XOR<FlowWalletCreateWithoutFlowInput, FlowWalletUncheckedCreateWithoutFlowInput> | FlowWalletCreateWithoutFlowInput[] | FlowWalletUncheckedCreateWithoutFlowInput[]
+    connectOrCreate?: FlowWalletCreateOrConnectWithoutFlowInput | FlowWalletCreateOrConnectWithoutFlowInput[]
+    upsert?: FlowWalletUpsertWithWhereUniqueWithoutFlowInput | FlowWalletUpsertWithWhereUniqueWithoutFlowInput[]
+    createMany?: FlowWalletCreateManyFlowInputEnvelope
+    set?: FlowWalletWhereUniqueInput | FlowWalletWhereUniqueInput[]
+    disconnect?: FlowWalletWhereUniqueInput | FlowWalletWhereUniqueInput[]
+    delete?: FlowWalletWhereUniqueInput | FlowWalletWhereUniqueInput[]
+    connect?: FlowWalletWhereUniqueInput | FlowWalletWhereUniqueInput[]
+    update?: FlowWalletUpdateWithWhereUniqueWithoutFlowInput | FlowWalletUpdateWithWhereUniqueWithoutFlowInput[]
+    updateMany?: FlowWalletUpdateManyWithWhereWithoutFlowInput | FlowWalletUpdateManyWithWhereWithoutFlowInput[]
+    deleteMany?: FlowWalletScalarWhereInput | FlowWalletScalarWhereInput[]
+  }
+
   export type FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput = {
     create?: XOR<FlowTransactionCreateWithoutFlowInput, FlowTransactionUncheckedCreateWithoutFlowInput> | FlowTransactionCreateWithoutFlowInput[] | FlowTransactionUncheckedCreateWithoutFlowInput[]
     connectOrCreate?: FlowTransactionCreateOrConnectWithoutFlowInput | FlowTransactionCreateOrConnectWithoutFlowInput[]
@@ -20286,6 +21873,34 @@ export namespace Prisma {
     update?: FlowEdgeUpdateWithWhereUniqueWithoutFlowInput | FlowEdgeUpdateWithWhereUniqueWithoutFlowInput[]
     updateMany?: FlowEdgeUpdateManyWithWhereWithoutFlowInput | FlowEdgeUpdateManyWithWhereWithoutFlowInput[]
     deleteMany?: FlowEdgeScalarWhereInput | FlowEdgeScalarWhereInput[]
+  }
+
+  export type FlowWalletUncheckedUpdateManyWithoutFlowNestedInput = {
+    create?: XOR<FlowWalletCreateWithoutFlowInput, FlowWalletUncheckedCreateWithoutFlowInput> | FlowWalletCreateWithoutFlowInput[] | FlowWalletUncheckedCreateWithoutFlowInput[]
+    connectOrCreate?: FlowWalletCreateOrConnectWithoutFlowInput | FlowWalletCreateOrConnectWithoutFlowInput[]
+    upsert?: FlowWalletUpsertWithWhereUniqueWithoutFlowInput | FlowWalletUpsertWithWhereUniqueWithoutFlowInput[]
+    createMany?: FlowWalletCreateManyFlowInputEnvelope
+    set?: FlowWalletWhereUniqueInput | FlowWalletWhereUniqueInput[]
+    disconnect?: FlowWalletWhereUniqueInput | FlowWalletWhereUniqueInput[]
+    delete?: FlowWalletWhereUniqueInput | FlowWalletWhereUniqueInput[]
+    connect?: FlowWalletWhereUniqueInput | FlowWalletWhereUniqueInput[]
+    update?: FlowWalletUpdateWithWhereUniqueWithoutFlowInput | FlowWalletUpdateWithWhereUniqueWithoutFlowInput[]
+    updateMany?: FlowWalletUpdateManyWithWhereWithoutFlowInput | FlowWalletUpdateManyWithWhereWithoutFlowInput[]
+    deleteMany?: FlowWalletScalarWhereInput | FlowWalletScalarWhereInput[]
+  }
+
+  export type FlowCreateNestedOneWithoutWalletsInput = {
+    create?: XOR<FlowCreateWithoutWalletsInput, FlowUncheckedCreateWithoutWalletsInput>
+    connectOrCreate?: FlowCreateOrConnectWithoutWalletsInput
+    connect?: FlowWhereUniqueInput
+  }
+
+  export type FlowUpdateOneRequiredWithoutWalletsNestedInput = {
+    create?: XOR<FlowCreateWithoutWalletsInput, FlowUncheckedCreateWithoutWalletsInput>
+    connectOrCreate?: FlowCreateOrConnectWithoutWalletsInput
+    upsert?: FlowUpsertWithoutWalletsInput
+    connect?: FlowWhereUniqueInput
+    update?: XOR<XOR<FlowUpdateToOneWithWhereWithoutWalletsInput, FlowUpdateWithoutWalletsInput>, FlowUncheckedUpdateWithoutWalletsInput>
   }
 
   export type FlowCreateNestedOneWithoutTransactionsInput = {
@@ -20632,6 +22247,29 @@ export namespace Prisma {
     _min?: NestedEnumFlowEndpointReasonFilter<$PrismaModel>
     _max?: NestedEnumFlowEndpointReasonFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumFlowEdgeOutcomeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.FlowEdgeOutcome | EnumFlowEdgeOutcomeFieldRefInput<$PrismaModel> | null
@@ -20769,6 +22407,7 @@ export namespace Prisma {
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateWithoutChainInput = {
@@ -20788,6 +22427,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowCreateOrConnectWithoutChainInput = {
@@ -21161,6 +22801,7 @@ export namespace Prisma {
     chain: ChainCreateNestedOneWithoutFlowsInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateWithoutEndpointHotWalletInput = {
@@ -21180,6 +22821,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowCreateOrConnectWithoutEndpointHotWalletInput = {
@@ -21348,6 +22990,7 @@ export namespace Prisma {
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateWithoutCaseInput = {
@@ -21367,6 +23010,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowCreateOrConnectWithoutCaseInput = {
@@ -21517,6 +23161,7 @@ export namespace Prisma {
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateWithoutSeedInput = {
@@ -21536,6 +23181,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowCreateOrConnectWithoutSeedInput = {
@@ -21836,6 +23482,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FlowWalletCreateWithoutFlowInput = {
+    id?: string
+    nodeIndex: number
+    address: string
+    nickname?: string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlowWalletUncheckedCreateWithoutFlowInput = {
+    id?: string
+    nodeIndex: number
+    address: string
+    nickname?: string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlowWalletCreateOrConnectWithoutFlowInput = {
+    where: FlowWalletWhereUniqueInput
+    create: XOR<FlowWalletCreateWithoutFlowInput, FlowWalletUncheckedCreateWithoutFlowInput>
+  }
+
+  export type FlowWalletCreateManyFlowInputEnvelope = {
+    data: FlowWalletCreateManyFlowInput | FlowWalletCreateManyFlowInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CaseUpsertWithoutFlowsInput = {
     update: XOR<CaseUpdateWithoutFlowsInput, CaseUncheckedUpdateWithoutFlowsInput>
     create: XOR<CaseCreateWithoutFlowsInput, CaseUncheckedCreateWithoutFlowsInput>
@@ -22029,6 +23705,132 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"FlowEdge"> | Date | string
   }
 
+  export type FlowWalletUpsertWithWhereUniqueWithoutFlowInput = {
+    where: FlowWalletWhereUniqueInput
+    update: XOR<FlowWalletUpdateWithoutFlowInput, FlowWalletUncheckedUpdateWithoutFlowInput>
+    create: XOR<FlowWalletCreateWithoutFlowInput, FlowWalletUncheckedCreateWithoutFlowInput>
+  }
+
+  export type FlowWalletUpdateWithWhereUniqueWithoutFlowInput = {
+    where: FlowWalletWhereUniqueInput
+    data: XOR<FlowWalletUpdateWithoutFlowInput, FlowWalletUncheckedUpdateWithoutFlowInput>
+  }
+
+  export type FlowWalletUpdateManyWithWhereWithoutFlowInput = {
+    where: FlowWalletScalarWhereInput
+    data: XOR<FlowWalletUpdateManyMutationInput, FlowWalletUncheckedUpdateManyWithoutFlowInput>
+  }
+
+  export type FlowWalletScalarWhereInput = {
+    AND?: FlowWalletScalarWhereInput | FlowWalletScalarWhereInput[]
+    OR?: FlowWalletScalarWhereInput[]
+    NOT?: FlowWalletScalarWhereInput | FlowWalletScalarWhereInput[]
+    id?: StringFilter<"FlowWallet"> | string
+    flowId?: StringFilter<"FlowWallet"> | string
+    nodeIndex?: IntFilter<"FlowWallet"> | number
+    address?: StringFilter<"FlowWallet"> | string
+    nickname?: StringNullableFilter<"FlowWallet"> | string | null
+    position?: JsonNullableFilter<"FlowWallet">
+    createdAt?: DateTimeFilter<"FlowWallet"> | Date | string
+    updatedAt?: DateTimeFilter<"FlowWallet"> | Date | string
+  }
+
+  export type FlowCreateWithoutWalletsInput = {
+    id?: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    totalAmountRaw: string
+    totalAmountDecimal: string
+    hopsCount: number
+    endpointAddress: string
+    endpointReason: $Enums.FlowEndpointReason
+    isEndpointExchange?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    case: CaseCreateNestedOneWithoutFlowsInput
+    seed: CaseSeedTransactionCreateNestedOneWithoutFlowsInput
+    chain: ChainCreateNestedOneWithoutFlowsInput
+    endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
+    transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeCreateNestedManyWithoutFlowInput
+  }
+
+  export type FlowUncheckedCreateWithoutWalletsInput = {
+    id?: string
+    caseId: string
+    seedId: string
+    chainId: string
+    tokenAddress?: string | null
+    tokenSymbol?: string | null
+    totalAmountRaw: string
+    totalAmountDecimal: string
+    hopsCount: number
+    endpointAddress: string
+    endpointReason: $Enums.FlowEndpointReason
+    endpointHotWalletId?: string | null
+    isEndpointExchange?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
+    edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
+  }
+
+  export type FlowCreateOrConnectWithoutWalletsInput = {
+    where: FlowWhereUniqueInput
+    create: XOR<FlowCreateWithoutWalletsInput, FlowUncheckedCreateWithoutWalletsInput>
+  }
+
+  export type FlowUpsertWithoutWalletsInput = {
+    update: XOR<FlowUpdateWithoutWalletsInput, FlowUncheckedUpdateWithoutWalletsInput>
+    create: XOR<FlowCreateWithoutWalletsInput, FlowUncheckedCreateWithoutWalletsInput>
+    where?: FlowWhereInput
+  }
+
+  export type FlowUpdateToOneWithWhereWithoutWalletsInput = {
+    where?: FlowWhereInput
+    data: XOR<FlowUpdateWithoutWalletsInput, FlowUncheckedUpdateWithoutWalletsInput>
+  }
+
+  export type FlowUpdateWithoutWalletsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmountRaw?: StringFieldUpdateOperationsInput | string
+    totalAmountDecimal?: StringFieldUpdateOperationsInput | string
+    hopsCount?: IntFieldUpdateOperationsInput | number
+    endpointAddress?: StringFieldUpdateOperationsInput | string
+    endpointReason?: EnumFlowEndpointReasonFieldUpdateOperationsInput | $Enums.FlowEndpointReason
+    isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    case?: CaseUpdateOneRequiredWithoutFlowsNestedInput
+    seed?: CaseSeedTransactionUpdateOneRequiredWithoutFlowsNestedInput
+    chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
+    endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
+    transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
+  }
+
+  export type FlowUncheckedUpdateWithoutWalletsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    caseId?: StringFieldUpdateOperationsInput | string
+    seedId?: StringFieldUpdateOperationsInput | string
+    chainId?: StringFieldUpdateOperationsInput | string
+    tokenAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    tokenSymbol?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmountRaw?: StringFieldUpdateOperationsInput | string
+    totalAmountDecimal?: StringFieldUpdateOperationsInput | string
+    hopsCount?: IntFieldUpdateOperationsInput | number
+    endpointAddress?: StringFieldUpdateOperationsInput | string
+    endpointReason?: EnumFlowEndpointReasonFieldUpdateOperationsInput | $Enums.FlowEndpointReason
+    endpointHotWalletId?: NullableStringFieldUpdateOperationsInput | string | null
+    isEndpointExchange?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
+    edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
+  }
+
   export type FlowCreateWithoutTransactionsInput = {
     id?: string
     tokenAddress?: string | null
@@ -22046,6 +23848,7 @@ export namespace Prisma {
     chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     edges?: FlowEdgeCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateWithoutTransactionsInput = {
@@ -22065,6 +23868,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     edges?: FlowEdgeUncheckedCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowCreateOrConnectWithoutTransactionsInput = {
@@ -22129,6 +23933,7 @@ export namespace Prisma {
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateWithoutTransactionsInput = {
@@ -22148,6 +23953,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type ChainUpsertWithoutFlowTransactionsInput = {
@@ -22202,6 +24008,7 @@ export namespace Prisma {
     chain: ChainCreateNestedOneWithoutFlowsInput
     endpointHotWallet?: HotWalletCreateNestedOneWithoutFlowsAsEndpointInput
     transactions?: FlowTransactionCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletCreateNestedManyWithoutFlowInput
   }
 
   export type FlowUncheckedCreateWithoutEdgesInput = {
@@ -22221,6 +24028,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: FlowTransactionUncheckedCreateNestedManyWithoutFlowInput
+    wallets?: FlowWalletUncheckedCreateNestedManyWithoutFlowInput
   }
 
   export type FlowCreateOrConnectWithoutEdgesInput = {
@@ -22256,6 +24064,7 @@ export namespace Prisma {
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateWithoutEdgesInput = {
@@ -22275,6 +24084,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowTraceLogStepCreateWithoutFlowTraceLogInput = {
@@ -22552,6 +24362,7 @@ export namespace Prisma {
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateWithoutChainInput = {
@@ -22571,6 +24382,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateManyWithoutChainInput = {
@@ -22762,6 +24574,7 @@ export namespace Prisma {
     chain?: ChainUpdateOneRequiredWithoutFlowsNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateWithoutEndpointHotWalletInput = {
@@ -22781,6 +24594,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateManyWithoutEndpointHotWalletInput = {
@@ -22884,6 +24698,7 @@ export namespace Prisma {
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateWithoutCaseInput = {
@@ -22903,6 +24718,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateManyWithoutCaseInput = {
@@ -22956,6 +24772,7 @@ export namespace Prisma {
     endpointHotWallet?: HotWalletUpdateOneWithoutFlowsAsEndpointNestedInput
     transactions?: FlowTransactionUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateWithoutSeedInput = {
@@ -22975,6 +24792,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: FlowTransactionUncheckedUpdateManyWithoutFlowNestedInput
     edges?: FlowEdgeUncheckedUpdateManyWithoutFlowNestedInput
+    wallets?: FlowWalletUncheckedUpdateManyWithoutFlowNestedInput
   }
 
   export type FlowUncheckedUpdateManyWithoutSeedInput = {
@@ -23023,6 +24841,16 @@ export namespace Prisma {
     outcome?: $Enums.FlowEdgeOutcome | null
     transferTimestamp?: Date | string | null
     createdAt?: Date | string
+  }
+
+  export type FlowWalletCreateManyFlowInput = {
+    id?: string
+    nodeIndex: number
+    address: string
+    nickname?: string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type FlowTransactionUpdateWithoutFlowInput = {
@@ -23116,6 +24944,36 @@ export namespace Prisma {
     outcome?: NullableEnumFlowEdgeOutcomeFieldUpdateOperationsInput | $Enums.FlowEdgeOutcome | null
     transferTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowWalletUpdateWithoutFlowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nodeIndex?: IntFieldUpdateOperationsInput | number
+    address?: StringFieldUpdateOperationsInput | string
+    nickname?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowWalletUncheckedUpdateWithoutFlowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nodeIndex?: IntFieldUpdateOperationsInput | number
+    address?: StringFieldUpdateOperationsInput | string
+    nickname?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlowWalletUncheckedUpdateManyWithoutFlowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nodeIndex?: IntFieldUpdateOperationsInput | number
+    address?: StringFieldUpdateOperationsInput | string
+    nickname?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FlowTraceLogStepCreateManyFlowTraceLogInput = {

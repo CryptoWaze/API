@@ -216,6 +216,17 @@ exports.Prisma.FlowScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FlowWalletScalarFieldEnum = {
+  id: 'id',
+  flowId: 'flowId',
+  nodeIndex: 'nodeIndex',
+  address: 'address',
+  nickname: 'nickname',
+  position: 'position',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.FlowTransactionScalarFieldEnum = {
   id: 'id',
   flowId: 'flowId',
@@ -280,6 +291,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -288,6 +304,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.CaseStatus = exports.$Enums.CaseStatus = {
   OPEN: 'OPEN',
@@ -329,6 +351,7 @@ exports.Prisma.ModelName = {
   Case: 'Case',
   CaseSeedTransaction: 'CaseSeedTransaction',
   Flow: 'Flow',
+  FlowWallet: 'FlowWallet',
   FlowTransaction: 'FlowTransaction',
   FlowEdge: 'FlowEdge',
   FlowTraceLog: 'FlowTraceLog',

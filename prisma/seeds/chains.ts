@@ -12,4 +12,5 @@ export const CHAINS: { slug: string; name: string; iconUrl?: string }[] = [
   { slug: 'ton', name: 'TON' },
   { slug: 'dogecoin', name: 'Dogecoin' },
   { slug: 'zcash', name: 'Zcash' },
+  { slug: 'flare', name: 'Flare' },
 ];

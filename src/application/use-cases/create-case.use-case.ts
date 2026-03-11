@@ -1,17 +1,22 @@
 import { randomUUID } from 'node:crypto';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import type { CreateCaseInput } from '../schemas/create-case.schema';
 import type {
   FollowFlowToExchangeFullHistoryResult,
   FlowGraphEdge,
   FlowStep,
   ResolveTransactionResult,
+  WalletTransfer,
 } from '../types';
 import { ResolveTransactionUseCase } from './resolve-transaction.use-case';
 import { FollowFlowToExchangeFullHistoryUseCase } from './follow-flow-to-exchange-full-history.use-case';
 import { PrismaService } from '../../infrastructure/database/prisma.service';
 import { CaseStatus, FlowEndpointReason } from '../../generated/prisma';
 import { SocketGateway } from '../../presentation/socket/socket.gateway';
+import {
+  TOKEN_PRICE_PROVIDER,
+  type ITokenPriceProvider,
+} from '../ports/token-price-provider.port';
 
 function chainToSlug(chain: string): string {
   const t = chain.trim();
@@ -62,7 +67,75 @@ export class CreateCaseUseCase {
     private readonly followFlowToExchangeFullHistoryUseCase: FollowFlowToExchangeFullHistoryUseCase,
     private readonly prisma: PrismaService,
     private readonly socketGateway: SocketGateway,
+    @Inject(TOKEN_PRICE_PROVIDER)
+    private readonly tokenPriceProvider: ITokenPriceProvider,
   ) {}
+
+  private async enrichPrefixTokenInfo(
+    steps: FlowStep[],
+    edges: FlowGraphEdge[],
+  ): Promise<{
+    steps: FlowStep[];
+    edges: FlowGraphEdge[];
+  }> {
+    const symbols = new Set<string>();
+    for (const s of steps) symbols.add(s.transfer.symbol.trim().toLowerCase());
+    for (const e of edges) {
+      if (e.symbol) symbols.add(e.symbol.trim().toLowerCase());
+    }
+    const map = await this.tokenPriceProvider.getTokenInfoBatch([...symbols]);
+    const enrichedSteps = steps.map((s) => {
+      const info = map.get(s.transfer.symbol.trim().toLowerCase());
+      return {
+        ...s,
+        tokenPriceUsd: info?.priceUsd ?? null,
+        tokenImageUrl: info?.imageUrl ?? null,
+      };
+    });
+    const enrichedEdges = edges.map((e) => {
+      const sym = e.symbol?.trim().toLowerCase();
+      const info = sym ? map.get(sym) : null;
+      return {
+        ...e,
+        tokenPriceUsd: info?.priceUsd ?? null,
+        tokenImageUrl: info?.imageUrl ?? null,
+      };
+    });
+    return { steps: enrichedSteps, edges: enrichedEdges };
+  }
+
+  private buildPrefixSteps(
+    fromAddress: string,
+    toAddress: string,
+    outbounds: WalletTransfer[],
+  ): { steps: FlowStep[]; edges: FlowGraphEdge[] } {
+    const from = normalizeAddress(fromAddress);
+    const to = normalizeAddress(toAddress);
+    const allTo = outbounds
+      .filter((t) => normalizeAddress(t.counterparty) === to)
+      .sort(
+        (a, b) =>
+          new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+      );
+    const steps: FlowStep[] = allTo.map((t) => ({
+      fromAddress: from,
+      toAddress: to,
+      transfer: t,
+    }));
+    const edges: FlowGraphEdge[] = allTo.map((t) => ({
+      from,
+      to,
+      symbol: t.symbol,
+      amount: t.amount,
+      amountRaw: t.rawAmount,
+      txHash: t.txHash,
+      outcome: 'SUCCESS',
+      timestamp: t.timestamp,
+      tokenPriceUsd: null,
+      tokenImageUrl: null,
+    }));
+    return { steps, edges };
+  }
 
   async execute(
     input: CreateCaseInput,
@@ -176,6 +249,7 @@ export class CreateCaseUseCase {
         const chainSlug = chainToSlug(resolveResult.chain);
         const chainId = await getChainId(chainSlug);
         const txHash = input.seeds[seedIndex].txHash;
+        const minTimestamp = seedTransfer.timestamp ?? undefined;
 
         const seedRecord = await this.prisma.caseSeedTransaction.create({
           data: {
@@ -190,81 +264,156 @@ export class CreateCaseUseCase {
           },
         });
 
-        const firstStep = flowResult.steps[0];
-        const tokenSymbol = firstStep?.transfer.symbol ?? null;
-        const tokenAddress = firstStep?.transfer.contract ?? null;
-        const totalAmountRaw = firstStep?.transfer.rawAmount ?? '0';
-        const totalAmountDecimal =
-          firstStep?.transfer.amount?.toString() ?? '0';
-        const endpointReason = mapToEndpointReason(flowResult);
+        const BRANCH_CANDIDATES_PER_WALLET = 2;
+        const OUTBOUNDS_LIMIT = 100;
 
-        let endpointHotWalletId: string | null = null;
+        const extraFlowResults: FollowFlowToExchangeFullHistoryResult[] = [];
         if (flowResult.success) {
-          const hw = await this.prisma.hotWallet.findFirst({
-            where: {
-              chainId,
-              address: normalizeAddress(flowResult.endpointAddress),
-            },
-            select: { id: true },
-          });
-          endpointHotWalletId = hw?.id ?? null;
+          for (let hop = 0; hop < flowResult.steps.length; hop++) {
+            const step = flowResult.steps[hop];
+            const from = normalizeAddress(step.fromAddress);
+            const usedTo = normalizeAddress(step.toAddress);
+
+            const outbounds =
+              await this.followFlowToExchangeFullHistoryUseCase.getTopOutboundsForWallet(
+                {
+                  chain: chainSlug,
+                  address: from,
+                  limit: OUTBOUNDS_LIMIT,
+                  traceId: `${traceId}-${seedIndex}-branch-${hop}`,
+                  minTimestamp,
+                },
+              );
+
+            const picked: string[] = [];
+            for (const t of outbounds) {
+              const nextTo = normalizeAddress(t.counterparty);
+              if (nextTo === usedTo) continue;
+              if (picked.includes(nextTo)) continue;
+              picked.push(nextTo);
+              if (picked.length >= BRANCH_CANDIDATES_PER_WALLET) break;
+            }
+
+            for (let i = 0; i < picked.length; i++) {
+              const nextTo = picked[i];
+              const prefix = this.buildPrefixSteps(from, nextTo, outbounds);
+              const enrichedPrefix = await this.enrichPrefixTokenInfo(
+                prefix.steps,
+                prefix.edges,
+              );
+              const branchTrace =
+                await this.followFlowToExchangeFullHistoryUseCase.execute({
+                  address: nextTo,
+                  chain: chainSlug,
+                  traceId: `${traceId}-${seedIndex}-branch-${hop}-${i}`,
+                  minTimestamp,
+                });
+
+              if (!branchTrace.success) continue;
+
+              extraFlowResults.push({
+                ...branchTrace,
+                steps: [...enrichedPrefix.steps, ...branchTrace.steps],
+                graph: {
+                  nodes: branchTrace.graph.nodes,
+                  edges: [...enrichedPrefix.edges, ...branchTrace.graph.edges],
+                },
+              });
+            }
+          }
         }
 
-        const flowRecord = await this.prisma.flow.create({
-          data: {
-            caseId,
-            seedId: seedRecord.id,
-            chainId,
-            tokenAddress,
-            tokenSymbol,
-            totalAmountRaw,
-            totalAmountDecimal,
-            hopsCount: flowResult.steps.length,
-            endpointAddress: flowResult.success
-              ? flowResult.endpointAddress
-              : flowResult.lastWallet,
-            endpointReason,
-            endpointHotWalletId,
-            isEndpointExchange: flowResult.success,
-          },
-        });
-        flowsCount++;
+        const flowResultsForSeed: FollowFlowToExchangeFullHistoryResult[] = [
+          flowResult,
+          ...extraFlowResults,
+        ];
 
-        const txData = flowResult.steps.map(
-          (step: FlowStep, hopIndex: number) => ({
+        for (const fr of flowResultsForSeed) {
+          const firstStep = fr.steps[0];
+          const tokenSymbol = firstStep?.transfer.symbol ?? null;
+          const tokenAddress = firstStep?.transfer.contract ?? null;
+          const totalAmountRaw = firstStep?.transfer.rawAmount ?? '0';
+          const totalAmountDecimal =
+            firstStep?.transfer.amount?.toString() ?? '0';
+          const endpointReason = mapToEndpointReason(fr);
+
+          let endpointHotWalletId: string | null = null;
+          if (fr.success) {
+            const hw = await this.prisma.hotWallet.findFirst({
+              where: {
+                chainId,
+                address: normalizeAddress(fr.endpointAddress),
+              },
+              select: { id: true },
+            });
+            endpointHotWalletId = hw?.id ?? null;
+          }
+
+          const flowRecord = await this.prisma.flow.create({
+            data: {
+              caseId,
+              seedId: seedRecord.id,
+              chainId,
+              tokenAddress,
+              tokenSymbol,
+              totalAmountRaw,
+              totalAmountDecimal,
+              hopsCount: fr.steps.length,
+              endpointAddress: fr.success ? fr.endpointAddress : fr.lastWallet,
+              endpointReason,
+              endpointHotWalletId,
+              isEndpointExchange: fr.success,
+            },
+          });
+          flowsCount++;
+
+          const txData = fr.steps.map((s: FlowStep, hopIndex: number) => ({
             flowId: flowRecord.id,
             chainId,
             hopIndex,
-            txHash: step.transfer.txHash,
-            fromAddress: step.fromAddress,
-            toAddress: step.toAddress,
-            tokenAddress: step.transfer.contract ?? null,
-            tokenSymbol: step.transfer.symbol,
-            amountRaw: step.transfer.rawAmount,
-            amountDecimal: step.transfer.amount.toString(),
-            timestamp: parseTimestamp(step.transfer.timestamp),
-            isEndpointHop: hopIndex === flowResult.steps.length - 1,
-          }),
-        );
-        await this.prisma.flowTransaction.createMany({ data: txData });
+            txHash: s.transfer.txHash,
+            fromAddress: s.fromAddress,
+            toAddress: s.toAddress,
+            tokenAddress: s.transfer.contract ?? null,
+            tokenSymbol: s.transfer.symbol,
+            amountRaw: s.transfer.rawAmount,
+            amountDecimal: s.transfer.amount.toString(),
+            timestamp: parseTimestamp(s.transfer.timestamp),
+            isEndpointHop: hopIndex === fr.steps.length - 1,
+          }));
+          await this.prisma.flowTransaction.createMany({ data: txData });
 
-        const edgeData = flowResult.graph.edges.map(
-          (edge: FlowGraphEdge, stepIndex: number) => ({
+          const edgeData = fr.graph.edges.map(
+            (edge: FlowGraphEdge, stepIndex: number) => ({
+              flowId: flowRecord.id,
+              stepIndex,
+              fromAddress: edge.from,
+              toAddress: edge.to,
+              transferSymbol: edge.symbol,
+              transferAmountRaw: edge.amountRaw,
+              transferAmountDecimal: edge.amount.toString(),
+              txHash: edge.txHash,
+              outcome: edge.outcome ?? null,
+              transferTimestamp: edge.timestamp
+                ? parseTimestamp(edge.timestamp)
+                : null,
+            }),
+          );
+          await this.prisma.flowEdge.createMany({ data: edgeData });
+
+          const pathAddresses: string[] = [
+            fr.steps[0].fromAddress,
+            ...fr.steps.map((s: FlowStep) => s.toAddress),
+          ];
+          const walletData = pathAddresses.map((address, nodeIndex) => ({
             flowId: flowRecord.id,
-            stepIndex,
-            fromAddress: edge.from,
-            toAddress: edge.to,
-            transferSymbol: edge.symbol,
-            transferAmountRaw: edge.amountRaw,
-            transferAmountDecimal: edge.amount.toString(),
-            txHash: edge.txHash,
-            outcome: edge.outcome ?? null,
-            transferTimestamp: edge.timestamp
-              ? parseTimestamp(edge.timestamp)
-              : null,
-          }),
-        );
-        await this.prisma.flowEdge.createMany({ data: edgeData });
+            nodeIndex,
+            address,
+            nickname: null,
+            position: 'default' as const,
+          }));
+          await this.prisma.flowWallet.createMany({ data: walletData });
+        }
       }
 
       const successCount = flowResults.filter(

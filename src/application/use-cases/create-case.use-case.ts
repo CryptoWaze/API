@@ -174,6 +174,20 @@ export class CreateCaseUseCase {
     mode: 'basic' | 'advanced',
   ): Promise<void> {
     const { name, seeds } = input;
+    const caseStartedAt = Date.now();
+    const allFlowDurations: {
+      seedIndex: number;
+      flowIndex: number;
+      durationMs: number;
+      exchangeFoundAtMs: number | null;
+      success: boolean;
+    }[] = [];
+    const allWalletDurations: {
+      seedIndex: number;
+      flowIndex: number;
+      address: string;
+      durationMs: number;
+    }[] = [];
     let flowsCount = 0;
     try {
       const resolveResults = await Promise.all(
@@ -391,6 +405,26 @@ export class CreateCaseUseCase {
           flowResultsForSeed = [flowResult, ...extraFlowResults];
         }
 
+        flowResultsForSeed.forEach((fr, flowIndex) => {
+          if (fr.flowMetrics) {
+            allFlowDurations.push({
+              seedIndex,
+              flowIndex,
+              durationMs: fr.flowMetrics.flowDurationMs,
+              exchangeFoundAtMs: fr.flowMetrics.exchangeFoundAtMs,
+              success: fr.success,
+            });
+            for (const w of fr.flowMetrics.walletDurations) {
+              allWalletDurations.push({
+                seedIndex,
+                flowIndex,
+                address: w.address,
+                durationMs: w.durationMs,
+              });
+            }
+          }
+        });
+
         for (const fr of flowResultsForSeed) {
           const firstStep = fr.steps[0];
           const tokenSymbol = firstStep?.transfer.symbol ?? null;
@@ -497,6 +531,28 @@ export class CreateCaseUseCase {
         data: { status: finalStatus },
       });
 
+      const totalDurationMs = Date.now() - caseStartedAt;
+      const firstExchangeFoundAtMs =
+        allFlowDurations
+          .filter((f) => f.success && f.exchangeFoundAtMs != null)
+          .map((f) => f.exchangeFoundAtMs as number)
+          .sort((a, b) => a - b)[0] ?? null;
+
+      await this.prisma.traceMetric.create({
+        data: {
+          caseId,
+          traceId,
+          mode,
+          success:
+            finalStatus === CaseStatus.COMPLETED ||
+            finalStatus === CaseStatus.PARTIALLY,
+          totalDurationMs,
+          exchangeFoundAtMs: firstExchangeFoundAtMs,
+          flowDurationsJson: allFlowDurations as object,
+          walletDurationsJson: allWalletDurations as object,
+        },
+      });
+
       const seedsCreated = await this.prisma.caseSeedTransaction.count({
         where: { caseId },
       });
@@ -512,6 +568,19 @@ export class CreateCaseUseCase {
       await this.prisma.case.update({
         where: { id: caseId },
         data: { status: CaseStatus.FAILED },
+      });
+      const totalDurationMs = Date.now() - caseStartedAt;
+      await this.prisma.traceMetric.create({
+        data: {
+          caseId,
+          traceId,
+          mode,
+          success: false,
+          totalDurationMs,
+          exchangeFoundAtMs: null,
+          flowDurationsJson: [],
+          walletDurationsJson: [],
+        },
       });
       this.socketGateway.emitToRoom(traceId, CASE_CREATED_EVENT, {
         caseId,

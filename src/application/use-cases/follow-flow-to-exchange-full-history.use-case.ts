@@ -194,14 +194,17 @@ export class FollowFlowToExchangeFullHistoryUseCase {
       address: startAddress,
     });
 
+    const flowStartedAt = Date.now();
     try {
-      const { result, edges } = await this.traceFlowIterative(
-        covalentChainId,
-        chainSlug,
-        startAddress,
-        traceId,
-        minTimestamp,
-      );
+      const { result, edges, walletDurations, exchangeFoundAtMs } =
+        await this.traceFlowIterative(
+          covalentChainId,
+          chainSlug,
+          startAddress,
+          traceId,
+          minTimestamp,
+          flowStartedAt,
+        );
 
       const logSteps = edgesToLogInput(edges);
       const graph = buildGraph(edges);
@@ -226,6 +229,13 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         };
       });
 
+      const flowDurationMs = Date.now() - flowStartedAt;
+      const flowMetrics = {
+        flowDurationMs,
+        exchangeFoundAtMs: exchangeFoundAtMs ?? null,
+        walletDurations,
+      };
+
       if (result.success) {
         await this.flowTraceLogWriter.write({
           inputAddress: startAddress,
@@ -240,6 +250,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           steps: enrichedSteps,
           endpointAddress: result.endpointAddress,
           graph: { nodes: graph.nodes, edges: enrichedEdges },
+          flowMetrics,
         };
       }
 
@@ -264,6 +275,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         lastWallet: result.lastWallet,
         steps: enrichedSteps,
         graph: { nodes: graph.nodes, edges: enrichedEdges },
+        flowMetrics,
       };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -414,9 +426,12 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     startAddress: string,
     traceId: string | undefined,
     minTimestamp: string | undefined,
+    flowStartedAt: number,
   ): Promise<{
     result: TraceSuccess | TraceFailure;
     edges: EdgeRecord[];
+    walletDurations: { address: string; durationMs: number }[];
+    exchangeFoundAtMs: number | null;
   }> {
     type StackFrame = {
       path: FlowStep[];
@@ -427,6 +442,8 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     };
 
     const edges: EdgeRecord[] = [];
+    const walletDurations: { address: string; durationMs: number }[] = [];
+    let exchangeFoundAtMs: number | null = null;
     const stack: StackFrame[] = [
       {
         path: [],
@@ -458,6 +475,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
       }
 
       const frame = stack.pop()!;
+      const walletStartAt = Date.now();
       const depth = frame.path.length;
       const stackRemaining = stack.length;
 
@@ -467,6 +485,13 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         stackRemaining,
         address: frame.currentAddress,
       });
+
+      const recordWalletDuration = (): void => {
+        walletDurations.push({
+          address: frame.currentAddress,
+          durationMs: Date.now() - walletStartAt,
+        });
+      };
 
       if (frame.path.length >= MAX_WALLETS) {
         this.progress(traceId, {
@@ -482,6 +507,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           lastWallet: frame.currentAddress,
           reason: 'MAX_WALLETS_REACHED',
         };
+        recordWalletDuration();
         continue;
       }
 
@@ -490,6 +516,8 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         frame.currentAddress,
       );
       if (isHot) {
+        recordWalletDuration();
+        exchangeFoundAtMs = Date.now() - flowStartedAt;
         this.progress(traceId, {
           message: `Exchange encontrada. Carteira de destino identificada.`,
           depth: depth + 1,
@@ -504,6 +532,8 @@ export class FollowFlowToExchangeFullHistoryUseCase {
             endpointAddress: frame.currentAddress,
           },
           edges,
+          walletDurations,
+          exchangeFoundAtMs,
         };
       }
 
@@ -541,6 +571,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           lastWallet: frame.currentAddress,
           reason: 'NO_OUTBOUND',
         };
+        recordWalletDuration();
         continue;
       }
 
@@ -571,6 +602,8 @@ export class FollowFlowToExchangeFullHistoryUseCase {
               outcome: 'SUCCESS',
             });
           }
+          recordWalletDuration();
+          exchangeFoundAtMs = Date.now() - flowStartedAt;
           markPathEdgesSuccess(edges, frame.path);
           this.progress(traceId, {
             message: `Exchange encontrada. ${allToHot.length} transferência(s) desta carteira para exchange cadastrada.`,
@@ -585,6 +618,8 @@ export class FollowFlowToExchangeFullHistoryUseCase {
               endpointAddress: counterparty,
             },
             edges,
+            walletDurations,
+            exchangeFoundAtMs,
           };
         }
       }
@@ -631,6 +666,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         const edgeIndex = edges.length - 1;
         const totalAmount = allToB.reduce((sum, t) => sum + t.amount, 0);
         const symbol = allToB[0]?.symbol ?? transfer.symbol;
+        recordWalletDuration();
         this.progress(traceId, {
           message:
             allToB.length > 1
@@ -673,6 +709,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           lastWallet: frame.currentAddress,
           reason: 'EXHAUSTED_OPTIONS',
         };
+        recordWalletDuration();
       }
     }
 
@@ -695,6 +732,8 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         steps: path,
       },
       edges,
+      walletDurations,
+      exchangeFoundAtMs,
     };
   }
 }

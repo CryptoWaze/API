@@ -90,12 +90,19 @@ export type FlowGraph = {
   edges: FlowGraphEdge[];
 };
 
+export type FlowMetrics = {
+  flowDurationMs: number;
+  exchangeFoundAtMs: number | null;
+  walletDurations: { address: string; durationMs: number }[];
+};
+
 export type FollowFlowToExchangeFullHistorySuccess = {
   success: true;
   chain: string;
   steps: FlowStep[];
   endpointAddress: string;
   graph: FlowGraph;
+  flowMetrics?: FlowMetrics;
 };
 
 export type FollowFlowToExchangeFullHistoryFailure = {
@@ -105,6 +112,7 @@ export type FollowFlowToExchangeFullHistoryFailure = {
   lastWallet: string;
   steps: FlowStep[];
   graph: FlowGraph;
+  flowMetrics?: FlowMetrics;
 };
 
 export type FollowFlowToExchangeFullHistoryResult =

@@ -10,6 +10,7 @@ export type {
   FlowGraph,
   FlowGraphNode,
   FlowGraphEdge,
+  FlowMetrics,
   FollowFlowToExchangeFullHistoryResult,
   FollowFlowToExchangeFullHistorySuccess,
   FollowFlowToExchangeFullHistoryFailure,

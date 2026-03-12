@@ -266,8 +266,9 @@ export class CreateCaseUseCase {
           },
         });
 
-        const BRANCH_CANDIDATES_PER_WALLET = 2;
+        const BRANCH_CANDIDATES_PER_WALLET = 1;
         const OUTBOUNDS_LIMIT = 100;
+        const MAX_BRANCH_HOPS = 20;
 
         let flowResultsForSeed: FollowFlowToExchangeFullHistoryResult[] = [
           flowResult,
@@ -275,10 +276,25 @@ export class CreateCaseUseCase {
 
         if (mode === 'advanced' && flowResult.success) {
           const extraFlowResults: FollowFlowToExchangeFullHistoryResult[] = [];
+
+          const mainPathAddresses = new Set<string>();
+          if (flowResult.steps.length > 0) {
+            mainPathAddresses.add(
+              normalizeAddress(flowResult.steps[0].fromAddress),
+            );
+            for (const s of flowResult.steps) {
+              mainPathAddresses.add(normalizeAddress(s.toAddress));
+            }
+          }
+
+          const extraCreatedByFrom = new Set<string>();
+
           for (let hop = 0; hop < flowResult.steps.length; hop++) {
             const step = flowResult.steps[hop];
             const from = normalizeAddress(step.fromAddress);
             const usedTo = normalizeAddress(step.toAddress);
+
+            if (extraCreatedByFrom.has(from)) continue;
 
             const outbounds =
               await this.followFlowToExchangeFullHistoryUseCase.getTopOutboundsForWallet(
@@ -307,6 +323,11 @@ export class CreateCaseUseCase {
                 prefix.steps,
                 prefix.edges,
               );
+
+              const remainingSlots =
+                MAX_BRANCH_HOPS - enrichedPrefix.steps.length;
+              if (remainingSlots <= 0) continue;
+
               const branchTrace =
                 await this.followFlowToExchangeFullHistoryUseCase.execute({
                   address: nextTo,
@@ -315,16 +336,55 @@ export class CreateCaseUseCase {
                   minTimestamp,
                 });
 
-              if (!branchTrace.success) continue;
+              const maxBranchStepsCount = Math.max(0, remainingSlots);
+              const trimmedBranchSteps =
+                branchTrace.steps.length > maxBranchStepsCount
+                  ? branchTrace.steps.slice(0, maxBranchStepsCount)
+                  : branchTrace.steps;
+
+              const combinedSteps = [
+                ...enrichedPrefix.steps,
+                ...trimmedBranchSteps,
+              ];
+
+              const truncated =
+                combinedSteps.length <
+                enrichedPrefix.steps.length + branchTrace.steps.length;
+
+              const hasHotWalletWithinLimit =
+                branchTrace.success && !truncated;
+
+              const touchesMain = combinedSteps.some(
+                (s) =>
+                  mainPathAddresses.has(
+                    normalizeAddress(s.fromAddress),
+                  ) ||
+                  mainPathAddresses.has(normalizeAddress(s.toAddress)),
+              );
+
+              if (!hasHotWalletWithinLimit && !touchesMain) {
+                continue;
+              }
+
+              const combinedEdgesFull = [
+                ...enrichedPrefix.edges,
+                ...branchTrace.graph.edges,
+              ];
+              const combinedEdges = combinedEdgesFull.slice(
+                0,
+                MAX_BRANCH_HOPS,
+              );
 
               extraFlowResults.push({
                 ...branchTrace,
-                steps: [...enrichedPrefix.steps, ...branchTrace.steps],
+                steps: combinedSteps,
                 graph: {
                   nodes: branchTrace.graph.nodes,
-                  edges: [...enrichedPrefix.edges, ...branchTrace.graph.edges],
+                  edges: combinedEdges,
                 },
               });
+
+              extraCreatedByFrom.add(from);
             }
           }
 

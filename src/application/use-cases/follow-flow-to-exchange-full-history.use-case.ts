@@ -42,6 +42,7 @@ const MAX_PAGES_PER_WALLET = 50;
 const TOP_OUTBOUNDS_PER_WALLET = 10;
 const HOT_WALLET_SCAN_LIMIT = 100;
 const MIN_TRANSFER_AMOUNT = 0.01;
+const MIN_TRANSFER_USD = 100;
 
 function toCovalentChainId(slug: string): string {
   return `${slug}-mainnet`;
@@ -375,17 +376,23 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     const out = filterOutboundsAboveMin(transfers);
     if (out.length === 0) return [];
     const symbols = [...new Set(out.map((t) => t.symbol.trim().toLowerCase()))];
-    const priceBySymbol = new Map<string, number>();
+    const priceBySymbol = new Map<string, number | null>();
     for (const symbol of symbols) {
       const price = await this.tokenPriceProvider.getPriceInUsd(symbol);
-      priceBySymbol.set(symbol, price ?? 0);
+      priceBySymbol.set(symbol, price ?? null);
     }
-    const withUsd = out.map((t) => {
-      const price = priceBySymbol.get(t.symbol.trim().toLowerCase()) ?? 0;
-      const valueUsd = t.amount * price;
-      return { transfer: t, valueUsd };
-    });
-    withUsd.sort((a, b) => b.valueUsd - a.valueUsd);
+    const withUsd = out
+      .map((t) => {
+        const price = priceBySymbol.get(t.symbol.trim().toLowerCase()) ?? null;
+        const valueUsd =
+          price != null && !Number.isNaN(price) ? t.amount * price : null;
+        return { transfer: t, valueUsd };
+      })
+      .filter((x) => {
+        if (x.valueUsd == null) return true;
+        return x.valueUsd >= MIN_TRANSFER_USD;
+      });
+    withUsd.sort((a, b) => (b.valueUsd ?? 0) - (a.valueUsd ?? 0));
     return withUsd.slice(0, limit).map((x) => x.transfer);
   }
 

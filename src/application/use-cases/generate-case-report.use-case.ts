@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import Handlebars from 'handlebars';
 import puppeteer from 'puppeteer';
@@ -34,14 +34,7 @@ export class GenerateCaseReportUseCase {
     const generatedAt = new Date().toISOString();
     const templateData = buildReportTemplateData(caseData, generatedAt);
 
-    const templatePath = join(
-      __dirname,
-      '..',
-      '..',
-      'templates',
-      'report',
-      'report.hbs',
-    );
+    const templatePath = this.resolveTemplatePath();
     const templateSource = readFileSync(templatePath, 'utf-8');
     const template = Handlebars.compile(templateSource);
     const html = template(templateData);
@@ -106,9 +99,32 @@ export class GenerateCaseReportUseCase {
     };
   }
 
+  private resolveTemplatePath(): string {
+    const candidates = [
+      join(process.cwd(), 'templates', 'report', 'report.hbs'),
+      join(process.cwd(), 'dist', 'templates', 'report', 'report.hbs'),
+      join(__dirname, '..', '..', 'templates', 'report', 'report.hbs'),
+      join(__dirname, '..', '..', '..', 'templates', 'report', 'report.hbs'),
+    ];
+    const found = candidates.find((p) => existsSync(p));
+    if (!found) {
+      throw new Error(
+        `Template do relatório não encontrado. Caminhos testados: ${candidates.join(
+          ', ',
+        )}`,
+      );
+    }
+    return found;
+  }
+
   private async htmlToPdf(html: string): Promise<Buffer> {
+    const macChromePath =
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+    const executablePath = existsSync(macChromePath) ? macChromePath : undefined;
+
     const browser = await puppeteer.launch({
       headless: true,
+      ...(executablePath ? { executablePath } : {}),
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     try {

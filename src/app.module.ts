@@ -8,6 +8,7 @@ import { AddressesModule } from './presentation/addresses/addresses.module';
 import { SocketModule } from './presentation/socket';
 import { CasesModule } from './presentation/cases';
 import { TokensModule } from './presentation/tokens';
+import { BlockchainDataModule } from './presentation/blockchain-data/blockchain-data.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TokensModule } from './presentation/tokens';
     SocketModule,
     CasesModule,
     TokensModule,
+    BlockchainDataModule,
   ],
 })
 export class AppModule {}

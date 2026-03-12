@@ -44,6 +44,11 @@ export type HotWallet = $Result.DefaultSelection<Prisma.$HotWalletPayload>
  */
 export type Case = $Result.DefaultSelection<Prisma.$CasePayload>
 /**
+ * Model CaseReport
+ * 
+ */
+export type CaseReport = $Result.DefaultSelection<Prisma.$CaseReportPayload>
+/**
  * Model CaseSeedTransaction
  * 
  */
@@ -106,6 +111,14 @@ export const CaseStatus: {
 export type CaseStatus = (typeof CaseStatus)[keyof typeof CaseStatus]
 
 
+export const ReportFormat: {
+  PDF: 'PDF',
+  DOCX: 'DOCX'
+};
+
+export type ReportFormat = (typeof ReportFormat)[keyof typeof ReportFormat]
+
+
 export const FlowEdgeOutcome: {
   SUCCESS: 'SUCCESS',
   NO_OUTBOUND: 'NO_OUTBOUND',
@@ -134,6 +147,10 @@ export const FlowEndpointReason: typeof $Enums.FlowEndpointReason
 export type CaseStatus = $Enums.CaseStatus
 
 export const CaseStatus: typeof $Enums.CaseStatus
+
+export type ReportFormat = $Enums.ReportFormat
+
+export const ReportFormat: typeof $Enums.ReportFormat
 
 export type FlowEdgeOutcome = $Enums.FlowEdgeOutcome
 
@@ -323,6 +340,16 @@ export class PrismaClient<
     * ```
     */
   get case(): Prisma.CaseDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.caseReport`: Exposes CRUD operations for the **CaseReport** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CaseReports
+    * const caseReports = await prisma.caseReport.findMany()
+    * ```
+    */
+  get caseReport(): Prisma.CaseReportDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.caseSeedTransaction`: Exposes CRUD operations for the **CaseSeedTransaction** model.
@@ -833,6 +860,7 @@ export namespace Prisma {
     Token: 'Token',
     HotWallet: 'HotWallet',
     Case: 'Case',
+    CaseReport: 'CaseReport',
     CaseSeedTransaction: 'CaseSeedTransaction',
     Flow: 'Flow',
     FlowWallet: 'FlowWallet',
@@ -855,7 +883,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "chain" | "user" | "exchange" | "token" | "hotWallet" | "case" | "caseSeedTransaction" | "flow" | "flowWallet" | "flowTransaction" | "flowEdge" | "flowTraceLog" | "flowTraceLogStep"
+      modelProps: "chain" | "user" | "exchange" | "token" | "hotWallet" | "case" | "caseReport" | "caseSeedTransaction" | "flow" | "flowWallet" | "flowTransaction" | "flowEdge" | "flowTraceLog" | "flowTraceLogStep"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1300,6 +1328,80 @@ export namespace Prisma {
           count: {
             args: Prisma.CaseCountArgs<ExtArgs>
             result: $Utils.Optional<CaseCountAggregateOutputType> | number
+          }
+        }
+      }
+      CaseReport: {
+        payload: Prisma.$CaseReportPayload<ExtArgs>
+        fields: Prisma.CaseReportFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CaseReportFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseReportPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CaseReportFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseReportPayload>
+          }
+          findFirst: {
+            args: Prisma.CaseReportFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseReportPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CaseReportFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseReportPayload>
+          }
+          findMany: {
+            args: Prisma.CaseReportFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseReportPayload>[]
+          }
+          create: {
+            args: Prisma.CaseReportCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseReportPayload>
+          }
+          createMany: {
+            args: Prisma.CaseReportCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CaseReportCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseReportPayload>[]
+          }
+          delete: {
+            args: Prisma.CaseReportDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseReportPayload>
+          }
+          update: {
+            args: Prisma.CaseReportUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseReportPayload>
+          }
+          deleteMany: {
+            args: Prisma.CaseReportDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CaseReportUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CaseReportUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseReportPayload>[]
+          }
+          upsert: {
+            args: Prisma.CaseReportUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseReportPayload>
+          }
+          aggregate: {
+            args: Prisma.CaseReportAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCaseReport>
+          }
+          groupBy: {
+            args: Prisma.CaseReportGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CaseReportGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CaseReportCountArgs<ExtArgs>
+            result: $Utils.Optional<CaseReportCountAggregateOutputType> | number
           }
         }
       }
@@ -1935,6 +2037,7 @@ export namespace Prisma {
     token?: TokenOmit
     hotWallet?: HotWalletOmit
     case?: CaseOmit
+    caseReport?: CaseReportOmit
     caseSeedTransaction?: CaseSeedTransactionOmit
     flow?: FlowOmit
     flowWallet?: FlowWalletOmit
@@ -2175,11 +2278,13 @@ export namespace Prisma {
   export type CaseCountOutputType = {
     seeds: number
     flows: number
+    reports: number
   }
 
   export type CaseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     seeds?: boolean | CaseCountOutputTypeCountSeedsArgs
     flows?: boolean | CaseCountOutputTypeCountFlowsArgs
+    reports?: boolean | CaseCountOutputTypeCountReportsArgs
   }
 
   // Custom InputTypes
@@ -2205,6 +2310,13 @@ export namespace Prisma {
    */
   export type CaseCountOutputTypeCountFlowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FlowWhereInput
+  }
+
+  /**
+   * CaseCountOutputType without action
+   */
+  export type CaseCountOutputTypeCountReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CaseReportWhereInput
   }
 
 
@@ -8110,6 +8222,7 @@ export namespace Prisma {
     createdByUser?: boolean | UserDefaultArgs<ExtArgs>
     seeds?: boolean | Case$seedsArgs<ExtArgs>
     flows?: boolean | Case$flowsArgs<ExtArgs>
+    reports?: boolean | Case$reportsArgs<ExtArgs>
     _count?: boolean | CaseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["case"]>
 
@@ -8156,6 +8269,7 @@ export namespace Prisma {
     createdByUser?: boolean | UserDefaultArgs<ExtArgs>
     seeds?: boolean | Case$seedsArgs<ExtArgs>
     flows?: boolean | Case$flowsArgs<ExtArgs>
+    reports?: boolean | Case$reportsArgs<ExtArgs>
     _count?: boolean | CaseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CaseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8171,6 +8285,7 @@ export namespace Prisma {
       createdByUser: Prisma.$UserPayload<ExtArgs>
       seeds: Prisma.$CaseSeedTransactionPayload<ExtArgs>[]
       flows: Prisma.$FlowPayload<ExtArgs>[]
+      reports: Prisma.$CaseReportPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8579,6 +8694,7 @@ export namespace Prisma {
     createdByUser<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     seeds<T extends Case$seedsArgs<ExtArgs> = {}>(args?: Subset<T, Case$seedsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CaseSeedTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     flows<T extends Case$flowsArgs<ExtArgs> = {}>(args?: Subset<T, Case$flowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reports<T extends Case$reportsArgs<ExtArgs> = {}>(args?: Subset<T, Case$reportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9061,6 +9177,30 @@ export namespace Prisma {
   }
 
   /**
+   * Case.reports
+   */
+  export type Case$reportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportInclude<ExtArgs> | null
+    where?: CaseReportWhereInput
+    orderBy?: CaseReportOrderByWithRelationInput | CaseReportOrderByWithRelationInput[]
+    cursor?: CaseReportWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CaseReportScalarFieldEnum | CaseReportScalarFieldEnum[]
+  }
+
+  /**
    * Case without action
    */
   export type CaseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9076,6 +9216,1077 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CaseInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CaseReport
+   */
+
+  export type AggregateCaseReport = {
+    _count: CaseReportCountAggregateOutputType | null
+    _min: CaseReportMinAggregateOutputType | null
+    _max: CaseReportMaxAggregateOutputType | null
+  }
+
+  export type CaseReportMinAggregateOutputType = {
+    id: string | null
+    caseId: string | null
+    format: $Enums.ReportFormat | null
+    generatedAt: Date | null
+    storageKey: string | null
+    createdAt: Date | null
+  }
+
+  export type CaseReportMaxAggregateOutputType = {
+    id: string | null
+    caseId: string | null
+    format: $Enums.ReportFormat | null
+    generatedAt: Date | null
+    storageKey: string | null
+    createdAt: Date | null
+  }
+
+  export type CaseReportCountAggregateOutputType = {
+    id: number
+    caseId: number
+    format: number
+    generatedAt: number
+    storageKey: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CaseReportMinAggregateInputType = {
+    id?: true
+    caseId?: true
+    format?: true
+    generatedAt?: true
+    storageKey?: true
+    createdAt?: true
+  }
+
+  export type CaseReportMaxAggregateInputType = {
+    id?: true
+    caseId?: true
+    format?: true
+    generatedAt?: true
+    storageKey?: true
+    createdAt?: true
+  }
+
+  export type CaseReportCountAggregateInputType = {
+    id?: true
+    caseId?: true
+    format?: true
+    generatedAt?: true
+    storageKey?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CaseReportAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CaseReport to aggregate.
+     */
+    where?: CaseReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CaseReports to fetch.
+     */
+    orderBy?: CaseReportOrderByWithRelationInput | CaseReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CaseReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CaseReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CaseReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CaseReports
+    **/
+    _count?: true | CaseReportCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CaseReportMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CaseReportMaxAggregateInputType
+  }
+
+  export type GetCaseReportAggregateType<T extends CaseReportAggregateArgs> = {
+        [P in keyof T & keyof AggregateCaseReport]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCaseReport[P]>
+      : GetScalarType<T[P], AggregateCaseReport[P]>
+  }
+
+
+
+
+  export type CaseReportGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CaseReportWhereInput
+    orderBy?: CaseReportOrderByWithAggregationInput | CaseReportOrderByWithAggregationInput[]
+    by: CaseReportScalarFieldEnum[] | CaseReportScalarFieldEnum
+    having?: CaseReportScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CaseReportCountAggregateInputType | true
+    _min?: CaseReportMinAggregateInputType
+    _max?: CaseReportMaxAggregateInputType
+  }
+
+  export type CaseReportGroupByOutputType = {
+    id: string
+    caseId: string
+    format: $Enums.ReportFormat
+    generatedAt: Date
+    storageKey: string
+    createdAt: Date
+    _count: CaseReportCountAggregateOutputType | null
+    _min: CaseReportMinAggregateOutputType | null
+    _max: CaseReportMaxAggregateOutputType | null
+  }
+
+  type GetCaseReportGroupByPayload<T extends CaseReportGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CaseReportGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CaseReportGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CaseReportGroupByOutputType[P]>
+            : GetScalarType<T[P], CaseReportGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CaseReportSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    caseId?: boolean
+    format?: boolean
+    generatedAt?: boolean
+    storageKey?: boolean
+    createdAt?: boolean
+    case?: boolean | CaseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["caseReport"]>
+
+  export type CaseReportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    caseId?: boolean
+    format?: boolean
+    generatedAt?: boolean
+    storageKey?: boolean
+    createdAt?: boolean
+    case?: boolean | CaseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["caseReport"]>
+
+  export type CaseReportSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    caseId?: boolean
+    format?: boolean
+    generatedAt?: boolean
+    storageKey?: boolean
+    createdAt?: boolean
+    case?: boolean | CaseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["caseReport"]>
+
+  export type CaseReportSelectScalar = {
+    id?: boolean
+    caseId?: boolean
+    format?: boolean
+    generatedAt?: boolean
+    storageKey?: boolean
+    createdAt?: boolean
+  }
+
+  export type CaseReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caseId" | "format" | "generatedAt" | "storageKey" | "createdAt", ExtArgs["result"]["caseReport"]>
+  export type CaseReportInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    case?: boolean | CaseDefaultArgs<ExtArgs>
+  }
+  export type CaseReportIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    case?: boolean | CaseDefaultArgs<ExtArgs>
+  }
+  export type CaseReportIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    case?: boolean | CaseDefaultArgs<ExtArgs>
+  }
+
+  export type $CaseReportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CaseReport"
+    objects: {
+      case: Prisma.$CasePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      caseId: string
+      format: $Enums.ReportFormat
+      generatedAt: Date
+      storageKey: string
+      createdAt: Date
+    }, ExtArgs["result"]["caseReport"]>
+    composites: {}
+  }
+
+  type CaseReportGetPayload<S extends boolean | null | undefined | CaseReportDefaultArgs> = $Result.GetResult<Prisma.$CaseReportPayload, S>
+
+  type CaseReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CaseReportFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CaseReportCountAggregateInputType | true
+    }
+
+  export interface CaseReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CaseReport'], meta: { name: 'CaseReport' } }
+    /**
+     * Find zero or one CaseReport that matches the filter.
+     * @param {CaseReportFindUniqueArgs} args - Arguments to find a CaseReport
+     * @example
+     * // Get one CaseReport
+     * const caseReport = await prisma.caseReport.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CaseReportFindUniqueArgs>(args: SelectSubset<T, CaseReportFindUniqueArgs<ExtArgs>>): Prisma__CaseReportClient<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CaseReport that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CaseReportFindUniqueOrThrowArgs} args - Arguments to find a CaseReport
+     * @example
+     * // Get one CaseReport
+     * const caseReport = await prisma.caseReport.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CaseReportFindUniqueOrThrowArgs>(args: SelectSubset<T, CaseReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CaseReportClient<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CaseReport that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseReportFindFirstArgs} args - Arguments to find a CaseReport
+     * @example
+     * // Get one CaseReport
+     * const caseReport = await prisma.caseReport.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CaseReportFindFirstArgs>(args?: SelectSubset<T, CaseReportFindFirstArgs<ExtArgs>>): Prisma__CaseReportClient<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CaseReport that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseReportFindFirstOrThrowArgs} args - Arguments to find a CaseReport
+     * @example
+     * // Get one CaseReport
+     * const caseReport = await prisma.caseReport.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CaseReportFindFirstOrThrowArgs>(args?: SelectSubset<T, CaseReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__CaseReportClient<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CaseReports that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseReportFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CaseReports
+     * const caseReports = await prisma.caseReport.findMany()
+     * 
+     * // Get first 10 CaseReports
+     * const caseReports = await prisma.caseReport.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const caseReportWithIdOnly = await prisma.caseReport.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CaseReportFindManyArgs>(args?: SelectSubset<T, CaseReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CaseReport.
+     * @param {CaseReportCreateArgs} args - Arguments to create a CaseReport.
+     * @example
+     * // Create one CaseReport
+     * const CaseReport = await prisma.caseReport.create({
+     *   data: {
+     *     // ... data to create a CaseReport
+     *   }
+     * })
+     * 
+     */
+    create<T extends CaseReportCreateArgs>(args: SelectSubset<T, CaseReportCreateArgs<ExtArgs>>): Prisma__CaseReportClient<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CaseReports.
+     * @param {CaseReportCreateManyArgs} args - Arguments to create many CaseReports.
+     * @example
+     * // Create many CaseReports
+     * const caseReport = await prisma.caseReport.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CaseReportCreateManyArgs>(args?: SelectSubset<T, CaseReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CaseReports and returns the data saved in the database.
+     * @param {CaseReportCreateManyAndReturnArgs} args - Arguments to create many CaseReports.
+     * @example
+     * // Create many CaseReports
+     * const caseReport = await prisma.caseReport.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CaseReports and only return the `id`
+     * const caseReportWithIdOnly = await prisma.caseReport.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CaseReportCreateManyAndReturnArgs>(args?: SelectSubset<T, CaseReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CaseReport.
+     * @param {CaseReportDeleteArgs} args - Arguments to delete one CaseReport.
+     * @example
+     * // Delete one CaseReport
+     * const CaseReport = await prisma.caseReport.delete({
+     *   where: {
+     *     // ... filter to delete one CaseReport
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CaseReportDeleteArgs>(args: SelectSubset<T, CaseReportDeleteArgs<ExtArgs>>): Prisma__CaseReportClient<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CaseReport.
+     * @param {CaseReportUpdateArgs} args - Arguments to update one CaseReport.
+     * @example
+     * // Update one CaseReport
+     * const caseReport = await prisma.caseReport.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CaseReportUpdateArgs>(args: SelectSubset<T, CaseReportUpdateArgs<ExtArgs>>): Prisma__CaseReportClient<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CaseReports.
+     * @param {CaseReportDeleteManyArgs} args - Arguments to filter CaseReports to delete.
+     * @example
+     * // Delete a few CaseReports
+     * const { count } = await prisma.caseReport.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CaseReportDeleteManyArgs>(args?: SelectSubset<T, CaseReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CaseReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseReportUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CaseReports
+     * const caseReport = await prisma.caseReport.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CaseReportUpdateManyArgs>(args: SelectSubset<T, CaseReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CaseReports and returns the data updated in the database.
+     * @param {CaseReportUpdateManyAndReturnArgs} args - Arguments to update many CaseReports.
+     * @example
+     * // Update many CaseReports
+     * const caseReport = await prisma.caseReport.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CaseReports and only return the `id`
+     * const caseReportWithIdOnly = await prisma.caseReport.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CaseReportUpdateManyAndReturnArgs>(args: SelectSubset<T, CaseReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CaseReport.
+     * @param {CaseReportUpsertArgs} args - Arguments to update or create a CaseReport.
+     * @example
+     * // Update or create a CaseReport
+     * const caseReport = await prisma.caseReport.upsert({
+     *   create: {
+     *     // ... data to create a CaseReport
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CaseReport we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CaseReportUpsertArgs>(args: SelectSubset<T, CaseReportUpsertArgs<ExtArgs>>): Prisma__CaseReportClient<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CaseReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseReportCountArgs} args - Arguments to filter CaseReports to count.
+     * @example
+     * // Count the number of CaseReports
+     * const count = await prisma.caseReport.count({
+     *   where: {
+     *     // ... the filter for the CaseReports we want to count
+     *   }
+     * })
+    **/
+    count<T extends CaseReportCountArgs>(
+      args?: Subset<T, CaseReportCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CaseReportCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CaseReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseReportAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CaseReportAggregateArgs>(args: Subset<T, CaseReportAggregateArgs>): Prisma.PrismaPromise<GetCaseReportAggregateType<T>>
+
+    /**
+     * Group by CaseReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseReportGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CaseReportGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CaseReportGroupByArgs['orderBy'] }
+        : { orderBy?: CaseReportGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CaseReportGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCaseReportGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CaseReport model
+   */
+  readonly fields: CaseReportFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CaseReport.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CaseReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    case<T extends CaseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CaseDefaultArgs<ExtArgs>>): Prisma__CaseClient<$Result.GetResult<Prisma.$CasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CaseReport model
+   */
+  interface CaseReportFieldRefs {
+    readonly id: FieldRef<"CaseReport", 'String'>
+    readonly caseId: FieldRef<"CaseReport", 'String'>
+    readonly format: FieldRef<"CaseReport", 'ReportFormat'>
+    readonly generatedAt: FieldRef<"CaseReport", 'DateTime'>
+    readonly storageKey: FieldRef<"CaseReport", 'String'>
+    readonly createdAt: FieldRef<"CaseReport", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CaseReport findUnique
+   */
+  export type CaseReportFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportInclude<ExtArgs> | null
+    /**
+     * Filter, which CaseReport to fetch.
+     */
+    where: CaseReportWhereUniqueInput
+  }
+
+  /**
+   * CaseReport findUniqueOrThrow
+   */
+  export type CaseReportFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportInclude<ExtArgs> | null
+    /**
+     * Filter, which CaseReport to fetch.
+     */
+    where: CaseReportWhereUniqueInput
+  }
+
+  /**
+   * CaseReport findFirst
+   */
+  export type CaseReportFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportInclude<ExtArgs> | null
+    /**
+     * Filter, which CaseReport to fetch.
+     */
+    where?: CaseReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CaseReports to fetch.
+     */
+    orderBy?: CaseReportOrderByWithRelationInput | CaseReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CaseReports.
+     */
+    cursor?: CaseReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CaseReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CaseReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CaseReports.
+     */
+    distinct?: CaseReportScalarFieldEnum | CaseReportScalarFieldEnum[]
+  }
+
+  /**
+   * CaseReport findFirstOrThrow
+   */
+  export type CaseReportFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportInclude<ExtArgs> | null
+    /**
+     * Filter, which CaseReport to fetch.
+     */
+    where?: CaseReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CaseReports to fetch.
+     */
+    orderBy?: CaseReportOrderByWithRelationInput | CaseReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CaseReports.
+     */
+    cursor?: CaseReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CaseReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CaseReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CaseReports.
+     */
+    distinct?: CaseReportScalarFieldEnum | CaseReportScalarFieldEnum[]
+  }
+
+  /**
+   * CaseReport findMany
+   */
+  export type CaseReportFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportInclude<ExtArgs> | null
+    /**
+     * Filter, which CaseReports to fetch.
+     */
+    where?: CaseReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CaseReports to fetch.
+     */
+    orderBy?: CaseReportOrderByWithRelationInput | CaseReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CaseReports.
+     */
+    cursor?: CaseReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CaseReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CaseReports.
+     */
+    skip?: number
+    distinct?: CaseReportScalarFieldEnum | CaseReportScalarFieldEnum[]
+  }
+
+  /**
+   * CaseReport create
+   */
+  export type CaseReportCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CaseReport.
+     */
+    data: XOR<CaseReportCreateInput, CaseReportUncheckedCreateInput>
+  }
+
+  /**
+   * CaseReport createMany
+   */
+  export type CaseReportCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CaseReports.
+     */
+    data: CaseReportCreateManyInput | CaseReportCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CaseReport createManyAndReturn
+   */
+  export type CaseReportCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * The data used to create many CaseReports.
+     */
+    data: CaseReportCreateManyInput | CaseReportCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CaseReport update
+   */
+  export type CaseReportUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CaseReport.
+     */
+    data: XOR<CaseReportUpdateInput, CaseReportUncheckedUpdateInput>
+    /**
+     * Choose, which CaseReport to update.
+     */
+    where: CaseReportWhereUniqueInput
+  }
+
+  /**
+   * CaseReport updateMany
+   */
+  export type CaseReportUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CaseReports.
+     */
+    data: XOR<CaseReportUpdateManyMutationInput, CaseReportUncheckedUpdateManyInput>
+    /**
+     * Filter which CaseReports to update
+     */
+    where?: CaseReportWhereInput
+    /**
+     * Limit how many CaseReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CaseReport updateManyAndReturn
+   */
+  export type CaseReportUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * The data used to update CaseReports.
+     */
+    data: XOR<CaseReportUpdateManyMutationInput, CaseReportUncheckedUpdateManyInput>
+    /**
+     * Filter which CaseReports to update
+     */
+    where?: CaseReportWhereInput
+    /**
+     * Limit how many CaseReports to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CaseReport upsert
+   */
+  export type CaseReportUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CaseReport to update in case it exists.
+     */
+    where: CaseReportWhereUniqueInput
+    /**
+     * In case the CaseReport found by the `where` argument doesn't exist, create a new CaseReport with this data.
+     */
+    create: XOR<CaseReportCreateInput, CaseReportUncheckedCreateInput>
+    /**
+     * In case the CaseReport was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CaseReportUpdateInput, CaseReportUncheckedUpdateInput>
+  }
+
+  /**
+   * CaseReport delete
+   */
+  export type CaseReportDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportInclude<ExtArgs> | null
+    /**
+     * Filter which CaseReport to delete.
+     */
+    where: CaseReportWhereUniqueInput
+  }
+
+  /**
+   * CaseReport deleteMany
+   */
+  export type CaseReportDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CaseReports to delete
+     */
+    where?: CaseReportWhereInput
+    /**
+     * Limit how many CaseReports to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CaseReport without action
+   */
+  export type CaseReportDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseReport
+     */
+    select?: CaseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseReport
+     */
+    omit?: CaseReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseReportInclude<ExtArgs> | null
   }
 
 
@@ -17593,6 +18804,18 @@ export namespace Prisma {
   export type CaseScalarFieldEnum = (typeof CaseScalarFieldEnum)[keyof typeof CaseScalarFieldEnum]
 
 
+  export const CaseReportScalarFieldEnum: {
+    id: 'id',
+    caseId: 'caseId',
+    format: 'format',
+    generatedAt: 'generatedAt',
+    storageKey: 'storageKey',
+    createdAt: 'createdAt'
+  };
+
+  export type CaseReportScalarFieldEnum = (typeof CaseReportScalarFieldEnum)[keyof typeof CaseReportScalarFieldEnum]
+
+
   export const CaseSeedTransactionScalarFieldEnum: {
     id: 'id',
     caseId: 'caseId',
@@ -17824,6 +19047,20 @@ export namespace Prisma {
    * Reference to a field of type 'CaseStatus[]'
    */
   export type ListEnumCaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CaseStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReportFormat'
+   */
+  export type EnumReportFormatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReportFormat'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReportFormat[]'
+   */
+  export type ListEnumReportFormatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReportFormat[]'>
     
 
 
@@ -18271,6 +19508,7 @@ export namespace Prisma {
     createdByUser?: XOR<UserScalarRelationFilter, UserWhereInput>
     seeds?: CaseSeedTransactionListRelationFilter
     flows?: FlowListRelationFilter
+    reports?: CaseReportListRelationFilter
   }
 
   export type CaseOrderByWithRelationInput = {
@@ -18286,6 +19524,7 @@ export namespace Prisma {
     createdByUser?: UserOrderByWithRelationInput
     seeds?: CaseSeedTransactionOrderByRelationAggregateInput
     flows?: FlowOrderByRelationAggregateInput
+    reports?: CaseReportOrderByRelationAggregateInput
   }
 
   export type CaseWhereUniqueInput = Prisma.AtLeast<{
@@ -18304,6 +19543,7 @@ export namespace Prisma {
     createdByUser?: XOR<UserScalarRelationFilter, UserWhereInput>
     seeds?: CaseSeedTransactionListRelationFilter
     flows?: FlowListRelationFilter
+    reports?: CaseReportListRelationFilter
   }, "id" | "externalId">
 
   export type CaseOrderByWithAggregationInput = {
@@ -18334,6 +19574,66 @@ export namespace Prisma {
     totalAmountLostDecimal?: StringWithAggregatesFilter<"Case"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Case"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Case"> | Date | string
+  }
+
+  export type CaseReportWhereInput = {
+    AND?: CaseReportWhereInput | CaseReportWhereInput[]
+    OR?: CaseReportWhereInput[]
+    NOT?: CaseReportWhereInput | CaseReportWhereInput[]
+    id?: StringFilter<"CaseReport"> | string
+    caseId?: StringFilter<"CaseReport"> | string
+    format?: EnumReportFormatFilter<"CaseReport"> | $Enums.ReportFormat
+    generatedAt?: DateTimeFilter<"CaseReport"> | Date | string
+    storageKey?: StringFilter<"CaseReport"> | string
+    createdAt?: DateTimeFilter<"CaseReport"> | Date | string
+    case?: XOR<CaseScalarRelationFilter, CaseWhereInput>
+  }
+
+  export type CaseReportOrderByWithRelationInput = {
+    id?: SortOrder
+    caseId?: SortOrder
+    format?: SortOrder
+    generatedAt?: SortOrder
+    storageKey?: SortOrder
+    createdAt?: SortOrder
+    case?: CaseOrderByWithRelationInput
+  }
+
+  export type CaseReportWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CaseReportWhereInput | CaseReportWhereInput[]
+    OR?: CaseReportWhereInput[]
+    NOT?: CaseReportWhereInput | CaseReportWhereInput[]
+    caseId?: StringFilter<"CaseReport"> | string
+    format?: EnumReportFormatFilter<"CaseReport"> | $Enums.ReportFormat
+    generatedAt?: DateTimeFilter<"CaseReport"> | Date | string
+    storageKey?: StringFilter<"CaseReport"> | string
+    createdAt?: DateTimeFilter<"CaseReport"> | Date | string
+    case?: XOR<CaseScalarRelationFilter, CaseWhereInput>
+  }, "id">
+
+  export type CaseReportOrderByWithAggregationInput = {
+    id?: SortOrder
+    caseId?: SortOrder
+    format?: SortOrder
+    generatedAt?: SortOrder
+    storageKey?: SortOrder
+    createdAt?: SortOrder
+    _count?: CaseReportCountOrderByAggregateInput
+    _max?: CaseReportMaxOrderByAggregateInput
+    _min?: CaseReportMinOrderByAggregateInput
+  }
+
+  export type CaseReportScalarWhereWithAggregatesInput = {
+    AND?: CaseReportScalarWhereWithAggregatesInput | CaseReportScalarWhereWithAggregatesInput[]
+    OR?: CaseReportScalarWhereWithAggregatesInput[]
+    NOT?: CaseReportScalarWhereWithAggregatesInput | CaseReportScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CaseReport"> | string
+    caseId?: StringWithAggregatesFilter<"CaseReport"> | string
+    format?: EnumReportFormatWithAggregatesFilter<"CaseReport"> | $Enums.ReportFormat
+    generatedAt?: DateTimeWithAggregatesFilter<"CaseReport"> | Date | string
+    storageKey?: StringWithAggregatesFilter<"CaseReport"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CaseReport"> | Date | string
   }
 
   export type CaseSeedTransactionWhereInput = {
@@ -19413,6 +20713,7 @@ export namespace Prisma {
     createdByUser: UserCreateNestedOneWithoutCasesInput
     seeds?: CaseSeedTransactionCreateNestedManyWithoutCaseInput
     flows?: FlowCreateNestedManyWithoutCaseInput
+    reports?: CaseReportCreateNestedManyWithoutCaseInput
   }
 
   export type CaseUncheckedCreateInput = {
@@ -19427,6 +20728,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     seeds?: CaseSeedTransactionUncheckedCreateNestedManyWithoutCaseInput
     flows?: FlowUncheckedCreateNestedManyWithoutCaseInput
+    reports?: CaseReportUncheckedCreateNestedManyWithoutCaseInput
   }
 
   export type CaseUpdateInput = {
@@ -19441,6 +20743,7 @@ export namespace Prisma {
     createdByUser?: UserUpdateOneRequiredWithoutCasesNestedInput
     seeds?: CaseSeedTransactionUpdateManyWithoutCaseNestedInput
     flows?: FlowUpdateManyWithoutCaseNestedInput
+    reports?: CaseReportUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseUncheckedUpdateInput = {
@@ -19455,6 +20758,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seeds?: CaseSeedTransactionUncheckedUpdateManyWithoutCaseNestedInput
     flows?: FlowUncheckedUpdateManyWithoutCaseNestedInput
+    reports?: CaseReportUncheckedUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseCreateManyInput = {
@@ -19490,6 +20794,68 @@ export namespace Prisma {
     totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CaseReportCreateInput = {
+    id?: string
+    format: $Enums.ReportFormat
+    generatedAt: Date | string
+    storageKey: string
+    createdAt?: Date | string
+    case: CaseCreateNestedOneWithoutReportsInput
+  }
+
+  export type CaseReportUncheckedCreateInput = {
+    id?: string
+    caseId: string
+    format: $Enums.ReportFormat
+    generatedAt: Date | string
+    storageKey: string
+    createdAt?: Date | string
+  }
+
+  export type CaseReportUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    format?: EnumReportFormatFieldUpdateOperationsInput | $Enums.ReportFormat
+    generatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storageKey?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    case?: CaseUpdateOneRequiredWithoutReportsNestedInput
+  }
+
+  export type CaseReportUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    caseId?: StringFieldUpdateOperationsInput | string
+    format?: EnumReportFormatFieldUpdateOperationsInput | $Enums.ReportFormat
+    generatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storageKey?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CaseReportCreateManyInput = {
+    id?: string
+    caseId: string
+    format: $Enums.ReportFormat
+    generatedAt: Date | string
+    storageKey: string
+    createdAt?: Date | string
+  }
+
+  export type CaseReportUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    format?: EnumReportFormatFieldUpdateOperationsInput | $Enums.ReportFormat
+    generatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storageKey?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CaseReportUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    caseId?: StringFieldUpdateOperationsInput | string
+    format?: EnumReportFormatFieldUpdateOperationsInput | $Enums.ReportFormat
+    generatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storageKey?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CaseSeedTransactionCreateInput = {
@@ -20635,6 +22001,16 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
+  export type CaseReportListRelationFilter = {
+    every?: CaseReportWhereInput
+    some?: CaseReportWhereInput
+    none?: CaseReportWhereInput
+  }
+
+  export type CaseReportOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type CaseCountOrderByAggregateInput = {
     id?: SortOrder
     externalId?: SortOrder
@@ -20681,9 +22057,53 @@ export namespace Prisma {
     _max?: NestedEnumCaseStatusFilter<$PrismaModel>
   }
 
+  export type EnumReportFormatFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportFormat | EnumReportFormatFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportFormat[] | ListEnumReportFormatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportFormat[] | ListEnumReportFormatFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportFormatFilter<$PrismaModel> | $Enums.ReportFormat
+  }
+
   export type CaseScalarRelationFilter = {
     is?: CaseWhereInput
     isNot?: CaseWhereInput
+  }
+
+  export type CaseReportCountOrderByAggregateInput = {
+    id?: SortOrder
+    caseId?: SortOrder
+    format?: SortOrder
+    generatedAt?: SortOrder
+    storageKey?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CaseReportMaxOrderByAggregateInput = {
+    id?: SortOrder
+    caseId?: SortOrder
+    format?: SortOrder
+    generatedAt?: SortOrder
+    storageKey?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CaseReportMinOrderByAggregateInput = {
+    id?: SortOrder
+    caseId?: SortOrder
+    format?: SortOrder
+    generatedAt?: SortOrder
+    storageKey?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EnumReportFormatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportFormat | EnumReportFormatFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportFormat[] | ListEnumReportFormatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportFormat[] | ListEnumReportFormatFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportFormatWithAggregatesFilter<$PrismaModel> | $Enums.ReportFormat
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReportFormatFilter<$PrismaModel>
+    _max?: NestedEnumReportFormatFilter<$PrismaModel>
   }
 
   export type CaseSeedTransactionCountOrderByAggregateInput = {
@@ -21628,6 +23048,13 @@ export namespace Prisma {
     connect?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
   }
 
+  export type CaseReportCreateNestedManyWithoutCaseInput = {
+    create?: XOR<CaseReportCreateWithoutCaseInput, CaseReportUncheckedCreateWithoutCaseInput> | CaseReportCreateWithoutCaseInput[] | CaseReportUncheckedCreateWithoutCaseInput[]
+    connectOrCreate?: CaseReportCreateOrConnectWithoutCaseInput | CaseReportCreateOrConnectWithoutCaseInput[]
+    createMany?: CaseReportCreateManyCaseInputEnvelope
+    connect?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
+  }
+
   export type CaseSeedTransactionUncheckedCreateNestedManyWithoutCaseInput = {
     create?: XOR<CaseSeedTransactionCreateWithoutCaseInput, CaseSeedTransactionUncheckedCreateWithoutCaseInput> | CaseSeedTransactionCreateWithoutCaseInput[] | CaseSeedTransactionUncheckedCreateWithoutCaseInput[]
     connectOrCreate?: CaseSeedTransactionCreateOrConnectWithoutCaseInput | CaseSeedTransactionCreateOrConnectWithoutCaseInput[]
@@ -21640,6 +23067,13 @@ export namespace Prisma {
     connectOrCreate?: FlowCreateOrConnectWithoutCaseInput | FlowCreateOrConnectWithoutCaseInput[]
     createMany?: FlowCreateManyCaseInputEnvelope
     connect?: FlowWhereUniqueInput | FlowWhereUniqueInput[]
+  }
+
+  export type CaseReportUncheckedCreateNestedManyWithoutCaseInput = {
+    create?: XOR<CaseReportCreateWithoutCaseInput, CaseReportUncheckedCreateWithoutCaseInput> | CaseReportCreateWithoutCaseInput[] | CaseReportUncheckedCreateWithoutCaseInput[]
+    connectOrCreate?: CaseReportCreateOrConnectWithoutCaseInput | CaseReportCreateOrConnectWithoutCaseInput[]
+    createMany?: CaseReportCreateManyCaseInputEnvelope
+    connect?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
   }
 
   export type EnumCaseStatusFieldUpdateOperationsInput = {
@@ -21682,6 +23116,20 @@ export namespace Prisma {
     deleteMany?: FlowScalarWhereInput | FlowScalarWhereInput[]
   }
 
+  export type CaseReportUpdateManyWithoutCaseNestedInput = {
+    create?: XOR<CaseReportCreateWithoutCaseInput, CaseReportUncheckedCreateWithoutCaseInput> | CaseReportCreateWithoutCaseInput[] | CaseReportUncheckedCreateWithoutCaseInput[]
+    connectOrCreate?: CaseReportCreateOrConnectWithoutCaseInput | CaseReportCreateOrConnectWithoutCaseInput[]
+    upsert?: CaseReportUpsertWithWhereUniqueWithoutCaseInput | CaseReportUpsertWithWhereUniqueWithoutCaseInput[]
+    createMany?: CaseReportCreateManyCaseInputEnvelope
+    set?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
+    disconnect?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
+    delete?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
+    connect?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
+    update?: CaseReportUpdateWithWhereUniqueWithoutCaseInput | CaseReportUpdateWithWhereUniqueWithoutCaseInput[]
+    updateMany?: CaseReportUpdateManyWithWhereWithoutCaseInput | CaseReportUpdateManyWithWhereWithoutCaseInput[]
+    deleteMany?: CaseReportScalarWhereInput | CaseReportScalarWhereInput[]
+  }
+
   export type CaseSeedTransactionUncheckedUpdateManyWithoutCaseNestedInput = {
     create?: XOR<CaseSeedTransactionCreateWithoutCaseInput, CaseSeedTransactionUncheckedCreateWithoutCaseInput> | CaseSeedTransactionCreateWithoutCaseInput[] | CaseSeedTransactionUncheckedCreateWithoutCaseInput[]
     connectOrCreate?: CaseSeedTransactionCreateOrConnectWithoutCaseInput | CaseSeedTransactionCreateOrConnectWithoutCaseInput[]
@@ -21708,6 +23156,38 @@ export namespace Prisma {
     update?: FlowUpdateWithWhereUniqueWithoutCaseInput | FlowUpdateWithWhereUniqueWithoutCaseInput[]
     updateMany?: FlowUpdateManyWithWhereWithoutCaseInput | FlowUpdateManyWithWhereWithoutCaseInput[]
     deleteMany?: FlowScalarWhereInput | FlowScalarWhereInput[]
+  }
+
+  export type CaseReportUncheckedUpdateManyWithoutCaseNestedInput = {
+    create?: XOR<CaseReportCreateWithoutCaseInput, CaseReportUncheckedCreateWithoutCaseInput> | CaseReportCreateWithoutCaseInput[] | CaseReportUncheckedCreateWithoutCaseInput[]
+    connectOrCreate?: CaseReportCreateOrConnectWithoutCaseInput | CaseReportCreateOrConnectWithoutCaseInput[]
+    upsert?: CaseReportUpsertWithWhereUniqueWithoutCaseInput | CaseReportUpsertWithWhereUniqueWithoutCaseInput[]
+    createMany?: CaseReportCreateManyCaseInputEnvelope
+    set?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
+    disconnect?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
+    delete?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
+    connect?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
+    update?: CaseReportUpdateWithWhereUniqueWithoutCaseInput | CaseReportUpdateWithWhereUniqueWithoutCaseInput[]
+    updateMany?: CaseReportUpdateManyWithWhereWithoutCaseInput | CaseReportUpdateManyWithWhereWithoutCaseInput[]
+    deleteMany?: CaseReportScalarWhereInput | CaseReportScalarWhereInput[]
+  }
+
+  export type CaseCreateNestedOneWithoutReportsInput = {
+    create?: XOR<CaseCreateWithoutReportsInput, CaseUncheckedCreateWithoutReportsInput>
+    connectOrCreate?: CaseCreateOrConnectWithoutReportsInput
+    connect?: CaseWhereUniqueInput
+  }
+
+  export type EnumReportFormatFieldUpdateOperationsInput = {
+    set?: $Enums.ReportFormat
+  }
+
+  export type CaseUpdateOneRequiredWithoutReportsNestedInput = {
+    create?: XOR<CaseCreateWithoutReportsInput, CaseUncheckedCreateWithoutReportsInput>
+    connectOrCreate?: CaseCreateOrConnectWithoutReportsInput
+    upsert?: CaseUpsertWithoutReportsInput
+    connect?: CaseWhereUniqueInput
+    update?: XOR<XOR<CaseUpdateToOneWithWhereWithoutReportsInput, CaseUpdateWithoutReportsInput>, CaseUncheckedUpdateWithoutReportsInput>
   }
 
   export type CaseCreateNestedOneWithoutSeedsInput = {
@@ -22291,6 +23771,23 @@ export namespace Prisma {
     _max?: NestedEnumCaseStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumReportFormatFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportFormat | EnumReportFormatFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportFormat[] | ListEnumReportFormatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportFormat[] | ListEnumReportFormatFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportFormatFilter<$PrismaModel> | $Enums.ReportFormat
+  }
+
+  export type NestedEnumReportFormatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportFormat | EnumReportFormatFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportFormat[] | ListEnumReportFormatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportFormat[] | ListEnumReportFormatFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportFormatWithAggregatesFilter<$PrismaModel> | $Enums.ReportFormat
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReportFormatFilter<$PrismaModel>
+    _max?: NestedEnumReportFormatFilter<$PrismaModel>
+  }
+
   export type NestedEnumFlowEndpointReasonFilter<$PrismaModel = never> = {
     equals?: $Enums.FlowEndpointReason | EnumFlowEndpointReasonFieldRefInput<$PrismaModel>
     in?: $Enums.FlowEndpointReason[] | ListEnumFlowEndpointReasonFieldRefInput<$PrismaModel>
@@ -22721,6 +24218,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     seeds?: CaseSeedTransactionCreateNestedManyWithoutCaseInput
     flows?: FlowCreateNestedManyWithoutCaseInput
+    reports?: CaseReportCreateNestedManyWithoutCaseInput
   }
 
   export type CaseUncheckedCreateWithoutCreatedByUserInput = {
@@ -22734,6 +24232,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     seeds?: CaseSeedTransactionUncheckedCreateNestedManyWithoutCaseInput
     flows?: FlowUncheckedCreateNestedManyWithoutCaseInput
+    reports?: CaseReportUncheckedCreateNestedManyWithoutCaseInput
   }
 
   export type CaseCreateOrConnectWithoutCreatedByUserInput = {
@@ -23120,6 +24619,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CaseReportCreateWithoutCaseInput = {
+    id?: string
+    format: $Enums.ReportFormat
+    generatedAt: Date | string
+    storageKey: string
+    createdAt?: Date | string
+  }
+
+  export type CaseReportUncheckedCreateWithoutCaseInput = {
+    id?: string
+    format: $Enums.ReportFormat
+    generatedAt: Date | string
+    storageKey: string
+    createdAt?: Date | string
+  }
+
+  export type CaseReportCreateOrConnectWithoutCaseInput = {
+    where: CaseReportWhereUniqueInput
+    create: XOR<CaseReportCreateWithoutCaseInput, CaseReportUncheckedCreateWithoutCaseInput>
+  }
+
+  export type CaseReportCreateManyCaseInputEnvelope = {
+    data: CaseReportCreateManyCaseInput | CaseReportCreateManyCaseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutCasesInput = {
     update: XOR<UserUpdateWithoutCasesInput, UserUncheckedUpdateWithoutCasesInput>
     create: XOR<UserCreateWithoutCasesInput, UserUncheckedCreateWithoutCasesInput>
@@ -23181,6 +24706,106 @@ export namespace Prisma {
     data: XOR<FlowUpdateManyMutationInput, FlowUncheckedUpdateManyWithoutCaseInput>
   }
 
+  export type CaseReportUpsertWithWhereUniqueWithoutCaseInput = {
+    where: CaseReportWhereUniqueInput
+    update: XOR<CaseReportUpdateWithoutCaseInput, CaseReportUncheckedUpdateWithoutCaseInput>
+    create: XOR<CaseReportCreateWithoutCaseInput, CaseReportUncheckedCreateWithoutCaseInput>
+  }
+
+  export type CaseReportUpdateWithWhereUniqueWithoutCaseInput = {
+    where: CaseReportWhereUniqueInput
+    data: XOR<CaseReportUpdateWithoutCaseInput, CaseReportUncheckedUpdateWithoutCaseInput>
+  }
+
+  export type CaseReportUpdateManyWithWhereWithoutCaseInput = {
+    where: CaseReportScalarWhereInput
+    data: XOR<CaseReportUpdateManyMutationInput, CaseReportUncheckedUpdateManyWithoutCaseInput>
+  }
+
+  export type CaseReportScalarWhereInput = {
+    AND?: CaseReportScalarWhereInput | CaseReportScalarWhereInput[]
+    OR?: CaseReportScalarWhereInput[]
+    NOT?: CaseReportScalarWhereInput | CaseReportScalarWhereInput[]
+    id?: StringFilter<"CaseReport"> | string
+    caseId?: StringFilter<"CaseReport"> | string
+    format?: EnumReportFormatFilter<"CaseReport"> | $Enums.ReportFormat
+    generatedAt?: DateTimeFilter<"CaseReport"> | Date | string
+    storageKey?: StringFilter<"CaseReport"> | string
+    createdAt?: DateTimeFilter<"CaseReport"> | Date | string
+  }
+
+  export type CaseCreateWithoutReportsInput = {
+    id?: string
+    externalId?: string | null
+    name: string
+    status?: $Enums.CaseStatus
+    totalAmountLostRaw: string
+    totalAmountLostDecimal: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdByUser: UserCreateNestedOneWithoutCasesInput
+    seeds?: CaseSeedTransactionCreateNestedManyWithoutCaseInput
+    flows?: FlowCreateNestedManyWithoutCaseInput
+  }
+
+  export type CaseUncheckedCreateWithoutReportsInput = {
+    id?: string
+    externalId?: string | null
+    name: string
+    status?: $Enums.CaseStatus
+    createdByUserId: string
+    totalAmountLostRaw: string
+    totalAmountLostDecimal: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    seeds?: CaseSeedTransactionUncheckedCreateNestedManyWithoutCaseInput
+    flows?: FlowUncheckedCreateNestedManyWithoutCaseInput
+  }
+
+  export type CaseCreateOrConnectWithoutReportsInput = {
+    where: CaseWhereUniqueInput
+    create: XOR<CaseCreateWithoutReportsInput, CaseUncheckedCreateWithoutReportsInput>
+  }
+
+  export type CaseUpsertWithoutReportsInput = {
+    update: XOR<CaseUpdateWithoutReportsInput, CaseUncheckedUpdateWithoutReportsInput>
+    create: XOR<CaseCreateWithoutReportsInput, CaseUncheckedCreateWithoutReportsInput>
+    where?: CaseWhereInput
+  }
+
+  export type CaseUpdateToOneWithWhereWithoutReportsInput = {
+    where?: CaseWhereInput
+    data: XOR<CaseUpdateWithoutReportsInput, CaseUncheckedUpdateWithoutReportsInput>
+  }
+
+  export type CaseUpdateWithoutReportsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
+    totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
+    totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUser?: UserUpdateOneRequiredWithoutCasesNestedInput
+    seeds?: CaseSeedTransactionUpdateManyWithoutCaseNestedInput
+    flows?: FlowUpdateManyWithoutCaseNestedInput
+  }
+
+  export type CaseUncheckedUpdateWithoutReportsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
+    createdByUserId?: StringFieldUpdateOperationsInput | string
+    totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
+    totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    seeds?: CaseSeedTransactionUncheckedUpdateManyWithoutCaseNestedInput
+    flows?: FlowUncheckedUpdateManyWithoutCaseNestedInput
+  }
+
   export type CaseCreateWithoutSeedsInput = {
     id?: string
     externalId?: string | null
@@ -23192,6 +24817,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdByUser: UserCreateNestedOneWithoutCasesInput
     flows?: FlowCreateNestedManyWithoutCaseInput
+    reports?: CaseReportCreateNestedManyWithoutCaseInput
   }
 
   export type CaseUncheckedCreateWithoutSeedsInput = {
@@ -23205,6 +24831,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     flows?: FlowUncheckedCreateNestedManyWithoutCaseInput
+    reports?: CaseReportUncheckedCreateNestedManyWithoutCaseInput
   }
 
   export type CaseCreateOrConnectWithoutSeedsInput = {
@@ -23315,6 +24942,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdByUser?: UserUpdateOneRequiredWithoutCasesNestedInput
     flows?: FlowUpdateManyWithoutCaseNestedInput
+    reports?: CaseReportUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseUncheckedUpdateWithoutSeedsInput = {
@@ -23328,6 +24956,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flows?: FlowUncheckedUpdateManyWithoutCaseNestedInput
+    reports?: CaseReportUncheckedUpdateManyWithoutCaseNestedInput
   }
 
   export type ChainUpsertWithoutCaseSeedTransactionsInput = {
@@ -23392,6 +25021,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdByUser: UserCreateNestedOneWithoutCasesInput
     seeds?: CaseSeedTransactionCreateNestedManyWithoutCaseInput
+    reports?: CaseReportCreateNestedManyWithoutCaseInput
   }
 
   export type CaseUncheckedCreateWithoutFlowsInput = {
@@ -23405,6 +25035,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     seeds?: CaseSeedTransactionUncheckedCreateNestedManyWithoutCaseInput
+    reports?: CaseReportUncheckedCreateNestedManyWithoutCaseInput
   }
 
   export type CaseCreateOrConnectWithoutFlowsInput = {
@@ -23637,6 +25268,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdByUser?: UserUpdateOneRequiredWithoutCasesNestedInput
     seeds?: CaseSeedTransactionUpdateManyWithoutCaseNestedInput
+    reports?: CaseReportUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseUncheckedUpdateWithoutFlowsInput = {
@@ -23650,6 +25282,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seeds?: CaseSeedTransactionUncheckedUpdateManyWithoutCaseNestedInput
+    reports?: CaseReportUncheckedUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseSeedTransactionUpsertWithoutFlowsInput = {
@@ -24596,6 +26229,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seeds?: CaseSeedTransactionUpdateManyWithoutCaseNestedInput
     flows?: FlowUpdateManyWithoutCaseNestedInput
+    reports?: CaseReportUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseUncheckedUpdateWithoutCreatedByUserInput = {
@@ -24609,6 +26243,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seeds?: CaseSeedTransactionUncheckedUpdateManyWithoutCaseNestedInput
     flows?: FlowUncheckedUpdateManyWithoutCaseNestedInput
+    reports?: CaseReportUncheckedUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseUncheckedUpdateManyWithoutCreatedByUserInput = {
@@ -24772,6 +26407,14 @@ export namespace Prisma {
     deletedAt?: Date | string | null
   }
 
+  export type CaseReportCreateManyCaseInput = {
+    id?: string
+    format: $Enums.ReportFormat
+    generatedAt: Date | string
+    storageKey: string
+    createdAt?: Date | string
+  }
+
   export type CaseSeedTransactionUpdateWithoutCaseInput = {
     id?: StringFieldUpdateOperationsInput | string
     txHash?: StringFieldUpdateOperationsInput | string
@@ -24868,6 +26511,30 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CaseReportUpdateWithoutCaseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    format?: EnumReportFormatFieldUpdateOperationsInput | $Enums.ReportFormat
+    generatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storageKey?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CaseReportUncheckedUpdateWithoutCaseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    format?: EnumReportFormatFieldUpdateOperationsInput | $Enums.ReportFormat
+    generatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storageKey?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CaseReportUncheckedUpdateManyWithoutCaseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    format?: EnumReportFormatFieldUpdateOperationsInput | $Enums.ReportFormat
+    generatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storageKey?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FlowCreateManySeedInput = {

@@ -157,7 +157,8 @@ export class CreateCaseUseCase {
       },
     });
 
-    void this.runInBackground(input, caseRecord.id, traceId);
+    const mode = input.mode ?? 'advanced';
+    void this.runInBackground(input, caseRecord.id, traceId, mode);
 
     return {
       traceId,
@@ -170,6 +171,7 @@ export class CreateCaseUseCase {
     input: CreateCaseInput,
     caseId: string,
     traceId: string,
+    mode: 'basic' | 'advanced',
   ): Promise<void> {
     const { name, seeds } = input;
     let flowsCount = 0;
@@ -267,8 +269,12 @@ export class CreateCaseUseCase {
         const BRANCH_CANDIDATES_PER_WALLET = 2;
         const OUTBOUNDS_LIMIT = 100;
 
-        const extraFlowResults: FollowFlowToExchangeFullHistoryResult[] = [];
-        if (flowResult.success) {
+        let flowResultsForSeed: FollowFlowToExchangeFullHistoryResult[] = [
+          flowResult,
+        ];
+
+        if (mode === 'advanced' && flowResult.success) {
+          const extraFlowResults: FollowFlowToExchangeFullHistoryResult[] = [];
           for (let hop = 0; hop < flowResult.steps.length; hop++) {
             const step = flowResult.steps[hop];
             const from = normalizeAddress(step.fromAddress);
@@ -321,12 +327,9 @@ export class CreateCaseUseCase {
               });
             }
           }
-        }
 
-        const flowResultsForSeed: FollowFlowToExchangeFullHistoryResult[] = [
-          flowResult,
-          ...extraFlowResults,
-        ];
+          flowResultsForSeed = [flowResult, ...extraFlowResults];
+        }
 
         for (const fr of flowResultsForSeed) {
           const firstStep = fr.steps[0];

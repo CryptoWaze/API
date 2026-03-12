@@ -185,6 +185,15 @@ exports.Prisma.CaseScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CaseReportScalarFieldEnum = {
+  id: 'id',
+  caseId: 'caseId',
+  format: 'format',
+  generatedAt: 'generatedAt',
+  storageKey: 'storageKey',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.CaseSeedTransactionScalarFieldEnum = {
   id: 'id',
   caseId: 'caseId',
@@ -322,6 +331,11 @@ exports.CaseStatus = exports.$Enums.CaseStatus = {
   FAILED: 'FAILED'
 };
 
+exports.ReportFormat = exports.$Enums.ReportFormat = {
+  PDF: 'PDF',
+  DOCX: 'DOCX'
+};
+
 exports.FlowEndpointReason = exports.$Enums.FlowEndpointReason = {
   EXCHANGE_HOT_WALLET: 'EXCHANGE_HOT_WALLET',
   MAX_HOPS_REACHED: 'MAX_HOPS_REACHED',
@@ -352,6 +366,7 @@ exports.Prisma.ModelName = {
   Token: 'Token',
   HotWallet: 'HotWallet',
   Case: 'Case',
+  CaseReport: 'CaseReport',
   CaseSeedTransaction: 'CaseSeedTransaction',
   Flow: 'Flow',
   FlowWallet: 'FlowWallet',

@@ -24,7 +24,11 @@ import { UpdateCaseUseCase } from '../../application/use-cases/update-case.use-c
 import { SoftDeleteFlowUseCase } from '../../application/use-cases/soft-delete-flow.use-case';
 import { SoftDeleteFlowTransactionUseCase } from '../../application/use-cases/soft-delete-flow-transaction.use-case';
 import { EditCaseUseCase } from '../../application/use-cases/edit-case.use-case';
+import { GetOrCreateCaseReportUseCase } from '../../application/use-cases/get-or-create-case-report.use-case';
+import { ListCaseReportsUseCase } from '../../application/use-cases/list-case-reports.use-case';
+import { GetCaseReportFileUseCase } from '../../application/use-cases/get-case-report-file.use-case';
 import { CurrentUser, JwtAuthGuard } from '../../infrastructure/auth';
+import { StreamableFile } from '@nestjs/common';
 
 @ApiTags('cases')
 @Controller('cases')
@@ -40,6 +44,9 @@ export class CasesController {
     private readonly softDeleteFlowUseCase: SoftDeleteFlowUseCase,
     private readonly softDeleteFlowTransactionUseCase: SoftDeleteFlowTransactionUseCase,
     private readonly editCaseUseCase: EditCaseUseCase,
+    private readonly getOrCreateCaseReportUseCase: GetOrCreateCaseReportUseCase,
+    private readonly listCaseReportsUseCase: ListCaseReportsUseCase,
+    private readonly getCaseReportFileUseCase: GetCaseReportFileUseCase,
   ) {}
 
   @Post()
@@ -55,6 +62,12 @@ export class CasesController {
       required: ['name', 'seeds'],
       properties: {
         name: { type: 'string', description: 'Nome do caso' },
+        mode: {
+          type: 'string',
+          enum: ['basic', 'advanced'],
+          description:
+            'Tipo de rastreio: "basic" (1 fluxo principal por seed) ou "advanced" (fluxos adicionais por branching). Padrão: advanced.',
+        },
         seeds: {
           type: 'array',
           items: {
@@ -354,6 +367,76 @@ export class CasesController {
       transactionId,
       user.userId,
     );
+  }
+
+  @Post(':caseId/reports')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Obter ou gerar relatório do caso',
+    description:
+      'Se não existir relatório ou o caso foi editado após o último relatório, gera um novo (PDF e DOCX) e retorna. Caso contrário, retorna o relatório existente mais recente.',
+  })
+  @ApiParam({ name: 'caseId', description: 'ID do caso' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Relatório(s) existente(s) ou recém-gerado(s). Campo generated indica se foi gerado agora (true) ou já existia (false).',
+  })
+  @ApiResponse({ status: 401, description: 'Não autorizado.' })
+  @ApiResponse({ status: 404, description: 'Caso não encontrado.' })
+  async getOrCreateReport(
+    @Param('caseId') caseId: string,
+    @CurrentUser() user: { userId: string },
+  ) {
+    return this.getOrCreateCaseReportUseCase.execute(caseId, user.userId);
+  }
+
+  @Get(':caseId/reports')
+  @ApiOperation({
+    summary: 'Listar relatórios do caso',
+    description: 'Retorna todos os relatórios do caso (histórico), ordenados do mais recente ao mais antigo.',
+  })
+  @ApiParam({ name: 'caseId', description: 'ID do caso' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de relatórios com id, format, generatedAt, createdAt.',
+  })
+  @ApiResponse({ status: 401, description: 'Não autorizado.' })
+  @ApiResponse({ status: 404, description: 'Caso não encontrado.' })
+  async listReports(
+    @Param('caseId') caseId: string,
+    @CurrentUser() user: { userId: string },
+  ) {
+    return this.listCaseReportsUseCase.execute(caseId, user.userId);
+  }
+
+  @Get(':caseId/reports/:reportId')
+  @ApiOperation({
+    summary: 'Download de relatório',
+    description: 'Retorna o arquivo do relatório (PDF ou DOCX) para download.',
+  })
+  @ApiParam({ name: 'caseId', description: 'ID do caso' })
+  @ApiParam({ name: 'reportId', description: 'ID do relatório' })
+  @ApiResponse({
+    status: 200,
+    description: 'Arquivo do relatório (application/pdf ou application/vnd.openxmlformats-officedocument.wordprocessingml.document).',
+  })
+  @ApiResponse({ status: 401, description: 'Não autorizado.' })
+  @ApiResponse({ status: 404, description: 'Caso ou relatório não encontrado.' })
+  async getReportFile(
+    @Param('caseId') caseId: string,
+    @Param('reportId') reportId: string,
+    @CurrentUser() user: { userId: string },
+  ) {
+    const result = await this.getCaseReportFileUseCase.execute(
+      caseId,
+      reportId,
+      user.userId,
+    );
+    return new StreamableFile(result.body, {
+      type: result.contentType,
+      disposition: `attachment; filename="${result.fileName}"`,
+    });
   }
 
   @Get(':id')

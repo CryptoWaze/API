@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pré-relatório de rastreio – {{caseName}}</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; font-size: 11pt; line-height: 1.4; color: #222; max-width: 800px; margin: 0 auto; padding: 2rem; }
+    h1 { font-size: 18pt; margin-bottom: 0.5rem; }
+    h2 { font-size: 14pt; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+    .meta { color: #555; font-size: 10pt; margin-bottom: 2rem; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 10pt; }
+    th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
+    th { background: #f5f5f5; }
+    .placeholder { border: 1px dashed #999; padding: 2rem; text-align: center; color: #666; margin: 1rem 0; }
+    ul { margin: 0.5rem 0; padding-left: 1.5rem; }
+    .address { font-family: monospace; font-size: 9pt; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <h1>Pré-relatório de rastreio de criptoativos</h1>
+  <p class="meta">Caso: {{caseName}} | Valor total reportado: {{totalAmountLostDecimal}} | Data do relatório: {{generatedAt}}</p>
+
+  <h2>1. Introdução</h2>
+  <p>Este documento consolida o resultado técnico do rastreio de criptoativos vinculado ao caso acima, incluindo transações iniciais (seeds), cadeias de transferências e endereços de destino identificados.</p>
+
+  <h2>2. Objetivo</h2>
+  <p>Registrar o percurso dos ativos a partir das transações iniciais reportadas até os endereços de custódia (ex.: hot wallets de exchanges) identificados durante o rastreio.</p>
+
+  <h2>3. Delimitação e fontes</h2>
+  <p>Os dados utilizados provêm de APIs de blocos (ex.: Covalent) e de informações cadastrais de exchanges e redes. O rastreio foi realizado a partir das hashes de transação e valores reportados pelo usuário.</p>
+
+  <h2>4. Termos e conceitos</h2>
+  <ul>
+    <li><strong>Seed:</strong> transação inicial reportada como origem do prejuízo.</li>
+    <li><strong>Flow:</strong> sequência de transferências desde uma carteira até um endereço de custódia (ex.: hot wallet).</li>
+    <li><strong>Deposit address:</strong> endereço de depósito antes do ingresso na hot wallet da exchange.</li>
+    <li><strong>Hot wallet:</strong> carteira controlada pela exchange para movimentação de ativos.</li>
+  </ul>
+
+  <h2>5. Rede blockchain e ativo</h2>
+  <p>Redes e ativos envolvidos nas transações iniciais e nos fluxos estão descritos nas tabelas abaixo.</p>
+  <div class="placeholder">[ --imagem-- ]</div>
+
+  <h2>6. Saídas iniciais e primeiras carteiras</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Hash</th>
+        <th>Rede</th>
+        <th>Token</th>
+        <th>Valor</th>
+        <th>Carteiras iniciais</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each seeds}}
+      <tr>
+        <td>{{this.timestamp}}</td>
+        <td><a href="{{this.txExplorerUrl}}">{{this.txHash}}</a></td>
+        <td>{{this.chainName}}</td>
+        <td>{{this.tokenSymbol}}</td>
+        <td>{{this.amountDecimal}}</td>
+        <td>
+          {{#each this.initialWalletAddresses}}
+          <span class="address">{{this}}</span>{{#unless @last}}; {{/unless}}
+          {{/each}}
+        </td>
+      </tr>
+      {{else}}
+      <tr><td colspan="6">Nenhuma transação inicial registrada.</td></tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <h2>7. Camada intermediária e ingresso custodial</h2>
+  <p>Resumo dos fluxos identificados até os endereços de custódia.</p>
+  {{#each flows}}
+  <h3>Fluxo ({{this.chainName}})</h3>
+  <p>Carteira inicial: <span class="address">{{this.initialWalletAddress}}</span></p>
+  <p>Endereço final: <span class="address">{{this.endpointAddress}}</span> – {{this.endpointLabel}}{{#if this.endpointExchangeName}} ({{this.endpointExchangeName}}){{/if}}</p>
+  {{#if this.steps.length}}
+  <table>
+    <thead>
+      <tr>
+        <th>De</th>
+        <th>Para</th>
+        <th>Token</th>
+        <th>Valor</th>
+        <th>Data</th>
+        <th>Hash</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each this.steps}}
+      <tr>
+        <td class="address">{{this.fromAddress}}</td>
+        <td class="address">{{this.toAddress}}</td>
+        <td>{{this.tokenSymbol}}</td>
+        <td>{{this.amountDecimal}}</td>
+        <td>{{this.timestamp}}</td>
+        <td>{{#if this.txHash}}<a href="{{this.txExplorerUrl}}">{{this.txHash}}</a>{{else}}—{{/if}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{/if}}
+  {{/each}}
+  <div class="placeholder">[ --imagem-- ]</div>
+
+  <h2>8. Medidas de diligência</h2>
+  <p>Recomenda-se validar os endereços e hashes em exploradores oficiais das redes e contactar as exchanges quando aplicável, para fins de notificação e eventual bloqueio.</p>
+
+  <h2>9. Conclusão</h2>
+  <p>O rastreio técnico registrado neste pré-relatório indica os caminhos dos ativos a partir das transações iniciais até os endereços de custódia identificados. A conclusão técnica final e eventuais assinaturas devem ser inseridas na versão definitiva do documento.</p>
+
+  <p class="meta">Documento gerado em {{generatedAt}}. Caso: {{caseName}}.</p>
+</body>
+</html>

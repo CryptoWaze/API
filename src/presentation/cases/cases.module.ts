@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from '../../infrastructure/auth';
+import { StorageModule } from '../../infrastructure/storage/storage.module';
 import { AddressesModule } from '../addresses/addresses.module';
 import { TransactionsModule } from '../transactions/transactions.module';
 import { SocketModule } from '../socket/socket.module';
@@ -11,10 +12,20 @@ import { UpdateCaseUseCase } from '../../application/use-cases/update-case.use-c
 import { SoftDeleteFlowUseCase } from '../../application/use-cases/soft-delete-flow.use-case';
 import { SoftDeleteFlowTransactionUseCase } from '../../application/use-cases/soft-delete-flow-transaction.use-case';
 import { EditCaseUseCase } from '../../application/use-cases/edit-case.use-case';
+import { GenerateCaseReportUseCase } from '../../application/use-cases/generate-case-report.use-case';
+import { GetOrCreateCaseReportUseCase } from '../../application/use-cases/get-or-create-case-report.use-case';
+import { ListCaseReportsUseCase } from '../../application/use-cases/list-case-reports.use-case';
+import { GetCaseReportFileUseCase } from '../../application/use-cases/get-case-report-file.use-case';
 import { CasesController } from './cases.controller';
 
 @Module({
-  imports: [AuthModule, AddressesModule, TransactionsModule, SocketModule],
+  imports: [
+    AuthModule,
+    StorageModule,
+    AddressesModule,
+    TransactionsModule,
+    SocketModule,
+  ],
   controllers: [CasesController],
   providers: [
     CreateCaseUseCase,
@@ -25,6 +36,10 @@ import { CasesController } from './cases.controller';
     SoftDeleteFlowUseCase,
     SoftDeleteFlowTransactionUseCase,
     EditCaseUseCase,
+    GenerateCaseReportUseCase,
+    GetOrCreateCaseReportUseCase,
+    ListCaseReportsUseCase,
+    GetCaseReportFileUseCase,
   ],
 })
 export class CasesModule {}

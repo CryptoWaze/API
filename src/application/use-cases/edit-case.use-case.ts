@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../infrastructure/database/prisma.service';
 import type { EditCaseInput } from '../schemas/edit-case.schema';
 import { UpdateCaseUseCase } from './update-case.use-case';
 import { UpdateFlowWalletUseCase } from './update-flow-wallet.use-case';
@@ -16,6 +17,7 @@ type EditCaseResult = {
 @Injectable()
 export class EditCaseUseCase {
   constructor(
+    private readonly prisma: PrismaService,
     private readonly updateCaseUseCase: UpdateCaseUseCase,
     private readonly updateFlowWalletUseCase: UpdateFlowWalletUseCase,
     private readonly softDeleteFlowUseCase: SoftDeleteFlowUseCase,
@@ -78,6 +80,18 @@ export class EditCaseUseCase {
         );
         deletedTransactionIds.push(res.id);
       }
+    }
+
+    const anyEdit =
+      updatedName !== undefined ||
+      updatedWalletIds.length > 0 ||
+      deletedFlowIds.length > 0 ||
+      deletedTransactionIds.length > 0;
+    if (anyEdit) {
+      await this.prisma.case.update({
+        where: { id: caseId },
+        data: { updatedAt: new Date() },
+      });
     }
 
     return {

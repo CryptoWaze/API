@@ -298,6 +298,20 @@ exports.Prisma.FlowTraceLogStepScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.TraceMetricScalarFieldEnum = {
+  id: 'id',
+  caseId: 'caseId',
+  traceId: 'traceId',
+  seedIndex: 'seedIndex',
+  mode: 'mode',
+  success: 'success',
+  totalDurationMs: 'totalDurationMs',
+  exchangeFoundAtMs: 'exchangeFoundAtMs',
+  flowDurationsJson: 'flowDurationsJson',
+  walletDurationsJson: 'walletDurationsJson',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -373,7 +387,8 @@ exports.Prisma.ModelName = {
   FlowTransaction: 'FlowTransaction',
   FlowEdge: 'FlowEdge',
   FlowTraceLog: 'FlowTraceLog',
-  FlowTraceLogStep: 'FlowTraceLogStep'
+  FlowTraceLogStep: 'FlowTraceLogStep',
+  TraceMetric: 'TraceMetric'
 };
 
 /**

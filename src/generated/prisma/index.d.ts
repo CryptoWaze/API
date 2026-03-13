@@ -83,6 +83,11 @@ export type FlowTraceLog = $Result.DefaultSelection<Prisma.$FlowTraceLogPayload>
  * 
  */
 export type FlowTraceLogStep = $Result.DefaultSelection<Prisma.$FlowTraceLogStepPayload>
+/**
+ * Model TraceMetric
+ * 
+ */
+export type TraceMetric = $Result.DefaultSelection<Prisma.$TraceMetricPayload>
 
 /**
  * Enums
@@ -420,6 +425,16 @@ export class PrismaClient<
     * ```
     */
   get flowTraceLogStep(): Prisma.FlowTraceLogStepDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.traceMetric`: Exposes CRUD operations for the **TraceMetric** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TraceMetrics
+    * const traceMetrics = await prisma.traceMetric.findMany()
+    * ```
+    */
+  get traceMetric(): Prisma.TraceMetricDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -867,7 +882,8 @@ export namespace Prisma {
     FlowTransaction: 'FlowTransaction',
     FlowEdge: 'FlowEdge',
     FlowTraceLog: 'FlowTraceLog',
-    FlowTraceLogStep: 'FlowTraceLogStep'
+    FlowTraceLogStep: 'FlowTraceLogStep',
+    TraceMetric: 'TraceMetric'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -883,7 +899,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "chain" | "user" | "exchange" | "token" | "hotWallet" | "case" | "caseReport" | "caseSeedTransaction" | "flow" | "flowWallet" | "flowTransaction" | "flowEdge" | "flowTraceLog" | "flowTraceLogStep"
+      modelProps: "chain" | "user" | "exchange" | "token" | "hotWallet" | "case" | "caseReport" | "caseSeedTransaction" | "flow" | "flowWallet" | "flowTransaction" | "flowEdge" | "flowTraceLog" | "flowTraceLogStep" | "traceMetric"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1923,6 +1939,80 @@ export namespace Prisma {
           }
         }
       }
+      TraceMetric: {
+        payload: Prisma.$TraceMetricPayload<ExtArgs>
+        fields: Prisma.TraceMetricFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TraceMetricFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TraceMetricPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TraceMetricFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TraceMetricPayload>
+          }
+          findFirst: {
+            args: Prisma.TraceMetricFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TraceMetricPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TraceMetricFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TraceMetricPayload>
+          }
+          findMany: {
+            args: Prisma.TraceMetricFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TraceMetricPayload>[]
+          }
+          create: {
+            args: Prisma.TraceMetricCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TraceMetricPayload>
+          }
+          createMany: {
+            args: Prisma.TraceMetricCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TraceMetricCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TraceMetricPayload>[]
+          }
+          delete: {
+            args: Prisma.TraceMetricDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TraceMetricPayload>
+          }
+          update: {
+            args: Prisma.TraceMetricUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TraceMetricPayload>
+          }
+          deleteMany: {
+            args: Prisma.TraceMetricDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TraceMetricUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TraceMetricUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TraceMetricPayload>[]
+          }
+          upsert: {
+            args: Prisma.TraceMetricUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TraceMetricPayload>
+          }
+          aggregate: {
+            args: Prisma.TraceMetricAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTraceMetric>
+          }
+          groupBy: {
+            args: Prisma.TraceMetricGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TraceMetricGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TraceMetricCountArgs<ExtArgs>
+            result: $Utils.Optional<TraceMetricCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2045,6 +2135,7 @@ export namespace Prisma {
     flowEdge?: FlowEdgeOmit
     flowTraceLog?: FlowTraceLogOmit
     flowTraceLogStep?: FlowTraceLogStepOmit
+    traceMetric?: TraceMetricOmit
   }
 
   /* Types for Logging */
@@ -2279,12 +2370,14 @@ export namespace Prisma {
     seeds: number
     flows: number
     reports: number
+    traceMetrics: number
   }
 
   export type CaseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     seeds?: boolean | CaseCountOutputTypeCountSeedsArgs
     flows?: boolean | CaseCountOutputTypeCountFlowsArgs
     reports?: boolean | CaseCountOutputTypeCountReportsArgs
+    traceMetrics?: boolean | CaseCountOutputTypeCountTraceMetricsArgs
   }
 
   // Custom InputTypes
@@ -2317,6 +2410,13 @@ export namespace Prisma {
    */
   export type CaseCountOutputTypeCountReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CaseReportWhereInput
+  }
+
+  /**
+   * CaseCountOutputType without action
+   */
+  export type CaseCountOutputTypeCountTraceMetricsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TraceMetricWhereInput
   }
 
 
@@ -8223,6 +8323,7 @@ export namespace Prisma {
     seeds?: boolean | Case$seedsArgs<ExtArgs>
     flows?: boolean | Case$flowsArgs<ExtArgs>
     reports?: boolean | Case$reportsArgs<ExtArgs>
+    traceMetrics?: boolean | Case$traceMetricsArgs<ExtArgs>
     _count?: boolean | CaseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["case"]>
 
@@ -8270,6 +8371,7 @@ export namespace Prisma {
     seeds?: boolean | Case$seedsArgs<ExtArgs>
     flows?: boolean | Case$flowsArgs<ExtArgs>
     reports?: boolean | Case$reportsArgs<ExtArgs>
+    traceMetrics?: boolean | Case$traceMetricsArgs<ExtArgs>
     _count?: boolean | CaseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CaseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8286,6 +8388,7 @@ export namespace Prisma {
       seeds: Prisma.$CaseSeedTransactionPayload<ExtArgs>[]
       flows: Prisma.$FlowPayload<ExtArgs>[]
       reports: Prisma.$CaseReportPayload<ExtArgs>[]
+      traceMetrics: Prisma.$TraceMetricPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8695,6 +8798,7 @@ export namespace Prisma {
     seeds<T extends Case$seedsArgs<ExtArgs> = {}>(args?: Subset<T, Case$seedsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CaseSeedTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     flows<T extends Case$flowsArgs<ExtArgs> = {}>(args?: Subset<T, Case$flowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reports<T extends Case$reportsArgs<ExtArgs> = {}>(args?: Subset<T, Case$reportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CaseReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    traceMetrics<T extends Case$traceMetricsArgs<ExtArgs> = {}>(args?: Subset<T, Case$traceMetricsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9198,6 +9302,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CaseReportScalarFieldEnum | CaseReportScalarFieldEnum[]
+  }
+
+  /**
+   * Case.traceMetrics
+   */
+  export type Case$traceMetricsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricInclude<ExtArgs> | null
+    where?: TraceMetricWhereInput
+    orderBy?: TraceMetricOrderByWithRelationInput | TraceMetricOrderByWithRelationInput[]
+    cursor?: TraceMetricWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TraceMetricScalarFieldEnum | TraceMetricScalarFieldEnum[]
   }
 
   /**
@@ -18708,6 +18836,1195 @@ export namespace Prisma {
 
 
   /**
+   * Model TraceMetric
+   */
+
+  export type AggregateTraceMetric = {
+    _count: TraceMetricCountAggregateOutputType | null
+    _avg: TraceMetricAvgAggregateOutputType | null
+    _sum: TraceMetricSumAggregateOutputType | null
+    _min: TraceMetricMinAggregateOutputType | null
+    _max: TraceMetricMaxAggregateOutputType | null
+  }
+
+  export type TraceMetricAvgAggregateOutputType = {
+    seedIndex: number | null
+    totalDurationMs: number | null
+    exchangeFoundAtMs: number | null
+  }
+
+  export type TraceMetricSumAggregateOutputType = {
+    seedIndex: number | null
+    totalDurationMs: number | null
+    exchangeFoundAtMs: number | null
+  }
+
+  export type TraceMetricMinAggregateOutputType = {
+    id: string | null
+    caseId: string | null
+    traceId: string | null
+    seedIndex: number | null
+    mode: string | null
+    success: boolean | null
+    totalDurationMs: number | null
+    exchangeFoundAtMs: number | null
+    createdAt: Date | null
+  }
+
+  export type TraceMetricMaxAggregateOutputType = {
+    id: string | null
+    caseId: string | null
+    traceId: string | null
+    seedIndex: number | null
+    mode: string | null
+    success: boolean | null
+    totalDurationMs: number | null
+    exchangeFoundAtMs: number | null
+    createdAt: Date | null
+  }
+
+  export type TraceMetricCountAggregateOutputType = {
+    id: number
+    caseId: number
+    traceId: number
+    seedIndex: number
+    mode: number
+    success: number
+    totalDurationMs: number
+    exchangeFoundAtMs: number
+    flowDurationsJson: number
+    walletDurationsJson: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type TraceMetricAvgAggregateInputType = {
+    seedIndex?: true
+    totalDurationMs?: true
+    exchangeFoundAtMs?: true
+  }
+
+  export type TraceMetricSumAggregateInputType = {
+    seedIndex?: true
+    totalDurationMs?: true
+    exchangeFoundAtMs?: true
+  }
+
+  export type TraceMetricMinAggregateInputType = {
+    id?: true
+    caseId?: true
+    traceId?: true
+    seedIndex?: true
+    mode?: true
+    success?: true
+    totalDurationMs?: true
+    exchangeFoundAtMs?: true
+    createdAt?: true
+  }
+
+  export type TraceMetricMaxAggregateInputType = {
+    id?: true
+    caseId?: true
+    traceId?: true
+    seedIndex?: true
+    mode?: true
+    success?: true
+    totalDurationMs?: true
+    exchangeFoundAtMs?: true
+    createdAt?: true
+  }
+
+  export type TraceMetricCountAggregateInputType = {
+    id?: true
+    caseId?: true
+    traceId?: true
+    seedIndex?: true
+    mode?: true
+    success?: true
+    totalDurationMs?: true
+    exchangeFoundAtMs?: true
+    flowDurationsJson?: true
+    walletDurationsJson?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type TraceMetricAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TraceMetric to aggregate.
+     */
+    where?: TraceMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TraceMetrics to fetch.
+     */
+    orderBy?: TraceMetricOrderByWithRelationInput | TraceMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TraceMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TraceMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TraceMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TraceMetrics
+    **/
+    _count?: true | TraceMetricCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TraceMetricAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TraceMetricSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TraceMetricMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TraceMetricMaxAggregateInputType
+  }
+
+  export type GetTraceMetricAggregateType<T extends TraceMetricAggregateArgs> = {
+        [P in keyof T & keyof AggregateTraceMetric]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTraceMetric[P]>
+      : GetScalarType<T[P], AggregateTraceMetric[P]>
+  }
+
+
+
+
+  export type TraceMetricGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TraceMetricWhereInput
+    orderBy?: TraceMetricOrderByWithAggregationInput | TraceMetricOrderByWithAggregationInput[]
+    by: TraceMetricScalarFieldEnum[] | TraceMetricScalarFieldEnum
+    having?: TraceMetricScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TraceMetricCountAggregateInputType | true
+    _avg?: TraceMetricAvgAggregateInputType
+    _sum?: TraceMetricSumAggregateInputType
+    _min?: TraceMetricMinAggregateInputType
+    _max?: TraceMetricMaxAggregateInputType
+  }
+
+  export type TraceMetricGroupByOutputType = {
+    id: string
+    caseId: string | null
+    traceId: string
+    seedIndex: number | null
+    mode: string | null
+    success: boolean
+    totalDurationMs: number
+    exchangeFoundAtMs: number | null
+    flowDurationsJson: JsonValue | null
+    walletDurationsJson: JsonValue | null
+    createdAt: Date
+    _count: TraceMetricCountAggregateOutputType | null
+    _avg: TraceMetricAvgAggregateOutputType | null
+    _sum: TraceMetricSumAggregateOutputType | null
+    _min: TraceMetricMinAggregateOutputType | null
+    _max: TraceMetricMaxAggregateOutputType | null
+  }
+
+  type GetTraceMetricGroupByPayload<T extends TraceMetricGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TraceMetricGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TraceMetricGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TraceMetricGroupByOutputType[P]>
+            : GetScalarType<T[P], TraceMetricGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TraceMetricSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    caseId?: boolean
+    traceId?: boolean
+    seedIndex?: boolean
+    mode?: boolean
+    success?: boolean
+    totalDurationMs?: boolean
+    exchangeFoundAtMs?: boolean
+    flowDurationsJson?: boolean
+    walletDurationsJson?: boolean
+    createdAt?: boolean
+    case?: boolean | TraceMetric$caseArgs<ExtArgs>
+  }, ExtArgs["result"]["traceMetric"]>
+
+  export type TraceMetricSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    caseId?: boolean
+    traceId?: boolean
+    seedIndex?: boolean
+    mode?: boolean
+    success?: boolean
+    totalDurationMs?: boolean
+    exchangeFoundAtMs?: boolean
+    flowDurationsJson?: boolean
+    walletDurationsJson?: boolean
+    createdAt?: boolean
+    case?: boolean | TraceMetric$caseArgs<ExtArgs>
+  }, ExtArgs["result"]["traceMetric"]>
+
+  export type TraceMetricSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    caseId?: boolean
+    traceId?: boolean
+    seedIndex?: boolean
+    mode?: boolean
+    success?: boolean
+    totalDurationMs?: boolean
+    exchangeFoundAtMs?: boolean
+    flowDurationsJson?: boolean
+    walletDurationsJson?: boolean
+    createdAt?: boolean
+    case?: boolean | TraceMetric$caseArgs<ExtArgs>
+  }, ExtArgs["result"]["traceMetric"]>
+
+  export type TraceMetricSelectScalar = {
+    id?: boolean
+    caseId?: boolean
+    traceId?: boolean
+    seedIndex?: boolean
+    mode?: boolean
+    success?: boolean
+    totalDurationMs?: boolean
+    exchangeFoundAtMs?: boolean
+    flowDurationsJson?: boolean
+    walletDurationsJson?: boolean
+    createdAt?: boolean
+  }
+
+  export type TraceMetricOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caseId" | "traceId" | "seedIndex" | "mode" | "success" | "totalDurationMs" | "exchangeFoundAtMs" | "flowDurationsJson" | "walletDurationsJson" | "createdAt", ExtArgs["result"]["traceMetric"]>
+  export type TraceMetricInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    case?: boolean | TraceMetric$caseArgs<ExtArgs>
+  }
+  export type TraceMetricIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    case?: boolean | TraceMetric$caseArgs<ExtArgs>
+  }
+  export type TraceMetricIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    case?: boolean | TraceMetric$caseArgs<ExtArgs>
+  }
+
+  export type $TraceMetricPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TraceMetric"
+    objects: {
+      case: Prisma.$CasePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      caseId: string | null
+      traceId: string
+      seedIndex: number | null
+      mode: string | null
+      success: boolean
+      totalDurationMs: number
+      exchangeFoundAtMs: number | null
+      flowDurationsJson: Prisma.JsonValue | null
+      walletDurationsJson: Prisma.JsonValue | null
+      createdAt: Date
+    }, ExtArgs["result"]["traceMetric"]>
+    composites: {}
+  }
+
+  type TraceMetricGetPayload<S extends boolean | null | undefined | TraceMetricDefaultArgs> = $Result.GetResult<Prisma.$TraceMetricPayload, S>
+
+  type TraceMetricCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TraceMetricFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TraceMetricCountAggregateInputType | true
+    }
+
+  export interface TraceMetricDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TraceMetric'], meta: { name: 'TraceMetric' } }
+    /**
+     * Find zero or one TraceMetric that matches the filter.
+     * @param {TraceMetricFindUniqueArgs} args - Arguments to find a TraceMetric
+     * @example
+     * // Get one TraceMetric
+     * const traceMetric = await prisma.traceMetric.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TraceMetricFindUniqueArgs>(args: SelectSubset<T, TraceMetricFindUniqueArgs<ExtArgs>>): Prisma__TraceMetricClient<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TraceMetric that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TraceMetricFindUniqueOrThrowArgs} args - Arguments to find a TraceMetric
+     * @example
+     * // Get one TraceMetric
+     * const traceMetric = await prisma.traceMetric.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TraceMetricFindUniqueOrThrowArgs>(args: SelectSubset<T, TraceMetricFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TraceMetricClient<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TraceMetric that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TraceMetricFindFirstArgs} args - Arguments to find a TraceMetric
+     * @example
+     * // Get one TraceMetric
+     * const traceMetric = await prisma.traceMetric.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TraceMetricFindFirstArgs>(args?: SelectSubset<T, TraceMetricFindFirstArgs<ExtArgs>>): Prisma__TraceMetricClient<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TraceMetric that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TraceMetricFindFirstOrThrowArgs} args - Arguments to find a TraceMetric
+     * @example
+     * // Get one TraceMetric
+     * const traceMetric = await prisma.traceMetric.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TraceMetricFindFirstOrThrowArgs>(args?: SelectSubset<T, TraceMetricFindFirstOrThrowArgs<ExtArgs>>): Prisma__TraceMetricClient<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TraceMetrics that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TraceMetricFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TraceMetrics
+     * const traceMetrics = await prisma.traceMetric.findMany()
+     * 
+     * // Get first 10 TraceMetrics
+     * const traceMetrics = await prisma.traceMetric.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const traceMetricWithIdOnly = await prisma.traceMetric.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TraceMetricFindManyArgs>(args?: SelectSubset<T, TraceMetricFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TraceMetric.
+     * @param {TraceMetricCreateArgs} args - Arguments to create a TraceMetric.
+     * @example
+     * // Create one TraceMetric
+     * const TraceMetric = await prisma.traceMetric.create({
+     *   data: {
+     *     // ... data to create a TraceMetric
+     *   }
+     * })
+     * 
+     */
+    create<T extends TraceMetricCreateArgs>(args: SelectSubset<T, TraceMetricCreateArgs<ExtArgs>>): Prisma__TraceMetricClient<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TraceMetrics.
+     * @param {TraceMetricCreateManyArgs} args - Arguments to create many TraceMetrics.
+     * @example
+     * // Create many TraceMetrics
+     * const traceMetric = await prisma.traceMetric.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TraceMetricCreateManyArgs>(args?: SelectSubset<T, TraceMetricCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TraceMetrics and returns the data saved in the database.
+     * @param {TraceMetricCreateManyAndReturnArgs} args - Arguments to create many TraceMetrics.
+     * @example
+     * // Create many TraceMetrics
+     * const traceMetric = await prisma.traceMetric.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TraceMetrics and only return the `id`
+     * const traceMetricWithIdOnly = await prisma.traceMetric.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TraceMetricCreateManyAndReturnArgs>(args?: SelectSubset<T, TraceMetricCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TraceMetric.
+     * @param {TraceMetricDeleteArgs} args - Arguments to delete one TraceMetric.
+     * @example
+     * // Delete one TraceMetric
+     * const TraceMetric = await prisma.traceMetric.delete({
+     *   where: {
+     *     // ... filter to delete one TraceMetric
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TraceMetricDeleteArgs>(args: SelectSubset<T, TraceMetricDeleteArgs<ExtArgs>>): Prisma__TraceMetricClient<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TraceMetric.
+     * @param {TraceMetricUpdateArgs} args - Arguments to update one TraceMetric.
+     * @example
+     * // Update one TraceMetric
+     * const traceMetric = await prisma.traceMetric.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TraceMetricUpdateArgs>(args: SelectSubset<T, TraceMetricUpdateArgs<ExtArgs>>): Prisma__TraceMetricClient<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TraceMetrics.
+     * @param {TraceMetricDeleteManyArgs} args - Arguments to filter TraceMetrics to delete.
+     * @example
+     * // Delete a few TraceMetrics
+     * const { count } = await prisma.traceMetric.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TraceMetricDeleteManyArgs>(args?: SelectSubset<T, TraceMetricDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TraceMetrics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TraceMetricUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TraceMetrics
+     * const traceMetric = await prisma.traceMetric.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TraceMetricUpdateManyArgs>(args: SelectSubset<T, TraceMetricUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TraceMetrics and returns the data updated in the database.
+     * @param {TraceMetricUpdateManyAndReturnArgs} args - Arguments to update many TraceMetrics.
+     * @example
+     * // Update many TraceMetrics
+     * const traceMetric = await prisma.traceMetric.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TraceMetrics and only return the `id`
+     * const traceMetricWithIdOnly = await prisma.traceMetric.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TraceMetricUpdateManyAndReturnArgs>(args: SelectSubset<T, TraceMetricUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TraceMetric.
+     * @param {TraceMetricUpsertArgs} args - Arguments to update or create a TraceMetric.
+     * @example
+     * // Update or create a TraceMetric
+     * const traceMetric = await prisma.traceMetric.upsert({
+     *   create: {
+     *     // ... data to create a TraceMetric
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TraceMetric we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TraceMetricUpsertArgs>(args: SelectSubset<T, TraceMetricUpsertArgs<ExtArgs>>): Prisma__TraceMetricClient<$Result.GetResult<Prisma.$TraceMetricPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TraceMetrics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TraceMetricCountArgs} args - Arguments to filter TraceMetrics to count.
+     * @example
+     * // Count the number of TraceMetrics
+     * const count = await prisma.traceMetric.count({
+     *   where: {
+     *     // ... the filter for the TraceMetrics we want to count
+     *   }
+     * })
+    **/
+    count<T extends TraceMetricCountArgs>(
+      args?: Subset<T, TraceMetricCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TraceMetricCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TraceMetric.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TraceMetricAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TraceMetricAggregateArgs>(args: Subset<T, TraceMetricAggregateArgs>): Prisma.PrismaPromise<GetTraceMetricAggregateType<T>>
+
+    /**
+     * Group by TraceMetric.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TraceMetricGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TraceMetricGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TraceMetricGroupByArgs['orderBy'] }
+        : { orderBy?: TraceMetricGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TraceMetricGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTraceMetricGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TraceMetric model
+   */
+  readonly fields: TraceMetricFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TraceMetric.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TraceMetricClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    case<T extends TraceMetric$caseArgs<ExtArgs> = {}>(args?: Subset<T, TraceMetric$caseArgs<ExtArgs>>): Prisma__CaseClient<$Result.GetResult<Prisma.$CasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TraceMetric model
+   */
+  interface TraceMetricFieldRefs {
+    readonly id: FieldRef<"TraceMetric", 'String'>
+    readonly caseId: FieldRef<"TraceMetric", 'String'>
+    readonly traceId: FieldRef<"TraceMetric", 'String'>
+    readonly seedIndex: FieldRef<"TraceMetric", 'Int'>
+    readonly mode: FieldRef<"TraceMetric", 'String'>
+    readonly success: FieldRef<"TraceMetric", 'Boolean'>
+    readonly totalDurationMs: FieldRef<"TraceMetric", 'Int'>
+    readonly exchangeFoundAtMs: FieldRef<"TraceMetric", 'Int'>
+    readonly flowDurationsJson: FieldRef<"TraceMetric", 'Json'>
+    readonly walletDurationsJson: FieldRef<"TraceMetric", 'Json'>
+    readonly createdAt: FieldRef<"TraceMetric", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TraceMetric findUnique
+   */
+  export type TraceMetricFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which TraceMetric to fetch.
+     */
+    where: TraceMetricWhereUniqueInput
+  }
+
+  /**
+   * TraceMetric findUniqueOrThrow
+   */
+  export type TraceMetricFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which TraceMetric to fetch.
+     */
+    where: TraceMetricWhereUniqueInput
+  }
+
+  /**
+   * TraceMetric findFirst
+   */
+  export type TraceMetricFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which TraceMetric to fetch.
+     */
+    where?: TraceMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TraceMetrics to fetch.
+     */
+    orderBy?: TraceMetricOrderByWithRelationInput | TraceMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TraceMetrics.
+     */
+    cursor?: TraceMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TraceMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TraceMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TraceMetrics.
+     */
+    distinct?: TraceMetricScalarFieldEnum | TraceMetricScalarFieldEnum[]
+  }
+
+  /**
+   * TraceMetric findFirstOrThrow
+   */
+  export type TraceMetricFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which TraceMetric to fetch.
+     */
+    where?: TraceMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TraceMetrics to fetch.
+     */
+    orderBy?: TraceMetricOrderByWithRelationInput | TraceMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TraceMetrics.
+     */
+    cursor?: TraceMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TraceMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TraceMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TraceMetrics.
+     */
+    distinct?: TraceMetricScalarFieldEnum | TraceMetricScalarFieldEnum[]
+  }
+
+  /**
+   * TraceMetric findMany
+   */
+  export type TraceMetricFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which TraceMetrics to fetch.
+     */
+    where?: TraceMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TraceMetrics to fetch.
+     */
+    orderBy?: TraceMetricOrderByWithRelationInput | TraceMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TraceMetrics.
+     */
+    cursor?: TraceMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TraceMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TraceMetrics.
+     */
+    skip?: number
+    distinct?: TraceMetricScalarFieldEnum | TraceMetricScalarFieldEnum[]
+  }
+
+  /**
+   * TraceMetric create
+   */
+  export type TraceMetricCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TraceMetric.
+     */
+    data: XOR<TraceMetricCreateInput, TraceMetricUncheckedCreateInput>
+  }
+
+  /**
+   * TraceMetric createMany
+   */
+  export type TraceMetricCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TraceMetrics.
+     */
+    data: TraceMetricCreateManyInput | TraceMetricCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TraceMetric createManyAndReturn
+   */
+  export type TraceMetricCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * The data used to create many TraceMetrics.
+     */
+    data: TraceMetricCreateManyInput | TraceMetricCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TraceMetric update
+   */
+  export type TraceMetricUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TraceMetric.
+     */
+    data: XOR<TraceMetricUpdateInput, TraceMetricUncheckedUpdateInput>
+    /**
+     * Choose, which TraceMetric to update.
+     */
+    where: TraceMetricWhereUniqueInput
+  }
+
+  /**
+   * TraceMetric updateMany
+   */
+  export type TraceMetricUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TraceMetrics.
+     */
+    data: XOR<TraceMetricUpdateManyMutationInput, TraceMetricUncheckedUpdateManyInput>
+    /**
+     * Filter which TraceMetrics to update
+     */
+    where?: TraceMetricWhereInput
+    /**
+     * Limit how many TraceMetrics to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TraceMetric updateManyAndReturn
+   */
+  export type TraceMetricUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * The data used to update TraceMetrics.
+     */
+    data: XOR<TraceMetricUpdateManyMutationInput, TraceMetricUncheckedUpdateManyInput>
+    /**
+     * Filter which TraceMetrics to update
+     */
+    where?: TraceMetricWhereInput
+    /**
+     * Limit how many TraceMetrics to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TraceMetric upsert
+   */
+  export type TraceMetricUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TraceMetric to update in case it exists.
+     */
+    where: TraceMetricWhereUniqueInput
+    /**
+     * In case the TraceMetric found by the `where` argument doesn't exist, create a new TraceMetric with this data.
+     */
+    create: XOR<TraceMetricCreateInput, TraceMetricUncheckedCreateInput>
+    /**
+     * In case the TraceMetric was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TraceMetricUpdateInput, TraceMetricUncheckedUpdateInput>
+  }
+
+  /**
+   * TraceMetric delete
+   */
+  export type TraceMetricDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricInclude<ExtArgs> | null
+    /**
+     * Filter which TraceMetric to delete.
+     */
+    where: TraceMetricWhereUniqueInput
+  }
+
+  /**
+   * TraceMetric deleteMany
+   */
+  export type TraceMetricDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TraceMetrics to delete
+     */
+    where?: TraceMetricWhereInput
+    /**
+     * Limit how many TraceMetrics to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TraceMetric.case
+   */
+  export type TraceMetric$caseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Case
+     */
+    select?: CaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Case
+     */
+    omit?: CaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CaseInclude<ExtArgs> | null
+    where?: CaseWhereInput
+  }
+
+  /**
+   * TraceMetric without action
+   */
+  export type TraceMetricDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TraceMetric
+     */
+    select?: TraceMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TraceMetric
+     */
+    omit?: TraceMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TraceMetricInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -18939,6 +20256,23 @@ export namespace Prisma {
   };
 
   export type FlowTraceLogStepScalarFieldEnum = (typeof FlowTraceLogStepScalarFieldEnum)[keyof typeof FlowTraceLogStepScalarFieldEnum]
+
+
+  export const TraceMetricScalarFieldEnum: {
+    id: 'id',
+    caseId: 'caseId',
+    traceId: 'traceId',
+    seedIndex: 'seedIndex',
+    mode: 'mode',
+    success: 'success',
+    totalDurationMs: 'totalDurationMs',
+    exchangeFoundAtMs: 'exchangeFoundAtMs',
+    flowDurationsJson: 'flowDurationsJson',
+    walletDurationsJson: 'walletDurationsJson',
+    createdAt: 'createdAt'
+  };
+
+  export type TraceMetricScalarFieldEnum = (typeof TraceMetricScalarFieldEnum)[keyof typeof TraceMetricScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -19509,6 +20843,7 @@ export namespace Prisma {
     seeds?: CaseSeedTransactionListRelationFilter
     flows?: FlowListRelationFilter
     reports?: CaseReportListRelationFilter
+    traceMetrics?: TraceMetricListRelationFilter
   }
 
   export type CaseOrderByWithRelationInput = {
@@ -19525,6 +20860,7 @@ export namespace Prisma {
     seeds?: CaseSeedTransactionOrderByRelationAggregateInput
     flows?: FlowOrderByRelationAggregateInput
     reports?: CaseReportOrderByRelationAggregateInput
+    traceMetrics?: TraceMetricOrderByRelationAggregateInput
   }
 
   export type CaseWhereUniqueInput = Prisma.AtLeast<{
@@ -19544,6 +20880,7 @@ export namespace Prisma {
     seeds?: CaseSeedTransactionListRelationFilter
     flows?: FlowListRelationFilter
     reports?: CaseReportListRelationFilter
+    traceMetrics?: TraceMetricListRelationFilter
   }, "id" | "externalId">
 
   export type CaseOrderByWithAggregationInput = {
@@ -20304,6 +21641,93 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"FlowTraceLogStep"> | Date | string
   }
 
+  export type TraceMetricWhereInput = {
+    AND?: TraceMetricWhereInput | TraceMetricWhereInput[]
+    OR?: TraceMetricWhereInput[]
+    NOT?: TraceMetricWhereInput | TraceMetricWhereInput[]
+    id?: StringFilter<"TraceMetric"> | string
+    caseId?: StringNullableFilter<"TraceMetric"> | string | null
+    traceId?: StringFilter<"TraceMetric"> | string
+    seedIndex?: IntNullableFilter<"TraceMetric"> | number | null
+    mode?: StringNullableFilter<"TraceMetric"> | string | null
+    success?: BoolFilter<"TraceMetric"> | boolean
+    totalDurationMs?: IntFilter<"TraceMetric"> | number
+    exchangeFoundAtMs?: IntNullableFilter<"TraceMetric"> | number | null
+    flowDurationsJson?: JsonNullableFilter<"TraceMetric">
+    walletDurationsJson?: JsonNullableFilter<"TraceMetric">
+    createdAt?: DateTimeFilter<"TraceMetric"> | Date | string
+    case?: XOR<CaseNullableScalarRelationFilter, CaseWhereInput> | null
+  }
+
+  export type TraceMetricOrderByWithRelationInput = {
+    id?: SortOrder
+    caseId?: SortOrderInput | SortOrder
+    traceId?: SortOrder
+    seedIndex?: SortOrderInput | SortOrder
+    mode?: SortOrderInput | SortOrder
+    success?: SortOrder
+    totalDurationMs?: SortOrder
+    exchangeFoundAtMs?: SortOrderInput | SortOrder
+    flowDurationsJson?: SortOrderInput | SortOrder
+    walletDurationsJson?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    case?: CaseOrderByWithRelationInput
+  }
+
+  export type TraceMetricWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TraceMetricWhereInput | TraceMetricWhereInput[]
+    OR?: TraceMetricWhereInput[]
+    NOT?: TraceMetricWhereInput | TraceMetricWhereInput[]
+    caseId?: StringNullableFilter<"TraceMetric"> | string | null
+    traceId?: StringFilter<"TraceMetric"> | string
+    seedIndex?: IntNullableFilter<"TraceMetric"> | number | null
+    mode?: StringNullableFilter<"TraceMetric"> | string | null
+    success?: BoolFilter<"TraceMetric"> | boolean
+    totalDurationMs?: IntFilter<"TraceMetric"> | number
+    exchangeFoundAtMs?: IntNullableFilter<"TraceMetric"> | number | null
+    flowDurationsJson?: JsonNullableFilter<"TraceMetric">
+    walletDurationsJson?: JsonNullableFilter<"TraceMetric">
+    createdAt?: DateTimeFilter<"TraceMetric"> | Date | string
+    case?: XOR<CaseNullableScalarRelationFilter, CaseWhereInput> | null
+  }, "id">
+
+  export type TraceMetricOrderByWithAggregationInput = {
+    id?: SortOrder
+    caseId?: SortOrderInput | SortOrder
+    traceId?: SortOrder
+    seedIndex?: SortOrderInput | SortOrder
+    mode?: SortOrderInput | SortOrder
+    success?: SortOrder
+    totalDurationMs?: SortOrder
+    exchangeFoundAtMs?: SortOrderInput | SortOrder
+    flowDurationsJson?: SortOrderInput | SortOrder
+    walletDurationsJson?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: TraceMetricCountOrderByAggregateInput
+    _avg?: TraceMetricAvgOrderByAggregateInput
+    _max?: TraceMetricMaxOrderByAggregateInput
+    _min?: TraceMetricMinOrderByAggregateInput
+    _sum?: TraceMetricSumOrderByAggregateInput
+  }
+
+  export type TraceMetricScalarWhereWithAggregatesInput = {
+    AND?: TraceMetricScalarWhereWithAggregatesInput | TraceMetricScalarWhereWithAggregatesInput[]
+    OR?: TraceMetricScalarWhereWithAggregatesInput[]
+    NOT?: TraceMetricScalarWhereWithAggregatesInput | TraceMetricScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TraceMetric"> | string
+    caseId?: StringNullableWithAggregatesFilter<"TraceMetric"> | string | null
+    traceId?: StringWithAggregatesFilter<"TraceMetric"> | string
+    seedIndex?: IntNullableWithAggregatesFilter<"TraceMetric"> | number | null
+    mode?: StringNullableWithAggregatesFilter<"TraceMetric"> | string | null
+    success?: BoolWithAggregatesFilter<"TraceMetric"> | boolean
+    totalDurationMs?: IntWithAggregatesFilter<"TraceMetric"> | number
+    exchangeFoundAtMs?: IntNullableWithAggregatesFilter<"TraceMetric"> | number | null
+    flowDurationsJson?: JsonNullableWithAggregatesFilter<"TraceMetric">
+    walletDurationsJson?: JsonNullableWithAggregatesFilter<"TraceMetric">
+    createdAt?: DateTimeWithAggregatesFilter<"TraceMetric"> | Date | string
+  }
+
   export type ChainCreateInput = {
     id?: string
     slug: string
@@ -20714,6 +22138,7 @@ export namespace Prisma {
     seeds?: CaseSeedTransactionCreateNestedManyWithoutCaseInput
     flows?: FlowCreateNestedManyWithoutCaseInput
     reports?: CaseReportCreateNestedManyWithoutCaseInput
+    traceMetrics?: TraceMetricCreateNestedManyWithoutCaseInput
   }
 
   export type CaseUncheckedCreateInput = {
@@ -20729,6 +22154,7 @@ export namespace Prisma {
     seeds?: CaseSeedTransactionUncheckedCreateNestedManyWithoutCaseInput
     flows?: FlowUncheckedCreateNestedManyWithoutCaseInput
     reports?: CaseReportUncheckedCreateNestedManyWithoutCaseInput
+    traceMetrics?: TraceMetricUncheckedCreateNestedManyWithoutCaseInput
   }
 
   export type CaseUpdateInput = {
@@ -20744,6 +22170,7 @@ export namespace Prisma {
     seeds?: CaseSeedTransactionUpdateManyWithoutCaseNestedInput
     flows?: FlowUpdateManyWithoutCaseNestedInput
     reports?: CaseReportUpdateManyWithoutCaseNestedInput
+    traceMetrics?: TraceMetricUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseUncheckedUpdateInput = {
@@ -20759,6 +22186,7 @@ export namespace Prisma {
     seeds?: CaseSeedTransactionUncheckedUpdateManyWithoutCaseNestedInput
     flows?: FlowUncheckedUpdateManyWithoutCaseNestedInput
     reports?: CaseReportUncheckedUpdateManyWithoutCaseNestedInput
+    traceMetrics?: TraceMetricUncheckedUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseCreateManyInput = {
@@ -21595,6 +23023,103 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TraceMetricCreateInput = {
+    id?: string
+    traceId: string
+    seedIndex?: number | null
+    mode?: string | null
+    success: boolean
+    totalDurationMs: number
+    exchangeFoundAtMs?: number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    case?: CaseCreateNestedOneWithoutTraceMetricsInput
+  }
+
+  export type TraceMetricUncheckedCreateInput = {
+    id?: string
+    caseId?: string | null
+    traceId: string
+    seedIndex?: number | null
+    mode?: string | null
+    success: boolean
+    totalDurationMs: number
+    exchangeFoundAtMs?: number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type TraceMetricUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    traceId?: StringFieldUpdateOperationsInput | string
+    seedIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    mode?: NullableStringFieldUpdateOperationsInput | string | null
+    success?: BoolFieldUpdateOperationsInput | boolean
+    totalDurationMs?: IntFieldUpdateOperationsInput | number
+    exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    case?: CaseUpdateOneWithoutTraceMetricsNestedInput
+  }
+
+  export type TraceMetricUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    caseId?: NullableStringFieldUpdateOperationsInput | string | null
+    traceId?: StringFieldUpdateOperationsInput | string
+    seedIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    mode?: NullableStringFieldUpdateOperationsInput | string | null
+    success?: BoolFieldUpdateOperationsInput | boolean
+    totalDurationMs?: IntFieldUpdateOperationsInput | number
+    exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TraceMetricCreateManyInput = {
+    id?: string
+    caseId?: string | null
+    traceId: string
+    seedIndex?: number | null
+    mode?: string | null
+    success: boolean
+    totalDurationMs: number
+    exchangeFoundAtMs?: number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type TraceMetricUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    traceId?: StringFieldUpdateOperationsInput | string
+    seedIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    mode?: NullableStringFieldUpdateOperationsInput | string | null
+    success?: BoolFieldUpdateOperationsInput | boolean
+    totalDurationMs?: IntFieldUpdateOperationsInput | number
+    exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TraceMetricUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    caseId?: NullableStringFieldUpdateOperationsInput | string | null
+    traceId?: StringFieldUpdateOperationsInput | string
+    seedIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    mode?: NullableStringFieldUpdateOperationsInput | string | null
+    success?: BoolFieldUpdateOperationsInput | boolean
+    totalDurationMs?: IntFieldUpdateOperationsInput | number
+    exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -22007,7 +23532,17 @@ export namespace Prisma {
     none?: CaseReportWhereInput
   }
 
+  export type TraceMetricListRelationFilter = {
+    every?: TraceMetricWhereInput
+    some?: TraceMetricWhereInput
+    none?: TraceMetricWhereInput
+  }
+
   export type CaseReportOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TraceMetricOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -22678,6 +24213,61 @@ export namespace Prisma {
     _max?: NestedEnumFlowTraceLogStatusNullableFilter<$PrismaModel>
   }
 
+  export type CaseNullableScalarRelationFilter = {
+    is?: CaseWhereInput | null
+    isNot?: CaseWhereInput | null
+  }
+
+  export type TraceMetricCountOrderByAggregateInput = {
+    id?: SortOrder
+    caseId?: SortOrder
+    traceId?: SortOrder
+    seedIndex?: SortOrder
+    mode?: SortOrder
+    success?: SortOrder
+    totalDurationMs?: SortOrder
+    exchangeFoundAtMs?: SortOrder
+    flowDurationsJson?: SortOrder
+    walletDurationsJson?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TraceMetricAvgOrderByAggregateInput = {
+    seedIndex?: SortOrder
+    totalDurationMs?: SortOrder
+    exchangeFoundAtMs?: SortOrder
+  }
+
+  export type TraceMetricMaxOrderByAggregateInput = {
+    id?: SortOrder
+    caseId?: SortOrder
+    traceId?: SortOrder
+    seedIndex?: SortOrder
+    mode?: SortOrder
+    success?: SortOrder
+    totalDurationMs?: SortOrder
+    exchangeFoundAtMs?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TraceMetricMinOrderByAggregateInput = {
+    id?: SortOrder
+    caseId?: SortOrder
+    traceId?: SortOrder
+    seedIndex?: SortOrder
+    mode?: SortOrder
+    success?: SortOrder
+    totalDurationMs?: SortOrder
+    exchangeFoundAtMs?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TraceMetricSumOrderByAggregateInput = {
+    seedIndex?: SortOrder
+    totalDurationMs?: SortOrder
+    exchangeFoundAtMs?: SortOrder
+  }
+
   export type HotWalletCreateNestedManyWithoutChainInput = {
     create?: XOR<HotWalletCreateWithoutChainInput, HotWalletUncheckedCreateWithoutChainInput> | HotWalletCreateWithoutChainInput[] | HotWalletUncheckedCreateWithoutChainInput[]
     connectOrCreate?: HotWalletCreateOrConnectWithoutChainInput | HotWalletCreateOrConnectWithoutChainInput[]
@@ -23055,6 +24645,13 @@ export namespace Prisma {
     connect?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
   }
 
+  export type TraceMetricCreateNestedManyWithoutCaseInput = {
+    create?: XOR<TraceMetricCreateWithoutCaseInput, TraceMetricUncheckedCreateWithoutCaseInput> | TraceMetricCreateWithoutCaseInput[] | TraceMetricUncheckedCreateWithoutCaseInput[]
+    connectOrCreate?: TraceMetricCreateOrConnectWithoutCaseInput | TraceMetricCreateOrConnectWithoutCaseInput[]
+    createMany?: TraceMetricCreateManyCaseInputEnvelope
+    connect?: TraceMetricWhereUniqueInput | TraceMetricWhereUniqueInput[]
+  }
+
   export type CaseSeedTransactionUncheckedCreateNestedManyWithoutCaseInput = {
     create?: XOR<CaseSeedTransactionCreateWithoutCaseInput, CaseSeedTransactionUncheckedCreateWithoutCaseInput> | CaseSeedTransactionCreateWithoutCaseInput[] | CaseSeedTransactionUncheckedCreateWithoutCaseInput[]
     connectOrCreate?: CaseSeedTransactionCreateOrConnectWithoutCaseInput | CaseSeedTransactionCreateOrConnectWithoutCaseInput[]
@@ -23074,6 +24671,13 @@ export namespace Prisma {
     connectOrCreate?: CaseReportCreateOrConnectWithoutCaseInput | CaseReportCreateOrConnectWithoutCaseInput[]
     createMany?: CaseReportCreateManyCaseInputEnvelope
     connect?: CaseReportWhereUniqueInput | CaseReportWhereUniqueInput[]
+  }
+
+  export type TraceMetricUncheckedCreateNestedManyWithoutCaseInput = {
+    create?: XOR<TraceMetricCreateWithoutCaseInput, TraceMetricUncheckedCreateWithoutCaseInput> | TraceMetricCreateWithoutCaseInput[] | TraceMetricUncheckedCreateWithoutCaseInput[]
+    connectOrCreate?: TraceMetricCreateOrConnectWithoutCaseInput | TraceMetricCreateOrConnectWithoutCaseInput[]
+    createMany?: TraceMetricCreateManyCaseInputEnvelope
+    connect?: TraceMetricWhereUniqueInput | TraceMetricWhereUniqueInput[]
   }
 
   export type EnumCaseStatusFieldUpdateOperationsInput = {
@@ -23130,6 +24734,20 @@ export namespace Prisma {
     deleteMany?: CaseReportScalarWhereInput | CaseReportScalarWhereInput[]
   }
 
+  export type TraceMetricUpdateManyWithoutCaseNestedInput = {
+    create?: XOR<TraceMetricCreateWithoutCaseInput, TraceMetricUncheckedCreateWithoutCaseInput> | TraceMetricCreateWithoutCaseInput[] | TraceMetricUncheckedCreateWithoutCaseInput[]
+    connectOrCreate?: TraceMetricCreateOrConnectWithoutCaseInput | TraceMetricCreateOrConnectWithoutCaseInput[]
+    upsert?: TraceMetricUpsertWithWhereUniqueWithoutCaseInput | TraceMetricUpsertWithWhereUniqueWithoutCaseInput[]
+    createMany?: TraceMetricCreateManyCaseInputEnvelope
+    set?: TraceMetricWhereUniqueInput | TraceMetricWhereUniqueInput[]
+    disconnect?: TraceMetricWhereUniqueInput | TraceMetricWhereUniqueInput[]
+    delete?: TraceMetricWhereUniqueInput | TraceMetricWhereUniqueInput[]
+    connect?: TraceMetricWhereUniqueInput | TraceMetricWhereUniqueInput[]
+    update?: TraceMetricUpdateWithWhereUniqueWithoutCaseInput | TraceMetricUpdateWithWhereUniqueWithoutCaseInput[]
+    updateMany?: TraceMetricUpdateManyWithWhereWithoutCaseInput | TraceMetricUpdateManyWithWhereWithoutCaseInput[]
+    deleteMany?: TraceMetricScalarWhereInput | TraceMetricScalarWhereInput[]
+  }
+
   export type CaseSeedTransactionUncheckedUpdateManyWithoutCaseNestedInput = {
     create?: XOR<CaseSeedTransactionCreateWithoutCaseInput, CaseSeedTransactionUncheckedCreateWithoutCaseInput> | CaseSeedTransactionCreateWithoutCaseInput[] | CaseSeedTransactionUncheckedCreateWithoutCaseInput[]
     connectOrCreate?: CaseSeedTransactionCreateOrConnectWithoutCaseInput | CaseSeedTransactionCreateOrConnectWithoutCaseInput[]
@@ -23170,6 +24788,20 @@ export namespace Prisma {
     update?: CaseReportUpdateWithWhereUniqueWithoutCaseInput | CaseReportUpdateWithWhereUniqueWithoutCaseInput[]
     updateMany?: CaseReportUpdateManyWithWhereWithoutCaseInput | CaseReportUpdateManyWithWhereWithoutCaseInput[]
     deleteMany?: CaseReportScalarWhereInput | CaseReportScalarWhereInput[]
+  }
+
+  export type TraceMetricUncheckedUpdateManyWithoutCaseNestedInput = {
+    create?: XOR<TraceMetricCreateWithoutCaseInput, TraceMetricUncheckedCreateWithoutCaseInput> | TraceMetricCreateWithoutCaseInput[] | TraceMetricUncheckedCreateWithoutCaseInput[]
+    connectOrCreate?: TraceMetricCreateOrConnectWithoutCaseInput | TraceMetricCreateOrConnectWithoutCaseInput[]
+    upsert?: TraceMetricUpsertWithWhereUniqueWithoutCaseInput | TraceMetricUpsertWithWhereUniqueWithoutCaseInput[]
+    createMany?: TraceMetricCreateManyCaseInputEnvelope
+    set?: TraceMetricWhereUniqueInput | TraceMetricWhereUniqueInput[]
+    disconnect?: TraceMetricWhereUniqueInput | TraceMetricWhereUniqueInput[]
+    delete?: TraceMetricWhereUniqueInput | TraceMetricWhereUniqueInput[]
+    connect?: TraceMetricWhereUniqueInput | TraceMetricWhereUniqueInput[]
+    update?: TraceMetricUpdateWithWhereUniqueWithoutCaseInput | TraceMetricUpdateWithWhereUniqueWithoutCaseInput[]
+    updateMany?: TraceMetricUpdateManyWithWhereWithoutCaseInput | TraceMetricUpdateManyWithWhereWithoutCaseInput[]
+    deleteMany?: TraceMetricScalarWhereInput | TraceMetricScalarWhereInput[]
   }
 
   export type CaseCreateNestedOneWithoutReportsInput = {
@@ -23578,6 +25210,22 @@ export namespace Prisma {
     upsert?: FlowTraceLogUpsertWithoutStepsInput
     connect?: FlowTraceLogWhereUniqueInput
     update?: XOR<XOR<FlowTraceLogUpdateToOneWithWhereWithoutStepsInput, FlowTraceLogUpdateWithoutStepsInput>, FlowTraceLogUncheckedUpdateWithoutStepsInput>
+  }
+
+  export type CaseCreateNestedOneWithoutTraceMetricsInput = {
+    create?: XOR<CaseCreateWithoutTraceMetricsInput, CaseUncheckedCreateWithoutTraceMetricsInput>
+    connectOrCreate?: CaseCreateOrConnectWithoutTraceMetricsInput
+    connect?: CaseWhereUniqueInput
+  }
+
+  export type CaseUpdateOneWithoutTraceMetricsNestedInput = {
+    create?: XOR<CaseCreateWithoutTraceMetricsInput, CaseUncheckedCreateWithoutTraceMetricsInput>
+    connectOrCreate?: CaseCreateOrConnectWithoutTraceMetricsInput
+    upsert?: CaseUpsertWithoutTraceMetricsInput
+    disconnect?: CaseWhereInput | boolean
+    delete?: CaseWhereInput | boolean
+    connect?: CaseWhereUniqueInput
+    update?: XOR<XOR<CaseUpdateToOneWithWhereWithoutTraceMetricsInput, CaseUpdateWithoutTraceMetricsInput>, CaseUncheckedUpdateWithoutTraceMetricsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -24219,6 +25867,7 @@ export namespace Prisma {
     seeds?: CaseSeedTransactionCreateNestedManyWithoutCaseInput
     flows?: FlowCreateNestedManyWithoutCaseInput
     reports?: CaseReportCreateNestedManyWithoutCaseInput
+    traceMetrics?: TraceMetricCreateNestedManyWithoutCaseInput
   }
 
   export type CaseUncheckedCreateWithoutCreatedByUserInput = {
@@ -24233,6 +25882,7 @@ export namespace Prisma {
     seeds?: CaseSeedTransactionUncheckedCreateNestedManyWithoutCaseInput
     flows?: FlowUncheckedCreateNestedManyWithoutCaseInput
     reports?: CaseReportUncheckedCreateNestedManyWithoutCaseInput
+    traceMetrics?: TraceMetricUncheckedCreateNestedManyWithoutCaseInput
   }
 
   export type CaseCreateOrConnectWithoutCreatedByUserInput = {
@@ -24645,6 +26295,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TraceMetricCreateWithoutCaseInput = {
+    id?: string
+    traceId: string
+    seedIndex?: number | null
+    mode?: string | null
+    success: boolean
+    totalDurationMs: number
+    exchangeFoundAtMs?: number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type TraceMetricUncheckedCreateWithoutCaseInput = {
+    id?: string
+    traceId: string
+    seedIndex?: number | null
+    mode?: string | null
+    success: boolean
+    totalDurationMs: number
+    exchangeFoundAtMs?: number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type TraceMetricCreateOrConnectWithoutCaseInput = {
+    where: TraceMetricWhereUniqueInput
+    create: XOR<TraceMetricCreateWithoutCaseInput, TraceMetricUncheckedCreateWithoutCaseInput>
+  }
+
+  export type TraceMetricCreateManyCaseInputEnvelope = {
+    data: TraceMetricCreateManyCaseInput | TraceMetricCreateManyCaseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutCasesInput = {
     update: XOR<UserUpdateWithoutCasesInput, UserUncheckedUpdateWithoutCasesInput>
     create: XOR<UserCreateWithoutCasesInput, UserUncheckedCreateWithoutCasesInput>
@@ -24734,6 +26420,39 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"CaseReport"> | Date | string
   }
 
+  export type TraceMetricUpsertWithWhereUniqueWithoutCaseInput = {
+    where: TraceMetricWhereUniqueInput
+    update: XOR<TraceMetricUpdateWithoutCaseInput, TraceMetricUncheckedUpdateWithoutCaseInput>
+    create: XOR<TraceMetricCreateWithoutCaseInput, TraceMetricUncheckedCreateWithoutCaseInput>
+  }
+
+  export type TraceMetricUpdateWithWhereUniqueWithoutCaseInput = {
+    where: TraceMetricWhereUniqueInput
+    data: XOR<TraceMetricUpdateWithoutCaseInput, TraceMetricUncheckedUpdateWithoutCaseInput>
+  }
+
+  export type TraceMetricUpdateManyWithWhereWithoutCaseInput = {
+    where: TraceMetricScalarWhereInput
+    data: XOR<TraceMetricUpdateManyMutationInput, TraceMetricUncheckedUpdateManyWithoutCaseInput>
+  }
+
+  export type TraceMetricScalarWhereInput = {
+    AND?: TraceMetricScalarWhereInput | TraceMetricScalarWhereInput[]
+    OR?: TraceMetricScalarWhereInput[]
+    NOT?: TraceMetricScalarWhereInput | TraceMetricScalarWhereInput[]
+    id?: StringFilter<"TraceMetric"> | string
+    caseId?: StringNullableFilter<"TraceMetric"> | string | null
+    traceId?: StringFilter<"TraceMetric"> | string
+    seedIndex?: IntNullableFilter<"TraceMetric"> | number | null
+    mode?: StringNullableFilter<"TraceMetric"> | string | null
+    success?: BoolFilter<"TraceMetric"> | boolean
+    totalDurationMs?: IntFilter<"TraceMetric"> | number
+    exchangeFoundAtMs?: IntNullableFilter<"TraceMetric"> | number | null
+    flowDurationsJson?: JsonNullableFilter<"TraceMetric">
+    walletDurationsJson?: JsonNullableFilter<"TraceMetric">
+    createdAt?: DateTimeFilter<"TraceMetric"> | Date | string
+  }
+
   export type CaseCreateWithoutReportsInput = {
     id?: string
     externalId?: string | null
@@ -24746,6 +26465,7 @@ export namespace Prisma {
     createdByUser: UserCreateNestedOneWithoutCasesInput
     seeds?: CaseSeedTransactionCreateNestedManyWithoutCaseInput
     flows?: FlowCreateNestedManyWithoutCaseInput
+    traceMetrics?: TraceMetricCreateNestedManyWithoutCaseInput
   }
 
   export type CaseUncheckedCreateWithoutReportsInput = {
@@ -24760,6 +26480,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     seeds?: CaseSeedTransactionUncheckedCreateNestedManyWithoutCaseInput
     flows?: FlowUncheckedCreateNestedManyWithoutCaseInput
+    traceMetrics?: TraceMetricUncheckedCreateNestedManyWithoutCaseInput
   }
 
   export type CaseCreateOrConnectWithoutReportsInput = {
@@ -24790,6 +26511,7 @@ export namespace Prisma {
     createdByUser?: UserUpdateOneRequiredWithoutCasesNestedInput
     seeds?: CaseSeedTransactionUpdateManyWithoutCaseNestedInput
     flows?: FlowUpdateManyWithoutCaseNestedInput
+    traceMetrics?: TraceMetricUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseUncheckedUpdateWithoutReportsInput = {
@@ -24804,6 +26526,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seeds?: CaseSeedTransactionUncheckedUpdateManyWithoutCaseNestedInput
     flows?: FlowUncheckedUpdateManyWithoutCaseNestedInput
+    traceMetrics?: TraceMetricUncheckedUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseCreateWithoutSeedsInput = {
@@ -24818,6 +26541,7 @@ export namespace Prisma {
     createdByUser: UserCreateNestedOneWithoutCasesInput
     flows?: FlowCreateNestedManyWithoutCaseInput
     reports?: CaseReportCreateNestedManyWithoutCaseInput
+    traceMetrics?: TraceMetricCreateNestedManyWithoutCaseInput
   }
 
   export type CaseUncheckedCreateWithoutSeedsInput = {
@@ -24832,6 +26556,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     flows?: FlowUncheckedCreateNestedManyWithoutCaseInput
     reports?: CaseReportUncheckedCreateNestedManyWithoutCaseInput
+    traceMetrics?: TraceMetricUncheckedCreateNestedManyWithoutCaseInput
   }
 
   export type CaseCreateOrConnectWithoutSeedsInput = {
@@ -24943,6 +26668,7 @@ export namespace Prisma {
     createdByUser?: UserUpdateOneRequiredWithoutCasesNestedInput
     flows?: FlowUpdateManyWithoutCaseNestedInput
     reports?: CaseReportUpdateManyWithoutCaseNestedInput
+    traceMetrics?: TraceMetricUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseUncheckedUpdateWithoutSeedsInput = {
@@ -24957,6 +26683,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flows?: FlowUncheckedUpdateManyWithoutCaseNestedInput
     reports?: CaseReportUncheckedUpdateManyWithoutCaseNestedInput
+    traceMetrics?: TraceMetricUncheckedUpdateManyWithoutCaseNestedInput
   }
 
   export type ChainUpsertWithoutCaseSeedTransactionsInput = {
@@ -25022,6 +26749,7 @@ export namespace Prisma {
     createdByUser: UserCreateNestedOneWithoutCasesInput
     seeds?: CaseSeedTransactionCreateNestedManyWithoutCaseInput
     reports?: CaseReportCreateNestedManyWithoutCaseInput
+    traceMetrics?: TraceMetricCreateNestedManyWithoutCaseInput
   }
 
   export type CaseUncheckedCreateWithoutFlowsInput = {
@@ -25036,6 +26764,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     seeds?: CaseSeedTransactionUncheckedCreateNestedManyWithoutCaseInput
     reports?: CaseReportUncheckedCreateNestedManyWithoutCaseInput
+    traceMetrics?: TraceMetricUncheckedCreateNestedManyWithoutCaseInput
   }
 
   export type CaseCreateOrConnectWithoutFlowsInput = {
@@ -25269,6 +26998,7 @@ export namespace Prisma {
     createdByUser?: UserUpdateOneRequiredWithoutCasesNestedInput
     seeds?: CaseSeedTransactionUpdateManyWithoutCaseNestedInput
     reports?: CaseReportUpdateManyWithoutCaseNestedInput
+    traceMetrics?: TraceMetricUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseUncheckedUpdateWithoutFlowsInput = {
@@ -25283,6 +27013,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seeds?: CaseSeedTransactionUncheckedUpdateManyWithoutCaseNestedInput
     reports?: CaseReportUncheckedUpdateManyWithoutCaseNestedInput
+    traceMetrics?: TraceMetricUncheckedUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseSeedTransactionUpsertWithoutFlowsInput = {
@@ -25969,6 +27700,82 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CaseCreateWithoutTraceMetricsInput = {
+    id?: string
+    externalId?: string | null
+    name: string
+    status?: $Enums.CaseStatus
+    totalAmountLostRaw: string
+    totalAmountLostDecimal: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdByUser: UserCreateNestedOneWithoutCasesInput
+    seeds?: CaseSeedTransactionCreateNestedManyWithoutCaseInput
+    flows?: FlowCreateNestedManyWithoutCaseInput
+    reports?: CaseReportCreateNestedManyWithoutCaseInput
+  }
+
+  export type CaseUncheckedCreateWithoutTraceMetricsInput = {
+    id?: string
+    externalId?: string | null
+    name: string
+    status?: $Enums.CaseStatus
+    createdByUserId: string
+    totalAmountLostRaw: string
+    totalAmountLostDecimal: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    seeds?: CaseSeedTransactionUncheckedCreateNestedManyWithoutCaseInput
+    flows?: FlowUncheckedCreateNestedManyWithoutCaseInput
+    reports?: CaseReportUncheckedCreateNestedManyWithoutCaseInput
+  }
+
+  export type CaseCreateOrConnectWithoutTraceMetricsInput = {
+    where: CaseWhereUniqueInput
+    create: XOR<CaseCreateWithoutTraceMetricsInput, CaseUncheckedCreateWithoutTraceMetricsInput>
+  }
+
+  export type CaseUpsertWithoutTraceMetricsInput = {
+    update: XOR<CaseUpdateWithoutTraceMetricsInput, CaseUncheckedUpdateWithoutTraceMetricsInput>
+    create: XOR<CaseCreateWithoutTraceMetricsInput, CaseUncheckedCreateWithoutTraceMetricsInput>
+    where?: CaseWhereInput
+  }
+
+  export type CaseUpdateToOneWithWhereWithoutTraceMetricsInput = {
+    where?: CaseWhereInput
+    data: XOR<CaseUpdateWithoutTraceMetricsInput, CaseUncheckedUpdateWithoutTraceMetricsInput>
+  }
+
+  export type CaseUpdateWithoutTraceMetricsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
+    totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
+    totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdByUser?: UserUpdateOneRequiredWithoutCasesNestedInput
+    seeds?: CaseSeedTransactionUpdateManyWithoutCaseNestedInput
+    flows?: FlowUpdateManyWithoutCaseNestedInput
+    reports?: CaseReportUpdateManyWithoutCaseNestedInput
+  }
+
+  export type CaseUncheckedUpdateWithoutTraceMetricsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumCaseStatusFieldUpdateOperationsInput | $Enums.CaseStatus
+    createdByUserId?: StringFieldUpdateOperationsInput | string
+    totalAmountLostRaw?: StringFieldUpdateOperationsInput | string
+    totalAmountLostDecimal?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    seeds?: CaseSeedTransactionUncheckedUpdateManyWithoutCaseNestedInput
+    flows?: FlowUncheckedUpdateManyWithoutCaseNestedInput
+    reports?: CaseReportUncheckedUpdateManyWithoutCaseNestedInput
+  }
+
   export type HotWalletCreateManyChainInput = {
     id?: string
     exchangeId: string
@@ -26230,6 +28037,7 @@ export namespace Prisma {
     seeds?: CaseSeedTransactionUpdateManyWithoutCaseNestedInput
     flows?: FlowUpdateManyWithoutCaseNestedInput
     reports?: CaseReportUpdateManyWithoutCaseNestedInput
+    traceMetrics?: TraceMetricUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseUncheckedUpdateWithoutCreatedByUserInput = {
@@ -26244,6 +28052,7 @@ export namespace Prisma {
     seeds?: CaseSeedTransactionUncheckedUpdateManyWithoutCaseNestedInput
     flows?: FlowUncheckedUpdateManyWithoutCaseNestedInput
     reports?: CaseReportUncheckedUpdateManyWithoutCaseNestedInput
+    traceMetrics?: TraceMetricUncheckedUpdateManyWithoutCaseNestedInput
   }
 
   export type CaseUncheckedUpdateManyWithoutCreatedByUserInput = {
@@ -26415,6 +28224,19 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type TraceMetricCreateManyCaseInput = {
+    id?: string
+    traceId: string
+    seedIndex?: number | null
+    mode?: string | null
+    success: boolean
+    totalDurationMs: number
+    exchangeFoundAtMs?: number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
   export type CaseSeedTransactionUpdateWithoutCaseInput = {
     id?: StringFieldUpdateOperationsInput | string
     txHash?: StringFieldUpdateOperationsInput | string
@@ -26534,6 +28356,45 @@ export namespace Prisma {
     format?: EnumReportFormatFieldUpdateOperationsInput | $Enums.ReportFormat
     generatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     storageKey?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TraceMetricUpdateWithoutCaseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    traceId?: StringFieldUpdateOperationsInput | string
+    seedIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    mode?: NullableStringFieldUpdateOperationsInput | string | null
+    success?: BoolFieldUpdateOperationsInput | boolean
+    totalDurationMs?: IntFieldUpdateOperationsInput | number
+    exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TraceMetricUncheckedUpdateWithoutCaseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    traceId?: StringFieldUpdateOperationsInput | string
+    seedIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    mode?: NullableStringFieldUpdateOperationsInput | string | null
+    success?: BoolFieldUpdateOperationsInput | boolean
+    totalDurationMs?: IntFieldUpdateOperationsInput | number
+    exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TraceMetricUncheckedUpdateManyWithoutCaseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    traceId?: StringFieldUpdateOperationsInput | string
+    seedIndex?: NullableIntFieldUpdateOperationsInput | number | null
+    mode?: NullableStringFieldUpdateOperationsInput | string | null
+    success?: BoolFieldUpdateOperationsInput | boolean
+    totalDurationMs?: IntFieldUpdateOperationsInput | number
+    exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
+    walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

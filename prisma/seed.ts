@@ -10,6 +10,26 @@ import {
   GATE_EXCHANGE,
   GATE_HOT_WALLETS_BY_CHAIN,
 } from './seeds/gate-hot-wallets';
+import {
+  COINBASE_EXCHANGE,
+  COINBASE_HOT_WALLETS_BY_CHAIN,
+} from './seeds/coinbase-hot-wallets';
+import {
+  UPBIT_EXCHANGE,
+  UPBIT_HOT_WALLETS_BY_CHAIN,
+} from './seeds/upbit-hot-wallets';
+import {
+  OKX_EXCHANGE,
+  OKX_HOT_WALLETS_BY_CHAIN,
+} from './seeds/okx-hot-wallets';
+import {
+  BYBIT_EXCHANGE,
+  BYBIT_HOT_WALLETS_BY_CHAIN,
+} from './seeds/bybit-hot-wallets';
+import {
+  BITGET_EXCHANGE,
+  BITGET_HOT_WALLETS_BY_CHAIN,
+} from './seeds/bitget-hot-wallets';
 
 const connectionString = process.env.DATABASE_URL ?? '';
 const adapter = new PrismaPg({ connectionString });
@@ -151,6 +171,206 @@ async function main() {
   if (process.env.NODE_ENV !== 'production') {
     console.log(
       `Seed: Gate hot wallets: ${gateCreated} created, ${gateSkipped} already existed.`,
+    );
+  }
+
+  const coinbaseExchange = await prisma.exchange.upsert({
+    where: { slug: COINBASE_EXCHANGE.slug },
+    create: {
+      name: COINBASE_EXCHANGE.name,
+      slug: COINBASE_EXCHANGE.slug,
+      iconUrl: COINBASE_EXCHANGE.iconUrl ?? null,
+    },
+    update: {
+      name: COINBASE_EXCHANGE.name,
+      iconUrl: COINBASE_EXCHANGE.iconUrl ?? null,
+    },
+  });
+
+  let coinbaseCreated = 0;
+  let coinbaseSkipped = 0;
+
+  for (const [chainSlug, addresses] of Object.entries(
+    COINBASE_HOT_WALLETS_BY_CHAIN,
+  )) {
+    const chainId = chainIdsBySlug.get(chainSlug);
+    if (!chainId) {
+      throw new Error(
+        `Chain slug "${chainSlug}" not found. Add it to prisma/seeds/chains.ts.`,
+      );
+    }
+    const result = await processAddressList(
+      addresses,
+      coinbaseExchange.id,
+      chainId,
+    );
+    coinbaseCreated += result.created;
+    coinbaseSkipped += result.skipped;
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(
+      `Seed: Coinbase hot wallets: ${coinbaseCreated} created, ${coinbaseSkipped} already existed.`,
+    );
+  }
+
+  const upbitExchange = await prisma.exchange.upsert({
+    where: { slug: UPBIT_EXCHANGE.slug },
+    create: {
+      name: UPBIT_EXCHANGE.name,
+      slug: UPBIT_EXCHANGE.slug,
+      iconUrl: UPBIT_EXCHANGE.iconUrl ?? null,
+    },
+    update: {
+      name: UPBIT_EXCHANGE.name,
+      iconUrl: UPBIT_EXCHANGE.iconUrl ?? null,
+    },
+  });
+
+  let upbitCreated = 0;
+  let upbitSkipped = 0;
+
+  for (const [chainSlug, addresses] of Object.entries(
+    UPBIT_HOT_WALLETS_BY_CHAIN,
+  )) {
+    const chainId = chainIdsBySlug.get(chainSlug);
+    if (!chainId) {
+      throw new Error(
+        `Chain slug "${chainSlug}" not found. Add it to prisma/seeds/chains.ts.`,
+      );
+    }
+    const result = await processAddressList(
+      addresses,
+      upbitExchange.id,
+      chainId,
+    );
+    upbitCreated += result.created;
+    upbitSkipped += result.skipped;
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(
+      `Seed: Upbit hot wallets: ${upbitCreated} created, ${upbitSkipped} already existed.`,
+    );
+  }
+
+  const okxExchange = await prisma.exchange.upsert({
+    where: { slug: OKX_EXCHANGE.slug },
+    create: {
+      name: OKX_EXCHANGE.name,
+      slug: OKX_EXCHANGE.slug,
+      iconUrl: OKX_EXCHANGE.iconUrl ?? null,
+    },
+    update: {
+      name: OKX_EXCHANGE.name,
+      iconUrl: OKX_EXCHANGE.iconUrl ?? null,
+    },
+  });
+
+  let okxCreated = 0;
+  let okxSkipped = 0;
+
+  for (const [chainSlug, addresses] of Object.entries(
+    OKX_HOT_WALLETS_BY_CHAIN,
+  )) {
+    const chainId = chainIdsBySlug.get(chainSlug);
+    if (!chainId) {
+      throw new Error(
+        `Chain slug "${chainSlug}" not found. Add it to prisma/seeds/chains.ts.`,
+      );
+    }
+    const result = await processAddressList(
+      addresses,
+      okxExchange.id,
+      chainId,
+    );
+    okxCreated += result.created;
+    okxSkipped += result.skipped;
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(
+      `Seed: OKX hot wallets: ${okxCreated} created, ${okxSkipped} already existed.`,
+    );
+  }
+
+  const bybitExchange = await prisma.exchange.upsert({
+    where: { slug: BYBIT_EXCHANGE.slug },
+    create: {
+      name: BYBIT_EXCHANGE.name,
+      slug: BYBIT_EXCHANGE.slug,
+      iconUrl: BYBIT_EXCHANGE.iconUrl ?? null,
+    },
+    update: {
+      name: BYBIT_EXCHANGE.name,
+      iconUrl: BYBIT_EXCHANGE.iconUrl ?? null,
+    },
+  });
+
+  let bybitCreated = 0;
+  let bybitSkipped = 0;
+
+  for (const [chainSlug, addresses] of Object.entries(
+    BYBIT_HOT_WALLETS_BY_CHAIN,
+  )) {
+    const chainId = chainIdsBySlug.get(chainSlug);
+    if (!chainId) {
+      throw new Error(
+        `Chain slug "${chainSlug}" not found. Add it to prisma/seeds/chains.ts.`,
+      );
+    }
+    const result = await processAddressList(
+      addresses,
+      bybitExchange.id,
+      chainId,
+    );
+    bybitCreated += result.created;
+    bybitSkipped += result.skipped;
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(
+      `Seed: Bybit hot wallets: ${bybitCreated} created, ${bybitSkipped} already existed.`,
+    );
+  }
+
+  const bitgetExchange = await prisma.exchange.upsert({
+    where: { slug: BITGET_EXCHANGE.slug },
+    create: {
+      name: BITGET_EXCHANGE.name,
+      slug: BITGET_EXCHANGE.slug,
+      iconUrl: BITGET_EXCHANGE.iconUrl ?? null,
+    },
+    update: {
+      name: BITGET_EXCHANGE.name,
+      iconUrl: BITGET_EXCHANGE.iconUrl ?? null,
+    },
+  });
+
+  let bitgetCreated = 0;
+  let bitgetSkipped = 0;
+
+  for (const [chainSlug, addresses] of Object.entries(
+    BITGET_HOT_WALLETS_BY_CHAIN,
+  )) {
+    const chainId = chainIdsBySlug.get(chainSlug);
+    if (!chainId) {
+      throw new Error(
+        `Chain slug "${chainSlug}" not found. Add it to prisma/seeds/chains.ts.`,
+      );
+    }
+    const result = await processAddressList(
+      addresses,
+      bitgetExchange.id,
+      chainId,
+    );
+    bitgetCreated += result.created;
+    bitgetSkipped += result.skipped;
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(
+      `Seed: Bitget hot wallets: ${bitgetCreated} created, ${bitgetSkipped} already existed.`,
     );
   }
 }

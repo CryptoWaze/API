@@ -210,7 +210,7 @@ Quando o modo **avançado** é usado na criação de casos (`mode: 'advanced'` n
      - obtém `OUTBOUNDS_LIMIT = 100` outbounds para `fromAddress` via `getTopOutboundsForWallet` (usa o full-history por baixo);
      - escolhe **no máximo 1 destino alternativo** (`BRANCH_CANDIDATES_PER_WALLET = 1`) diferente do `toAddress` principal;
      - constrói um prefixo de steps/edges (`buildPrefixSteps`) de `from` até `nextTo`;
-     - roda um novo rastreio full-history a partir de `nextTo` com limite de **20 hops totais** (`MAX_BRANCH_HOPS`),
+     - roda um novo rastreio full-history a partir de `nextTo` com limite de **10 hops totais** (`MAX_BRANCH_HOPS`),
        - corta o branch se exceder o limite;
        - só mantém o flow extra se:
          - encontrar hot wallet dentro do limite **ou**
@@ -253,7 +253,7 @@ Isso reduz:
 
 - 1 seed → **1 flow principal + flows extras (branches)**.
 - Usa `getAddressTransfersPage` e o helper `getFullHistoryTopOutbounds` para varrer **todo** o histórico relevante por carteira.
-- Faz branching controlado a partir do caminho principal (prefixos + limites de 20 hops por branch).
+- Faz branching controlado a partir do caminho principal (prefixos + limites de 10 hops por branch).
 - Mais caro em termos de chamadas / tempo, mas muito mais completo para casos complexos.
 
 ---

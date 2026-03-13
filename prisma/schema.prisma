@@ -277,18 +277,19 @@ model FlowTraceLogStep {
 }
 
 model TraceMetric {
-  id                   String   @id @default(cuid())
-  caseId               String?
-  case                 Case?    @relation(fields: [caseId], references: [id], onDelete: Cascade)
-  traceId              String
-  seedIndex            Int?
-  mode                 String?
-  success              Boolean
-  totalDurationMs      Int
-  exchangeFoundAtMs    Int?
-  flowDurationsJson    Json?
-  walletDurationsJson  Json?
-  createdAt            DateTime @default(now())
+  id                    String   @id @default(cuid())
+  caseId                String?
+  case                  Case?    @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  traceId               String
+  seedIndex             Int?
+  mode                  String?
+  success               Boolean
+  totalDurationMs       Int
+  exchangeFoundAtMs     Int?
+  covalentRequestsTotal Int?
+  flowDurationsJson     Json?
+  walletDurationsJson   Json?
+  createdAt             DateTime @default(now())
 
   @@index([caseId])
   @@index([traceId])

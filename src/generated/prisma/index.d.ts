@@ -18851,12 +18851,14 @@ export namespace Prisma {
     seedIndex: number | null
     totalDurationMs: number | null
     exchangeFoundAtMs: number | null
+    covalentRequestsTotal: number | null
   }
 
   export type TraceMetricSumAggregateOutputType = {
     seedIndex: number | null
     totalDurationMs: number | null
     exchangeFoundAtMs: number | null
+    covalentRequestsTotal: number | null
   }
 
   export type TraceMetricMinAggregateOutputType = {
@@ -18868,6 +18870,7 @@ export namespace Prisma {
     success: boolean | null
     totalDurationMs: number | null
     exchangeFoundAtMs: number | null
+    covalentRequestsTotal: number | null
     createdAt: Date | null
   }
 
@@ -18880,6 +18883,7 @@ export namespace Prisma {
     success: boolean | null
     totalDurationMs: number | null
     exchangeFoundAtMs: number | null
+    covalentRequestsTotal: number | null
     createdAt: Date | null
   }
 
@@ -18892,6 +18896,7 @@ export namespace Prisma {
     success: number
     totalDurationMs: number
     exchangeFoundAtMs: number
+    covalentRequestsTotal: number
     flowDurationsJson: number
     walletDurationsJson: number
     createdAt: number
@@ -18903,12 +18908,14 @@ export namespace Prisma {
     seedIndex?: true
     totalDurationMs?: true
     exchangeFoundAtMs?: true
+    covalentRequestsTotal?: true
   }
 
   export type TraceMetricSumAggregateInputType = {
     seedIndex?: true
     totalDurationMs?: true
     exchangeFoundAtMs?: true
+    covalentRequestsTotal?: true
   }
 
   export type TraceMetricMinAggregateInputType = {
@@ -18920,6 +18927,7 @@ export namespace Prisma {
     success?: true
     totalDurationMs?: true
     exchangeFoundAtMs?: true
+    covalentRequestsTotal?: true
     createdAt?: true
   }
 
@@ -18932,6 +18940,7 @@ export namespace Prisma {
     success?: true
     totalDurationMs?: true
     exchangeFoundAtMs?: true
+    covalentRequestsTotal?: true
     createdAt?: true
   }
 
@@ -18944,6 +18953,7 @@ export namespace Prisma {
     success?: true
     totalDurationMs?: true
     exchangeFoundAtMs?: true
+    covalentRequestsTotal?: true
     flowDurationsJson?: true
     walletDurationsJson?: true
     createdAt?: true
@@ -19045,6 +19055,7 @@ export namespace Prisma {
     success: boolean
     totalDurationMs: number
     exchangeFoundAtMs: number | null
+    covalentRequestsTotal: number | null
     flowDurationsJson: JsonValue | null
     walletDurationsJson: JsonValue | null
     createdAt: Date
@@ -19078,6 +19089,7 @@ export namespace Prisma {
     success?: boolean
     totalDurationMs?: boolean
     exchangeFoundAtMs?: boolean
+    covalentRequestsTotal?: boolean
     flowDurationsJson?: boolean
     walletDurationsJson?: boolean
     createdAt?: boolean
@@ -19093,6 +19105,7 @@ export namespace Prisma {
     success?: boolean
     totalDurationMs?: boolean
     exchangeFoundAtMs?: boolean
+    covalentRequestsTotal?: boolean
     flowDurationsJson?: boolean
     walletDurationsJson?: boolean
     createdAt?: boolean
@@ -19108,6 +19121,7 @@ export namespace Prisma {
     success?: boolean
     totalDurationMs?: boolean
     exchangeFoundAtMs?: boolean
+    covalentRequestsTotal?: boolean
     flowDurationsJson?: boolean
     walletDurationsJson?: boolean
     createdAt?: boolean
@@ -19123,12 +19137,13 @@ export namespace Prisma {
     success?: boolean
     totalDurationMs?: boolean
     exchangeFoundAtMs?: boolean
+    covalentRequestsTotal?: boolean
     flowDurationsJson?: boolean
     walletDurationsJson?: boolean
     createdAt?: boolean
   }
 
-  export type TraceMetricOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caseId" | "traceId" | "seedIndex" | "mode" | "success" | "totalDurationMs" | "exchangeFoundAtMs" | "flowDurationsJson" | "walletDurationsJson" | "createdAt", ExtArgs["result"]["traceMetric"]>
+  export type TraceMetricOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caseId" | "traceId" | "seedIndex" | "mode" | "success" | "totalDurationMs" | "exchangeFoundAtMs" | "covalentRequestsTotal" | "flowDurationsJson" | "walletDurationsJson" | "createdAt", ExtArgs["result"]["traceMetric"]>
   export type TraceMetricInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     case?: boolean | TraceMetric$caseArgs<ExtArgs>
   }
@@ -19153,6 +19168,7 @@ export namespace Prisma {
       success: boolean
       totalDurationMs: number
       exchangeFoundAtMs: number | null
+      covalentRequestsTotal: number | null
       flowDurationsJson: Prisma.JsonValue | null
       walletDurationsJson: Prisma.JsonValue | null
       createdAt: Date
@@ -19588,6 +19604,7 @@ export namespace Prisma {
     readonly success: FieldRef<"TraceMetric", 'Boolean'>
     readonly totalDurationMs: FieldRef<"TraceMetric", 'Int'>
     readonly exchangeFoundAtMs: FieldRef<"TraceMetric", 'Int'>
+    readonly covalentRequestsTotal: FieldRef<"TraceMetric", 'Int'>
     readonly flowDurationsJson: FieldRef<"TraceMetric", 'Json'>
     readonly walletDurationsJson: FieldRef<"TraceMetric", 'Json'>
     readonly createdAt: FieldRef<"TraceMetric", 'DateTime'>
@@ -20267,6 +20284,7 @@ export namespace Prisma {
     success: 'success',
     totalDurationMs: 'totalDurationMs',
     exchangeFoundAtMs: 'exchangeFoundAtMs',
+    covalentRequestsTotal: 'covalentRequestsTotal',
     flowDurationsJson: 'flowDurationsJson',
     walletDurationsJson: 'walletDurationsJson',
     createdAt: 'createdAt'
@@ -21653,6 +21671,7 @@ export namespace Prisma {
     success?: BoolFilter<"TraceMetric"> | boolean
     totalDurationMs?: IntFilter<"TraceMetric"> | number
     exchangeFoundAtMs?: IntNullableFilter<"TraceMetric"> | number | null
+    covalentRequestsTotal?: IntNullableFilter<"TraceMetric"> | number | null
     flowDurationsJson?: JsonNullableFilter<"TraceMetric">
     walletDurationsJson?: JsonNullableFilter<"TraceMetric">
     createdAt?: DateTimeFilter<"TraceMetric"> | Date | string
@@ -21668,6 +21687,7 @@ export namespace Prisma {
     success?: SortOrder
     totalDurationMs?: SortOrder
     exchangeFoundAtMs?: SortOrderInput | SortOrder
+    covalentRequestsTotal?: SortOrderInput | SortOrder
     flowDurationsJson?: SortOrderInput | SortOrder
     walletDurationsJson?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -21686,6 +21706,7 @@ export namespace Prisma {
     success?: BoolFilter<"TraceMetric"> | boolean
     totalDurationMs?: IntFilter<"TraceMetric"> | number
     exchangeFoundAtMs?: IntNullableFilter<"TraceMetric"> | number | null
+    covalentRequestsTotal?: IntNullableFilter<"TraceMetric"> | number | null
     flowDurationsJson?: JsonNullableFilter<"TraceMetric">
     walletDurationsJson?: JsonNullableFilter<"TraceMetric">
     createdAt?: DateTimeFilter<"TraceMetric"> | Date | string
@@ -21701,6 +21722,7 @@ export namespace Prisma {
     success?: SortOrder
     totalDurationMs?: SortOrder
     exchangeFoundAtMs?: SortOrderInput | SortOrder
+    covalentRequestsTotal?: SortOrderInput | SortOrder
     flowDurationsJson?: SortOrderInput | SortOrder
     walletDurationsJson?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -21723,6 +21745,7 @@ export namespace Prisma {
     success?: BoolWithAggregatesFilter<"TraceMetric"> | boolean
     totalDurationMs?: IntWithAggregatesFilter<"TraceMetric"> | number
     exchangeFoundAtMs?: IntNullableWithAggregatesFilter<"TraceMetric"> | number | null
+    covalentRequestsTotal?: IntNullableWithAggregatesFilter<"TraceMetric"> | number | null
     flowDurationsJson?: JsonNullableWithAggregatesFilter<"TraceMetric">
     walletDurationsJson?: JsonNullableWithAggregatesFilter<"TraceMetric">
     createdAt?: DateTimeWithAggregatesFilter<"TraceMetric"> | Date | string
@@ -23031,6 +23054,7 @@ export namespace Prisma {
     success: boolean
     totalDurationMs: number
     exchangeFoundAtMs?: number | null
+    covalentRequestsTotal?: number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -23046,6 +23070,7 @@ export namespace Prisma {
     success: boolean
     totalDurationMs: number
     exchangeFoundAtMs?: number | null
+    covalentRequestsTotal?: number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -23059,6 +23084,7 @@ export namespace Prisma {
     success?: BoolFieldUpdateOperationsInput | boolean
     totalDurationMs?: IntFieldUpdateOperationsInput | number
     exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    covalentRequestsTotal?: NullableIntFieldUpdateOperationsInput | number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23074,6 +23100,7 @@ export namespace Prisma {
     success?: BoolFieldUpdateOperationsInput | boolean
     totalDurationMs?: IntFieldUpdateOperationsInput | number
     exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    covalentRequestsTotal?: NullableIntFieldUpdateOperationsInput | number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23088,6 +23115,7 @@ export namespace Prisma {
     success: boolean
     totalDurationMs: number
     exchangeFoundAtMs?: number | null
+    covalentRequestsTotal?: number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -23101,6 +23129,7 @@ export namespace Prisma {
     success?: BoolFieldUpdateOperationsInput | boolean
     totalDurationMs?: IntFieldUpdateOperationsInput | number
     exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    covalentRequestsTotal?: NullableIntFieldUpdateOperationsInput | number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23115,6 +23144,7 @@ export namespace Prisma {
     success?: BoolFieldUpdateOperationsInput | boolean
     totalDurationMs?: IntFieldUpdateOperationsInput | number
     exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    covalentRequestsTotal?: NullableIntFieldUpdateOperationsInput | number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24227,6 +24257,7 @@ export namespace Prisma {
     success?: SortOrder
     totalDurationMs?: SortOrder
     exchangeFoundAtMs?: SortOrder
+    covalentRequestsTotal?: SortOrder
     flowDurationsJson?: SortOrder
     walletDurationsJson?: SortOrder
     createdAt?: SortOrder
@@ -24236,6 +24267,7 @@ export namespace Prisma {
     seedIndex?: SortOrder
     totalDurationMs?: SortOrder
     exchangeFoundAtMs?: SortOrder
+    covalentRequestsTotal?: SortOrder
   }
 
   export type TraceMetricMaxOrderByAggregateInput = {
@@ -24247,6 +24279,7 @@ export namespace Prisma {
     success?: SortOrder
     totalDurationMs?: SortOrder
     exchangeFoundAtMs?: SortOrder
+    covalentRequestsTotal?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -24259,6 +24292,7 @@ export namespace Prisma {
     success?: SortOrder
     totalDurationMs?: SortOrder
     exchangeFoundAtMs?: SortOrder
+    covalentRequestsTotal?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -24266,6 +24300,7 @@ export namespace Prisma {
     seedIndex?: SortOrder
     totalDurationMs?: SortOrder
     exchangeFoundAtMs?: SortOrder
+    covalentRequestsTotal?: SortOrder
   }
 
   export type HotWalletCreateNestedManyWithoutChainInput = {
@@ -26303,6 +26338,7 @@ export namespace Prisma {
     success: boolean
     totalDurationMs: number
     exchangeFoundAtMs?: number | null
+    covalentRequestsTotal?: number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -26316,6 +26352,7 @@ export namespace Prisma {
     success: boolean
     totalDurationMs: number
     exchangeFoundAtMs?: number | null
+    covalentRequestsTotal?: number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -26448,6 +26485,7 @@ export namespace Prisma {
     success?: BoolFilter<"TraceMetric"> | boolean
     totalDurationMs?: IntFilter<"TraceMetric"> | number
     exchangeFoundAtMs?: IntNullableFilter<"TraceMetric"> | number | null
+    covalentRequestsTotal?: IntNullableFilter<"TraceMetric"> | number | null
     flowDurationsJson?: JsonNullableFilter<"TraceMetric">
     walletDurationsJson?: JsonNullableFilter<"TraceMetric">
     createdAt?: DateTimeFilter<"TraceMetric"> | Date | string
@@ -28232,6 +28270,7 @@ export namespace Prisma {
     success: boolean
     totalDurationMs: number
     exchangeFoundAtMs?: number | null
+    covalentRequestsTotal?: number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
@@ -28367,6 +28406,7 @@ export namespace Prisma {
     success?: BoolFieldUpdateOperationsInput | boolean
     totalDurationMs?: IntFieldUpdateOperationsInput | number
     exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    covalentRequestsTotal?: NullableIntFieldUpdateOperationsInput | number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28380,6 +28420,7 @@ export namespace Prisma {
     success?: BoolFieldUpdateOperationsInput | boolean
     totalDurationMs?: IntFieldUpdateOperationsInput | number
     exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    covalentRequestsTotal?: NullableIntFieldUpdateOperationsInput | number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28393,6 +28434,7 @@ export namespace Prisma {
     success?: BoolFieldUpdateOperationsInput | boolean
     totalDurationMs?: IntFieldUpdateOperationsInput | number
     exchangeFoundAtMs?: NullableIntFieldUpdateOperationsInput | number | null
+    covalentRequestsTotal?: NullableIntFieldUpdateOperationsInput | number | null
     flowDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     walletDurationsJson?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

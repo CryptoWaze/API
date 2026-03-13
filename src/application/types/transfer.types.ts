@@ -94,6 +94,7 @@ export type FlowMetrics = {
   flowDurationMs: number;
   exchangeFoundAtMs: number | null;
   walletDurations: { address: string; durationMs: number }[];
+  covalentRequestsCount: number;
 };
 
 export type FollowFlowToExchangeFullHistorySuccess = {

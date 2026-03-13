@@ -175,12 +175,14 @@ export class CreateCaseUseCase {
   ): Promise<void> {
     const { name, seeds } = input;
     const caseStartedAt = Date.now();
+    const covalentRequestsCounter = { count: 0 };
     const allFlowDurations: {
       seedIndex: number;
       flowIndex: number;
       durationMs: number;
       exchangeFoundAtMs: number | null;
       success: boolean;
+      covalentRequestsCount?: number;
     }[] = [];
     const allWalletDurations: {
       seedIndex: number;
@@ -282,7 +284,7 @@ export class CreateCaseUseCase {
 
         const BRANCH_CANDIDATES_PER_WALLET = 1;
         const OUTBOUNDS_LIMIT = 100;
-        const MAX_BRANCH_HOPS = 20;
+        const MAX_BRANCH_HOPS = 10;
 
         let flowResultsForSeed: FollowFlowToExchangeFullHistoryResult[] = [
           flowResult,
@@ -319,6 +321,7 @@ export class CreateCaseUseCase {
                   traceId: `${traceId}-${seedIndex}-branch-${hop}`,
                   minTimestamp,
                 },
+                covalentRequestsCounter,
               );
 
             const picked: string[] = [];
@@ -413,6 +416,7 @@ export class CreateCaseUseCase {
               durationMs: fr.flowMetrics.flowDurationMs,
               exchangeFoundAtMs: fr.flowMetrics.exchangeFoundAtMs,
               success: fr.success,
+              covalentRequestsCount: fr.flowMetrics.covalentRequestsCount,
             });
             for (const w of fr.flowMetrics.walletDurations) {
               allWalletDurations.push({
@@ -538,6 +542,12 @@ export class CreateCaseUseCase {
           .map((f) => f.exchangeFoundAtMs as number)
           .sort((a, b) => a - b)[0] ?? null;
 
+      const covalentRequestsTotal =
+        allFlowDurations.reduce(
+          (sum, f) => sum + (f.covalentRequestsCount ?? 0),
+          0,
+        ) + covalentRequestsCounter.count;
+
       await this.prisma.traceMetric.create({
         data: {
           caseId,
@@ -548,6 +558,7 @@ export class CreateCaseUseCase {
             finalStatus === CaseStatus.PARTIALLY,
           totalDurationMs,
           exchangeFoundAtMs: firstExchangeFoundAtMs,
+          covalentRequestsTotal,
           flowDurationsJson: allFlowDurations as object,
           walletDurationsJson: allWalletDurations as object,
         },
@@ -578,6 +589,7 @@ export class CreateCaseUseCase {
           success: false,
           totalDurationMs,
           exchangeFoundAtMs: null,
+          covalentRequestsTotal: covalentRequestsCounter.count,
           flowDurationsJson: [],
           walletDurationsJson: [],
         },

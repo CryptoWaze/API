@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { PrismaClient } from '../src/generated/prisma';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { CHAINS } from './seeds/chains';
 import {
   BINANCE_EXCHANGE,
   BINANCE_HOT_WALLETS_BY_CHAIN,
@@ -84,15 +83,22 @@ async function processAddressList(
 }
 
 async function main() {
-  const chainIdsBySlug = new Map<string, string>();
-  for (const { slug, name, iconUrl } of CHAINS) {
-    const chain = await prisma.chain.upsert({
-      where: { slug },
-      create: { slug, name, iconUrl: iconUrl ?? null },
-      update: { name, iconUrl: iconUrl ?? null },
-    });
-    chainIdsBySlug.set(chain.slug, chain.id);
-  }
+  const slugsNeeded = [
+    ...new Set([
+      ...Object.keys(BINANCE_HOT_WALLETS_BY_CHAIN),
+      ...Object.keys(GATE_HOT_WALLETS_BY_CHAIN),
+      ...Object.keys(COINBASE_HOT_WALLETS_BY_CHAIN),
+      ...Object.keys(UPBIT_HOT_WALLETS_BY_CHAIN),
+      ...Object.keys(OKX_HOT_WALLETS_BY_CHAIN),
+      ...Object.keys(BYBIT_HOT_WALLETS_BY_CHAIN),
+      ...Object.keys(BITGET_HOT_WALLETS_BY_CHAIN),
+    ]),
+  ];
+  const chains = await prisma.chain.findMany({
+    where: { slug: { in: slugsNeeded } },
+    select: { id: true, slug: true },
+  });
+  const chainIdsBySlug = new Map(chains.map((c) => [c.slug, c.id]));
 
   const binanceExchange = await prisma.exchange.upsert({
     where: { slug: BINANCE_EXCHANGE.slug },

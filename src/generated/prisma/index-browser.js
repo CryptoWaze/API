@@ -307,6 +307,7 @@ exports.Prisma.TraceMetricScalarFieldEnum = {
   success: 'success',
   totalDurationMs: 'totalDurationMs',
   exchangeFoundAtMs: 'exchangeFoundAtMs',
+  covalentRequestsTotal: 'covalentRequestsTotal',
   flowDurationsJson: 'flowDurationsJson',
   walletDurationsJson: 'walletDurationsJson',
   createdAt: 'createdAt'

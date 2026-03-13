@@ -196,15 +196,20 @@ export class FollowFlowToExchangeFullHistoryUseCase {
 
     const flowStartedAt = Date.now();
     try {
-      const { result, edges, walletDurations, exchangeFoundAtMs } =
-        await this.traceFlowIterative(
-          covalentChainId,
-          chainSlug,
-          startAddress,
-          traceId,
-          minTimestamp,
-          flowStartedAt,
-        );
+      const {
+        result,
+        edges,
+        walletDurations,
+        exchangeFoundAtMs,
+        covalentRequestsCount,
+      } = await this.traceFlowIterative(
+        covalentChainId,
+        chainSlug,
+        startAddress,
+        traceId,
+        minTimestamp,
+        flowStartedAt,
+      );
 
       const logSteps = edgesToLogInput(edges);
       const graph = buildGraph(edges);
@@ -234,6 +239,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         flowDurationMs,
         exchangeFoundAtMs: exchangeFoundAtMs ?? null,
         walletDurations,
+        covalentRequestsCount,
       };
 
       if (result.success) {
@@ -307,6 +313,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     limit: number,
     traceId: string | undefined,
     minTimestamp: string | undefined,
+    covalentRequestsCounter: { count: number },
   ): Promise<WalletTransfer[]> {
     const all: WalletTransfer[] = [];
     const minTimeMs =
@@ -314,6 +321,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     const PAGE_LOG_INTERVAL = 20;
 
     for (let page = 0; page < MAX_PAGES_PER_WALLET; page++) {
+      covalentRequestsCounter.count += 1;
       const pageTransfers =
         await this.addressTransfersFetcher.getAddressTransfersPage(
           covalentChainId,
@@ -342,13 +350,16 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     return this.pickTopOutboundsByUsd(all, limit);
   }
 
-  async getTopOutboundsForWallet(input: {
-    chain: string;
-    address: string;
-    limit: number;
-    traceId?: string;
-    minTimestamp?: string;
-  }): Promise<WalletTransfer[]> {
+  async getTopOutboundsForWallet(
+    input: {
+      chain: string;
+      address: string;
+      limit: number;
+      traceId?: string;
+      minTimestamp?: string;
+    },
+    covalentRequestsCounter?: { count: number },
+  ): Promise<WalletTransfer[]> {
     const chainSlug = input.chain.trim();
     const covalentChainId = toCovalentChainId(chainSlug);
     const address = normalizeAddress(input.address);
@@ -358,12 +369,14 @@ export class FollowFlowToExchangeFullHistoryUseCase {
       typeof input.minTimestamp === 'string' && input.minTimestamp
         ? input.minTimestamp.trim()
         : undefined;
+    const counter = covalentRequestsCounter ?? { count: 0 };
     return this.getFullHistoryTopOutbounds(
       covalentChainId,
       address,
       limit,
       traceId,
       minTimestamp,
+      counter,
     );
   }
 
@@ -432,7 +445,9 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     edges: EdgeRecord[];
     walletDurations: { address: string; durationMs: number }[];
     exchangeFoundAtMs: number | null;
+    covalentRequestsCount: number;
   }> {
+    const covalentRequestsCounter = { count: 0 };
     type StackFrame = {
       path: FlowStep[];
       currentAddress: string;
@@ -534,6 +549,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           edges,
           walletDurations,
           exchangeFoundAtMs,
+          covalentRequestsCount: covalentRequestsCounter.count,
         };
       }
 
@@ -549,6 +565,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
           HOT_WALLET_SCAN_LIMIT,
           traceId,
           minTimestamp,
+          covalentRequestsCounter,
         );
         this.progress(traceId, {
           message: `Foram encontradas ${frame.outbounds.length} transferências de saída. Verificando destinos...`,
@@ -620,6 +637,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
             edges,
             walletDurations,
             exchangeFoundAtMs,
+            covalentRequestsCount: covalentRequestsCounter.count,
           };
         }
       }
@@ -734,6 +752,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
       edges,
       walletDurations,
       exchangeFoundAtMs,
+      covalentRequestsCount: covalentRequestsCounter.count,
     };
   }
 }

@@ -6,11 +6,139 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { BlockchainDataQueryService } from '../../infrastructure/blockchain/blockchain-data-query.service';
 
 @ApiTags('Blockchain Data')
 @Controller('_blockchain')
 export class BlockchainDataController {
-  // GET /_blockchain/:chain/address/:address/transfers
+  constructor(
+    private readonly queryService: BlockchainDataQueryService,
+  ) {}
+
+  @Get('exchanges/:exchangeSlug/hot-wallets')
+  @ApiOperation({
+    summary: 'Hot wallets de uma exchange',
+    description:
+      'Lista todas as hot wallets de uma exchange (dados do ClickHouse). Opcionalmente filtra por chain.',
+  })
+  @ApiParam({
+    name: 'exchangeSlug',
+    description: 'Slug da exchange (ex.: binance, gate).',
+  })
+  @ApiQuery({
+    name: 'chain',
+    required: false,
+    description: 'Filtrar por slug da chain (ex.: eth, bsc).',
+  })
+  @ApiResponse({ status: 200, description: 'Lista de hot wallets.' })
+  async getExchangeHotWallets(
+    @Param('exchangeSlug') exchangeSlug: string,
+    @Query('chain') chain?: string,
+  ) {
+    const items = await this.queryService.getHotWalletsByExchange(
+      exchangeSlug,
+      chain,
+    );
+    return {
+      exchangeSlug: exchangeSlug.trim().toLowerCase(),
+      chain: chain?.trim() ? chain.trim().toLowerCase() : null,
+      total: items.length,
+      items: items.map((r) => ({
+        id: r.id,
+        exchangeSlug: r.exchange_slug,
+        chainSlug: r.chain_slug,
+        address: r.address,
+        label: r.label,
+        isActive: r.is_active === '1',
+      })),
+    };
+  }
+
+  @Get(':chain/address/:address/summary')
+  @ApiOperation({
+    summary: 'Resumo de uma carteira',
+    description:
+      'Retorna contagem de transações, primeira e última transação. Saldo não disponível (dados apenas do ClickHouse).',
+  })
+  @ApiParam({ name: 'chain', description: 'Slug da chain (ex.: eth, bsc).' })
+  @ApiParam({ name: 'address', description: 'Endereço da carteira.' })
+  @ApiResponse({ status: 200, description: 'Resumo da carteira.' })
+  async getAddressSummary(
+    @Param('chain') chain: string,
+    @Param('address') address: string,
+  ) {
+    return this.queryService.getAddressSummary(chain, address);
+  }
+
+  @Get(':chain/address/:address/transactions')
+  @ApiOperation({
+    summary: 'Transações recentes de uma carteira',
+    description:
+      'Lista transações em que a carteira é origem ou destino (dados do ClickHouse, paginado).',
+  })
+  @ApiParam({ name: 'chain', description: 'Slug da chain (ex.: eth, bsc).' })
+  @ApiParam({ name: 'address', description: 'Endereço da carteira.' })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Máximo de registros (default: 100, máx. 1000).',
+  })
+  @ApiQuery({
+    name: 'offset',
+    required: false,
+    type: Number,
+    description: 'Offset para paginação (default: 0).',
+  })
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    enum: ['asc', 'desc'],
+    description: 'Ordenação por timestamp (default: desc).',
+  })
+  @ApiResponse({ status: 200, description: 'Lista paginada de transações.' })
+  async getAddressTransactions(
+    @Param('chain') chain: string,
+    @Param('address') address: string,
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+    @Query('order') order?: 'asc' | 'desc',
+  ) {
+    const limitNum = limit != null ? parseInt(limit, 10) : 100;
+    const offsetNum = offset != null ? parseInt(offset, 10) : 0;
+    const orderDir = order === 'asc' ? 'asc' : 'desc';
+    const items = await this.queryService.getAddressTransactions(
+      chain,
+      address,
+      limitNum,
+      offsetNum,
+      orderDir,
+    );
+    const total = await this.queryService.getAddressTransactionCount(
+      chain,
+      address,
+    );
+    return {
+      chain: chain.trim().toLowerCase(),
+      address: address.trim().toLowerCase(),
+      total,
+      limit: limitNum,
+      offset: offsetNum,
+      order: orderDir,
+      items: items.map((r) => ({
+        txHash: r.tx_hash,
+        blockNumber: parseInt(r.block_number, 10),
+        fromAddress: r.from_address,
+        toAddress: r.to_address,
+        valueWei: r.value_wei,
+        gasUsed: r.gas_used,
+        gasPriceWei: r.gas_price_wei,
+        timestamp: r.timestamp,
+        nonce: parseInt(r.nonce, 10),
+      })),
+    };
+  }
+
   @Get(':chain/address/:address/transfers')
   @ApiOperation({
     summary: 'Listar transfers de um endereço',

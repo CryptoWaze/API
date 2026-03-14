@@ -20,18 +20,9 @@ import {
   HOT_WALLET_CHECKER,
   type IHotWalletChecker,
 } from '../ports/hot-wallet-checker.port';
+import { normalizeAddress, toCovalentChainId } from '../utils/blockchain.utils';
 
 const MAX_HOPS = 10;
-
-function toCovalentChainId(slug: string): string {
-  return `${slug}-mainnet`;
-}
-
-function normalizeAddress(address: string): string {
-  const a = address.trim();
-  if (a.startsWith('0x')) return a.toLowerCase();
-  return a;
-}
 
 function pickLargestOutbound(
   transfers: WalletTransfer[],

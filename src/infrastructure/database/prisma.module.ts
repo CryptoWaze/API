@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { FLOW_TRACE_LOG_WRITER } from '../../application/ports/flow-trace-log-writer.port';
 import { HOT_WALLET_CHECKER } from '../../application/ports/hot-wallet-checker.port';
 import { TOKEN_PRICE_PROVIDER } from '../../application/ports/token-price-provider.port';
+import { ClickHouseModule } from '../blockchain/clickhouse/clickhouse.module';
 import { DatabaseService } from './database.service';
 import { FlowTraceLogWriterService } from './flow-trace-log-writer.service';
 import { HotWalletCheckerService } from './hot-wallet-checker.service';
@@ -10,6 +11,7 @@ import { TokenPriceProviderService } from './token-price-provider.service';
 
 @Global()
 @Module({
+  imports: [ClickHouseModule],
   providers: [
     PrismaService,
     DatabaseService,

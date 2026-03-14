@@ -5,9 +5,10 @@ import {
   ADDRESS_TRANSFERS_FETCHER,
   type IAddressTransfersFetcher,
 } from '../ports/address-transfers-fetcher.port';
-
-const CHAINS: readonly [string, string] = ['eth-mainnet', 'bsc-mainnet'];
-const TOP_N = 3;
+import {
+  ADDRESS_TOP_TRANSFERS_TOP_N,
+  RESOLVE_AND_ADDRESS_CHAINS,
+} from '../constants/domain.constants';
 
 /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment */
 function topOutboundByAmount(
@@ -36,13 +37,13 @@ export class GetAddressTopTransfersUseCase {
     const normalizedAddress = address.trim().toLowerCase();
     const result: Record<string, { transfers: WalletTransfer[] }> = {};
 
-    for (const chain of CHAINS) {
+    for (const chain of RESOLVE_AND_ADDRESS_CHAINS) {
       const all: WalletTransfer[] =
         await this.addressTransfersFetcher.getAddressTransfers(
           chain,
           normalizedAddress,
         );
-      const top = topOutboundByAmount(all, TOP_N);
+      const top = topOutboundByAmount(all, ADDRESS_TOP_TRANSFERS_TOP_N);
       if (top.length > 0) {
         result[chain] = { transfers: top };
       }

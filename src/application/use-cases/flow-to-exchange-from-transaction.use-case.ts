@@ -3,14 +3,7 @@ import type { FlowToExchangeFromTransactionInput } from '../schemas/flow-to-exch
 import type { FollowFlowToExchangeFullHistoryResult } from '../types';
 import { FollowFlowToExchangeFullHistoryUseCase } from './follow-flow-to-exchange-full-history.use-case';
 import { ResolveTransactionUseCase } from './resolve-transaction.use-case';
-
-function chainToSlug(chain: string): string {
-  const trimmed = chain.trim();
-  if (trimmed.endsWith('-mainnet')) {
-    return trimmed.slice(0, -'-mainnet'.length);
-  }
-  return trimmed;
-}
+import { chainToSlug } from '../utils/blockchain.utils';
 
 @Injectable()
 export class FlowToExchangeFromTransactionUseCase {

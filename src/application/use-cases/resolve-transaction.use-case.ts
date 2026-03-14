@@ -13,8 +13,7 @@ import {
   type ITransactionFetcher,
 } from '../ports/transaction-fetcher.port';
 import type { Transfer } from '../types';
-
-const CHAINS = ['eth-mainnet', 'bsc-mainnet'];
+import { RESOLVE_AND_ADDRESS_CHAINS } from '../constants/domain.constants';
 
 function pickTransferByReportedAmount(
   transfers: Transfer[],
@@ -56,7 +55,7 @@ export class ResolveTransactionUseCase {
       const { txHash, reportedLossAmount } = input;
       const normalizedHash = txHash.trim();
 
-      for (const chain of CHAINS) {
+      for (const chain of RESOLVE_AND_ADDRESS_CHAINS) {
         const data = await this.transactionFetcher.getTransactionWithTransfers(
           chain,
           normalizedHash,
@@ -81,7 +80,7 @@ export class ResolveTransactionUseCase {
       }
 
       throw new NotFoundException(
-        `Transação não encontrada em nenhuma chain (${CHAINS.join(', ')}). Verifique o hash.`,
+        `Transação não encontrada em nenhuma chain (${RESOLVE_AND_ADDRESS_CHAINS.join(', ')}). Verifique o hash.`,
       );
     } catch (err) {
       if (err instanceof NotFoundException) throw err;

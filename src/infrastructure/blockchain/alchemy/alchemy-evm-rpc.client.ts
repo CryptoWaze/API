@@ -179,5 +179,77 @@ export class AlchemyEvmRpcClient {
   ): Promise<unknown> {
     return this.request(chain, 'eth_getTransactionReceipt', [txHash]);
   }
+
+  async getTransactionReceiptsBatch(
+    chain: AlchemyEvmChain,
+    txHashes: string[],
+  ): Promise<(unknown | null)[]> {
+    if (txHashes.length === 0) return [];
+    const url = this.resolveRpcUrl(chain);
+    const batch = txHashes.map((hash, i) => ({
+      jsonrpc: '2.0' as const,
+      id: i,
+      method: 'eth_getTransactionReceipt',
+      params: [hash],
+    }));
+
+    const now = Date.now();
+    const diff = now - this.lastRequestAt;
+    if (diff < AlchemyEvmRpcClient.MIN_INTERVAL_MS) {
+      await this.sleep(AlchemyEvmRpcClient.MIN_INTERVAL_MS - diff);
+    }
+
+    let attempt = 0;
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      attempt += 1;
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(batch),
+        });
+        this.lastRequestAt = Date.now();
+
+        if (!response.ok) {
+          const isRetriable =
+            response.status === 429 || response.status >= 500;
+          const text = await response.text().catch(() => '');
+          const msg = `Alchemy batch HTTP error ${response.status}: ${text.slice(0, 200)}`;
+          if (!isRetriable || attempt >= AlchemyEvmRpcClient.MAX_RETRIES) {
+            throw new Error(msg);
+          }
+          this.logger.warn(
+            `Retrying batch (attempt ${attempt}/${AlchemyEvmRpcClient.MAX_RETRIES}) due to HTTP ${response.status}`,
+          );
+          await this.sleep(
+            attempt === 1 ? 200 : attempt === 2 ? 500 : 1000,
+          );
+          continue;
+        }
+
+        const results = (await response.json()) as JsonRpcResponse<unknown>[];
+        const arr = Array.isArray(results) ? results : [results];
+        const byId = new Map<number, unknown | null>();
+        for (const item of arr) {
+          const id = (item as { id?: number }).id;
+          if (id !== undefined) {
+            byId.set(id, (item as { result?: unknown }).result ?? null);
+          }
+        }
+        return txHashes.map((_, i) => byId.get(i) ?? null);
+      } catch (err) {
+        if (attempt >= AlchemyEvmRpcClient.MAX_RETRIES) throw err;
+        this.logger.warn(
+          `Retrying batch (attempt ${attempt}/${AlchemyEvmRpcClient.MAX_RETRIES}): ${
+            err instanceof Error ? err.message : String(err)
+          }`,
+        );
+        await this.sleep(
+          attempt === 1 ? 200 : attempt === 2 ? 500 : 1000,
+        );
+      }
+    }
+  }
 }
 

@@ -16,19 +16,9 @@ import { SocketGateway } from '../../presentation/socket/socket.gateway';
 import {
   TOKEN_PRICE_PROVIDER,
   type ITokenPriceProvider,
+  type TokenInfo,
 } from '../ports/token-price-provider.port';
-
-function chainToSlug(chain: string): string {
-  const t = chain.trim();
-  if (t.endsWith('-mainnet')) return t.slice(0, -'-mainnet'.length);
-  return t;
-}
-
-function normalizeAddress(address: string): string {
-  const a = address.trim();
-  if (a.startsWith('0x')) return a.toLowerCase();
-  return a;
-}
+import { chainToSlug, normalizeAddress } from '../utils/blockchain.utils';
 
 function mapToEndpointReason(
   result: FollowFlowToExchangeFullHistoryResult,
@@ -71,19 +61,15 @@ export class CreateCaseUseCase {
     private readonly tokenPriceProvider: ITokenPriceProvider,
   ) {}
 
-  private async enrichPrefixTokenInfo(
+  private enrichPrefixTokenInfo(
     steps: FlowStep[],
     edges: FlowGraphEdge[],
-  ): Promise<{
+    tokenInfoBySymbol: Map<string, TokenInfo>,
+  ): {
     steps: FlowStep[];
     edges: FlowGraphEdge[];
-  }> {
-    const symbols = new Set<string>();
-    for (const s of steps) symbols.add(s.transfer.symbol.trim().toLowerCase());
-    for (const e of edges) {
-      if (e.symbol) symbols.add(e.symbol.trim().toLowerCase());
-    }
-    const map = await this.tokenPriceProvider.getTokenInfoBatch([...symbols]);
+  } {
+    const map = tokenInfoBySymbol;
     const enrichedSteps = steps.map((s) => {
       const info = map.get(s.transfer.symbol.trim().toLowerCase());
       return {
@@ -260,6 +246,9 @@ export class CreateCaseUseCase {
         return id;
       };
 
+      const tokenInfoBySymbol =
+        await this.tokenPriceProvider.getAllTokenInfo();
+
       for (const { seedIndex, resolveResult, flowResult } of flowResults) {
         const seedTransfer = resolveResult.seedTransfer;
         if (!seedTransfer) continue;
@@ -322,6 +311,7 @@ export class CreateCaseUseCase {
                   minTimestamp,
                 },
                 covalentRequestsCounter,
+                tokenInfoBySymbol,
               );
 
             const picked: string[] = [];
@@ -336,9 +326,10 @@ export class CreateCaseUseCase {
             for (let i = 0; i < picked.length; i++) {
               const nextTo = picked[i];
               const prefix = this.buildPrefixSteps(from, nextTo, outbounds);
-              const enrichedPrefix = await this.enrichPrefixTokenInfo(
+              const enrichedPrefix = this.enrichPrefixTokenInfo(
                 prefix.steps,
                 prefix.edges,
+                tokenInfoBySymbol,
               );
 
               const remainingSlots =

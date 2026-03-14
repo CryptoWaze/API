@@ -36,29 +36,21 @@ import {
   type ITokenPriceProvider,
   type TokenInfo,
 } from '../ports/token-price-provider.port';
-
-const MAX_WALLETS = 50;
-const MAX_PAGES_PER_WALLET = 50;
-const TOP_OUTBOUNDS_PER_WALLET = 10;
-const HOT_WALLET_SCAN_LIMIT = 100;
-const MIN_TRANSFER_AMOUNT = 0.01;
-const MIN_TRANSFER_USD = 100;
-
-function toCovalentChainId(slug: string): string {
-  return `${slug}-mainnet`;
-}
-
-function normalizeAddress(address: string): string {
-  const a = address.trim();
-  if (a.startsWith('0x')) return a.toLowerCase();
-  return a;
-}
+import {
+  FLOW_TRACE_HOT_WALLET_SCAN_LIMIT,
+  FLOW_TRACE_MAX_PAGES_PER_WALLET,
+  FLOW_TRACE_MAX_WALLETS,
+  FLOW_TRACE_MIN_TRANSFER_AMOUNT,
+  FLOW_TRACE_MIN_TRANSFER_USD,
+  FLOW_TRACE_TOP_OUTBOUNDS_PER_WALLET,
+} from '../constants/domain.constants';
+import { normalizeAddress, toCovalentChainId } from '../utils/blockchain.utils';
 
 function filterOutboundsAboveMin(
   transfers: WalletTransfer[],
 ): WalletTransfer[] {
   return transfers.filter(
-    (t) => t.direction === 'OUT' && t.amount >= MIN_TRANSFER_AMOUNT,
+    (t) => t.direction === 'OUT' && t.amount >= FLOW_TRACE_MIN_TRANSFER_AMOUNT,
   );
 }
 
@@ -195,6 +187,11 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     });
 
     const flowStartedAt = Date.now();
+    const [tokenInfoBySymbol, hotWalletAddresses] = await Promise.all([
+      this.tokenPriceProvider.getAllTokenInfo(),
+      this.hotWalletChecker.getHotWalletAddressesForChain(chainSlug),
+    ]);
+
     try {
       const {
         result,
@@ -209,12 +206,11 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         traceId,
         minTimestamp,
         flowStartedAt,
+        { tokenInfoBySymbol, hotWalletAddresses },
       );
 
       const logSteps = edgesToLogInput(edges);
       const graph = buildGraph(edges);
-      const tokenInfoBySymbol: Map<string, TokenInfo> =
-        await this.enrichTokenInfo(result.steps, graph.edges);
       const enrichedSteps = result.steps.map((s) => {
         const info = tokenInfoBySymbol.get(
           s.transfer.symbol.trim().toLowerCase(),
@@ -314,13 +310,14 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     traceId: string | undefined,
     minTimestamp: string | undefined,
     covalentRequestsCounter: { count: number },
+    tokenInfoBySymbol: Map<string, TokenInfo>,
   ): Promise<WalletTransfer[]> {
     const all: WalletTransfer[] = [];
     const minTimeMs =
       minTimestamp != null ? this.parseTimestampToMs(minTimestamp) : null;
     const PAGE_LOG_INTERVAL = 20;
 
-    for (let page = 0; page < MAX_PAGES_PER_WALLET; page++) {
+    for (let page = 0; page < FLOW_TRACE_MAX_PAGES_PER_WALLET; page++) {
       covalentRequestsCounter.count += 1;
       const pageTransfers =
         await this.addressTransfersFetcher.getAddressTransfersPage(
@@ -347,7 +344,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         });
       }
     }
-    return this.pickTopOutboundsByUsd(all, limit);
+    return this.pickTopOutboundsByUsd(all, limit, tokenInfoBySymbol);
   }
 
   async getTopOutboundsForWallet(
@@ -358,7 +355,8 @@ export class FollowFlowToExchangeFullHistoryUseCase {
       traceId?: string;
       minTimestamp?: string;
     },
-    covalentRequestsCounter?: { count: number },
+    covalentRequestsCounter: { count: number } | undefined,
+    tokenInfoBySymbol: Map<string, TokenInfo>,
   ): Promise<WalletTransfer[]> {
     const chainSlug = input.chain.trim();
     const covalentChainId = toCovalentChainId(chainSlug);
@@ -377,45 +375,28 @@ export class FollowFlowToExchangeFullHistoryUseCase {
       traceId,
       minTimestamp,
       counter,
+      tokenInfoBySymbol,
     );
   }
 
-  private async enrichTokenInfo(
-    steps: FlowStep[],
-    edges: { symbol: string }[],
-  ): Promise<Map<string, TokenInfo>> {
-    const symbols = new Set<string>();
-    for (const s of steps) {
-      symbols.add(s.transfer.symbol.trim().toLowerCase());
-    }
-    for (const e of edges) {
-      symbols.add(e.symbol.trim().toLowerCase());
-    }
-    return this.tokenPriceProvider.getTokenInfoBatch([...symbols]);
-  }
-
-  private async pickTopOutboundsByUsd(
+  private pickTopOutboundsByUsd(
     transfers: WalletTransfer[],
     limit: number,
-  ): Promise<WalletTransfer[]> {
+    tokenInfoBySymbol: Map<string, TokenInfo>,
+  ): WalletTransfer[] {
     const out = filterOutboundsAboveMin(transfers);
     if (out.length === 0) return [];
-    const symbols = [...new Set(out.map((t) => t.symbol.trim().toLowerCase()))];
-    const priceBySymbol = new Map<string, number | null>();
-    for (const symbol of symbols) {
-      const price = await this.tokenPriceProvider.getPriceInUsd(symbol);
-      priceBySymbol.set(symbol, price ?? null);
-    }
     const withUsd = out
       .map((t) => {
-        const price = priceBySymbol.get(t.symbol.trim().toLowerCase()) ?? null;
+        const info = tokenInfoBySymbol.get(t.symbol.trim().toLowerCase());
+        const price = info?.priceUsd ?? null;
         const valueUsd =
           price != null && !Number.isNaN(price) ? t.amount * price : null;
         return { transfer: t, valueUsd };
       })
       .filter((x) => {
         if (x.valueUsd == null) return true;
-        return x.valueUsd >= MIN_TRANSFER_USD;
+        return x.valueUsd >= FLOW_TRACE_MIN_TRANSFER_USD;
       });
     withUsd.sort((a, b) => (b.valueUsd ?? 0) - (a.valueUsd ?? 0));
     return withUsd.slice(0, limit).map((x) => x.transfer);
@@ -440,6 +421,10 @@ export class FollowFlowToExchangeFullHistoryUseCase {
     traceId: string | undefined,
     minTimestamp: string | undefined,
     flowStartedAt: number,
+    traceContext: {
+      tokenInfoBySymbol: Map<string, TokenInfo>;
+      hotWalletAddresses: Set<string>;
+    },
   ): Promise<{
     result: TraceSuccess | TraceFailure;
     edges: EdgeRecord[];
@@ -508,7 +493,7 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         });
       };
 
-      if (frame.path.length >= MAX_WALLETS) {
+      if (frame.path.length >= FLOW_TRACE_MAX_WALLETS) {
         this.progress(traceId, {
           message: `Limite máximo de carteiras analisadas atingido (50). Interrompendo rastreio.`,
           depth: depth + 1,
@@ -526,9 +511,8 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         continue;
       }
 
-      const isHot = await this.hotWalletChecker.isHotWallet(
-        chainSlug,
-        frame.currentAddress,
+      const isHot = traceContext.hotWalletAddresses.has(
+        normalizeAddress(frame.currentAddress),
       );
       if (isHot) {
         recordWalletDuration();
@@ -562,10 +546,11 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         frame.outbounds = await this.getFullHistoryTopOutbounds(
           covalentChainId,
           frame.currentAddress,
-          HOT_WALLET_SCAN_LIMIT,
+          FLOW_TRACE_HOT_WALLET_SCAN_LIMIT,
           traceId,
           minTimestamp,
           covalentRequestsCounter,
+          traceContext.tokenInfoBySymbol,
         );
         this.progress(traceId, {
           message: `Foram encontradas ${frame.outbounds.length} transferências de saída. Verificando destinos...`,
@@ -594,10 +579,8 @@ export class FollowFlowToExchangeFullHistoryUseCase {
 
       for (const transfer of frame.outbounds) {
         const counterparty = normalizeAddress(transfer.counterparty);
-        const isCounterpartyHot = await this.hotWalletChecker.isHotWallet(
-          chainSlug,
-          counterparty,
-        );
+        const isCounterpartyHot =
+          traceContext.hotWalletAddresses.has(counterparty);
         if (isCounterpartyHot) {
           const allToHot = frame.outbounds.filter(
             (t) => normalizeAddress(t.counterparty) === counterparty,
@@ -642,7 +625,10 @@ export class FollowFlowToExchangeFullHistoryUseCase {
         }
       }
 
-      frame.outbounds = frame.outbounds.slice(0, TOP_OUTBOUNDS_PER_WALLET);
+      frame.outbounds = frame.outbounds.slice(
+        0,
+        FLOW_TRACE_TOP_OUTBOUNDS_PER_WALLET,
+      );
 
       const visited = this.visitedAddresses(frame.path, startAddress);
       let pushed = false;

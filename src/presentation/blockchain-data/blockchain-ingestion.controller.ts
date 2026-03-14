@@ -1,5 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { INGESTION_CHAINS } from '../../application/constants/domain.constants';
+import { CatalogSyncService } from '../../infrastructure/blockchain/ingestion/catalog-sync.service';
 import { EvmBlockIngestionService } from '../../infrastructure/blockchain/ingestion/evm-block-ingestion.service';
 import type { AlchemyEvmChain } from '../../infrastructure/blockchain/alchemy/alchemy-evm-rpc.client';
 
@@ -14,7 +16,18 @@ type RunOnceBody = {
 export class BlockchainIngestionController {
   constructor(
     private readonly evmBlockIngestionService: EvmBlockIngestionService,
+    private readonly catalogSync: CatalogSyncService,
   ) {}
+
+  @Post('catalog-sync')
+  @ApiOperation({
+    summary: 'Sincronizar catálogos do Postgres para o ClickHouse',
+    description:
+      'Copia tokens, hot_wallets e exchanges do Postgres para o ClickHouse. Tokens só são copiados se a tabela estiver vazia (o cron mantém atualizado).',
+  })
+  async catalogSync() {
+    return this.catalogSync.syncAll();
+  }
 
   @Post('evm/run-once')
   @ApiOperation({
@@ -28,7 +41,7 @@ export class BlockchainIngestionController {
       properties: {
         chain: {
           type: 'string',
-          enum: ['eth-mainnet', 'polygon-mainnet', 'base-mainnet', 'bnb-mainnet'],
+          enum: [...INGESTION_CHAINS],
         },
         startTimestampIso: {
           type: 'string',

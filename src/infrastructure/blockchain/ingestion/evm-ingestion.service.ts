@@ -48,6 +48,10 @@ export class EvmIngestionService {
     return initialState;
   }
 
+  async getState(chain: AlchemyEvmChain): Promise<IngestionState | null> {
+    return this.stateRepo.getState(chain);
+  }
+
   async getNextRange(
     chain: AlchemyEvmChain,
     startTimestampIso: string,
@@ -111,6 +115,38 @@ export class EvmIngestionService {
     this.logger.log(
       `Ingestão marcada como COMPLETED para chain=${chain} (start=${startTimestampIso}).`,
     );
+  }
+
+  async getBlockRangeForDate(
+    chain: AlchemyEvmChain,
+    dateIso: string,
+  ): Promise<{ startBlock: number; endBlock: number } | null> {
+    const dateOnly = dateIso.trim().split('T')[0];
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOnly)) {
+      throw new Error(`Invalid dateIso (expected YYYY-MM-DD): ${dateIso}`);
+    }
+    const startOfDay = `${dateOnly}T00:00:00.000Z`;
+    const nextDay = new Date(startOfDay);
+    nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+    const startOfNextDay = nextDay.toISOString();
+
+    const startBlock = await this.getBlockNumberForTimestamp(chain, startOfDay);
+    const firstBlockNextDay = await this.getBlockNumberForTimestamp(
+      chain,
+      startOfNextDay,
+    );
+    const endBlock = firstBlockNextDay - 1;
+    if (startBlock > endBlock) {
+      return null;
+    }
+    return { startBlock, endBlock };
+  }
+
+  async getBlockNumberForTimestamp(
+    chain: AlchemyEvmChain,
+    timestampIso: string,
+  ): Promise<number> {
+    return this.findStartBlockForTimestamp(chain, timestampIso);
   }
 
   private async findStartBlockForTimestamp(

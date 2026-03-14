@@ -14,13 +14,11 @@ import {
   ADDRESS_TRANSFERS_FETCHER,
   type IAddressTransfersFetcher,
 } from '../ports/address-transfers-fetcher.port';
-
-const TOP_N = 3;
-const MAX_PAGES = 500;
-
-function toCovalentChainId(slug: string): string {
-  return `${slug}-mainnet`;
-}
+import {
+  ADDRESS_TOP_TRANSFERS_HISTORY_MAX_PAGES,
+  ADDRESS_TOP_TRANSFERS_TOP_N,
+} from '../constants/domain.constants';
+import { toCovalentChainId } from '../utils/blockchain.utils';
 
 /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment */
 function topOutboundByAmount(
@@ -55,7 +53,7 @@ export class GetAddressTopTransfersHistoryUseCase {
       const normalizedAddress = input.address.trim().toLowerCase();
 
       const allTransfers: WalletTransfer[] = [];
-      for (let page = 0; page < MAX_PAGES; page++) {
+      for (let page = 0; page < ADDRESS_TOP_TRANSFERS_HISTORY_MAX_PAGES; page++) {
         const pageTransfers =
           await this.addressTransfersFetcher.getAddressTransfersPage(
             covalentChainId,
@@ -66,7 +64,10 @@ export class GetAddressTopTransfersHistoryUseCase {
         allTransfers.push(...pageTransfers);
       }
 
-      const top = topOutboundByAmount(allTransfers, TOP_N);
+      const top = topOutboundByAmount(
+        allTransfers,
+        ADDRESS_TOP_TRANSFERS_TOP_N,
+      );
 
       return {
         chain: chainSlug,

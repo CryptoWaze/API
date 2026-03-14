@@ -8,4 +8,5 @@ export type TokenInfo = {
 export interface ITokenPriceProvider {
   getPriceInUsd(symbol: string): Promise<number | null>;
   getTokenInfoBatch(symbols: string[]): Promise<Map<string, TokenInfo>>;
+  getAllTokenInfo(): Promise<Map<string, TokenInfo>>;
 }

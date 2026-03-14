@@ -14,12 +14,8 @@ import {
   ADDRESS_TRANSFERS_FETCHER,
   type IAddressTransfersFetcher,
 } from '../ports/address-transfers-fetcher.port';
-
-const TOP_N = 3;
-
-function toCovalentChainId(slug: string): string {
-  return `${slug}-mainnet`;
-}
+import { ADDRESS_TOP_TRANSFERS_TOP_N } from '../constants/domain.constants';
+import { toCovalentChainId } from '../utils/blockchain.utils';
 
 /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment */
 function topOutboundByAmount(
@@ -58,7 +54,10 @@ export class GetAddressTopTransfersPaginatedUseCase {
           normalizedAddress,
           page,
         );
-      const top = topOutboundByAmount(transfers, TOP_N);
+      const top = topOutboundByAmount(
+        transfers,
+        ADDRESS_TOP_TRANSFERS_TOP_N,
+      );
 
       return {
         chain: chainSlug,

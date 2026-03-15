@@ -23,15 +23,14 @@ describe('BlockchainIngestionController', () => {
     controller = module.get(BlockchainIngestionController);
   });
 
-  it('catalogSync route delegates to catalogSync.syncAll', async () => {
+  it('catalogSync delegates to catalogSyncService.syncAll', async () => {
     catalogSync.syncAll.mockResolvedValue({
       exchanges: 2,
       hotWallets: 10,
       tokens: 100,
     });
 
-    const routeMethod = Object.getPrototypeOf(controller).catalogSync;
-    const result = await routeMethod.call(controller);
+    const result = await controller.catalogSync();
 
     expect(result).toEqual({ exchanges: 2, hotWallets: 10, tokens: 100 });
     expect(catalogSync.syncAll).toHaveBeenCalled();

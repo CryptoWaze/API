@@ -26,6 +26,9 @@
     "prisma:seed-case-kauan": "npx tsx prisma/seed-case-kauan.ts",
     "prisma:seed-case-diversificado": "npx tsx prisma/seed-case-diversificado.ts",
     "prisma:seed-icons-base64": "npx tsx prisma/seed-icons-base64.ts",
+    "tokens:images-to-base64": "npx tsx scripts/token-images-to-base64.ts",
+    "tokens:images-to-r2-webp": "npx tsx scripts/token-images-to-r2-webp.ts",
+    "tokens:backfill-r2-urls": "npx tsx scripts/backfill-token-r2-urls.ts",
     "clickhouse:schema": "npx tsx scripts/clickhouse-create-schema.ts",
     "clickhouse:sync": "npx tsx scripts/catalog-sync-to-clickhouse.ts",
     "clickhouse:ingest": "npx tsx scripts/clickhouse-ingest.ts",
@@ -58,6 +61,7 @@
     "puppeteer": "^24.39.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "sharp": "^0.33.5",
     "socket.io": "^4.8.3",
     "zod": "^3.23.8"
   },

@@ -153,6 +153,8 @@ exports.Prisma.TokenScalarFieldEnum = {
   name: 'name',
   symbol: 'symbol',
   imageUrl: 'imageUrl',
+  imageBase64: 'imageBase64',
+  imageR2Url: 'imageR2Url',
   currentPrice: 'currentPrice',
   marketCap: 'marketCap',
   marketCapRank: 'marketCapRank',

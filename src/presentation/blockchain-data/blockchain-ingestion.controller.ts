@@ -16,7 +16,7 @@ type RunOnceBody = {
 export class BlockchainIngestionController {
   constructor(
     private readonly evmBlockIngestionService: EvmBlockIngestionService,
-    private readonly catalogSync: CatalogSyncService,
+    private readonly catalogSyncService: CatalogSyncService,
   ) {}
 
   @Post('catalog-sync')
@@ -26,7 +26,7 @@ export class BlockchainIngestionController {
       'Copia tokens, hot_wallets e exchanges do Postgres para o ClickHouse. Tokens só são copiados se a tabela estiver vazia (o cron mantém atualizado).',
   })
   async catalogSync() {
-    return this.catalogSync.syncAll();
+    return this.catalogSyncService.syncAll();
   }
 
   @Post('evm/run-once')

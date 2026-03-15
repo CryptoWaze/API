@@ -9,6 +9,7 @@ import { SocketModule } from './presentation/socket';
 import { CasesModule } from './presentation/cases';
 import { TokensModule } from './presentation/tokens';
 import { BlockchainDataModule } from './presentation/blockchain-data/blockchain-data.module';
+import { ChainsModule } from './presentation/chains/chains.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { BlockchainDataModule } from './presentation/blockchain-data/blockchain-
     CasesModule,
     TokensModule,
     BlockchainDataModule,
+    ChainsModule,
   ],
 })
 export class AppModule {}

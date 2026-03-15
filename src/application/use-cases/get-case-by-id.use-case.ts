@@ -134,7 +134,12 @@ export class GetCaseByIdUseCase {
     if (normalized.length === 0) return new Map();
     const tokens = await this.prisma.token.findMany({
       where: { symbol: { in: normalized } },
-      select: { symbol: true, currentPrice: true, imageUrl: true },
+      select: {
+        symbol: true,
+        currentPrice: true,
+        imageUrl: true,
+        imageBase64: true,
+      },
     });
     const map = new Map<string, TokenInfoEntry>();
     for (const sym of normalized) {
@@ -146,7 +151,7 @@ export class GetCaseByIdUseCase {
       map.set(sym, {
         priceUsd:
           priceUsd != null && !Number.isNaN(priceUsd) ? priceUsd : null,
-        imageUrl: token?.imageUrl ?? null,
+        imageUrl: token?.imageBase64 ?? token?.imageUrl ?? null,
       });
     }
     return map;

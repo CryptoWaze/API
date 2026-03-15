@@ -5894,6 +5894,8 @@ export namespace Prisma {
     name: string | null
     symbol: string | null
     imageUrl: string | null
+    imageBase64: string | null
+    imageR2Url: string | null
     currentPrice: string | null
     marketCap: string | null
     marketCapRank: number | null
@@ -5909,6 +5911,8 @@ export namespace Prisma {
     name: string | null
     symbol: string | null
     imageUrl: string | null
+    imageBase64: string | null
+    imageR2Url: string | null
     currentPrice: string | null
     marketCap: string | null
     marketCapRank: number | null
@@ -5924,6 +5928,8 @@ export namespace Prisma {
     name: number
     symbol: number
     imageUrl: number
+    imageBase64: number
+    imageR2Url: number
     currentPrice: number
     marketCap: number
     marketCapRank: number
@@ -5949,6 +5955,8 @@ export namespace Prisma {
     name?: true
     symbol?: true
     imageUrl?: true
+    imageBase64?: true
+    imageR2Url?: true
     currentPrice?: true
     marketCap?: true
     marketCapRank?: true
@@ -5964,6 +5972,8 @@ export namespace Prisma {
     name?: true
     symbol?: true
     imageUrl?: true
+    imageBase64?: true
+    imageR2Url?: true
     currentPrice?: true
     marketCap?: true
     marketCapRank?: true
@@ -5979,6 +5989,8 @@ export namespace Prisma {
     name?: true
     symbol?: true
     imageUrl?: true
+    imageBase64?: true
+    imageR2Url?: true
     currentPrice?: true
     marketCap?: true
     marketCapRank?: true
@@ -6081,6 +6093,8 @@ export namespace Prisma {
     name: string
     symbol: string
     imageUrl: string | null
+    imageBase64: string | null
+    imageR2Url: string | null
     currentPrice: string | null
     marketCap: string | null
     marketCapRank: number | null
@@ -6115,6 +6129,8 @@ export namespace Prisma {
     name?: boolean
     symbol?: boolean
     imageUrl?: boolean
+    imageBase64?: boolean
+    imageR2Url?: boolean
     currentPrice?: boolean
     marketCap?: boolean
     marketCapRank?: boolean
@@ -6130,6 +6146,8 @@ export namespace Prisma {
     name?: boolean
     symbol?: boolean
     imageUrl?: boolean
+    imageBase64?: boolean
+    imageR2Url?: boolean
     currentPrice?: boolean
     marketCap?: boolean
     marketCapRank?: boolean
@@ -6145,6 +6163,8 @@ export namespace Prisma {
     name?: boolean
     symbol?: boolean
     imageUrl?: boolean
+    imageBase64?: boolean
+    imageR2Url?: boolean
     currentPrice?: boolean
     marketCap?: boolean
     marketCapRank?: boolean
@@ -6160,6 +6180,8 @@ export namespace Prisma {
     name?: boolean
     symbol?: boolean
     imageUrl?: boolean
+    imageBase64?: boolean
+    imageR2Url?: boolean
     currentPrice?: boolean
     marketCap?: boolean
     marketCapRank?: boolean
@@ -6169,7 +6191,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type TokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "coingeckoId" | "name" | "symbol" | "imageUrl" | "currentPrice" | "marketCap" | "marketCapRank" | "totalVolume" | "lastUpdatedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["token"]>
+  export type TokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "coingeckoId" | "name" | "symbol" | "imageUrl" | "imageBase64" | "imageR2Url" | "currentPrice" | "marketCap" | "marketCapRank" | "totalVolume" | "lastUpdatedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["token"]>
 
   export type $TokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Token"
@@ -6180,6 +6202,8 @@ export namespace Prisma {
       name: string
       symbol: string
       imageUrl: string | null
+      imageBase64: string | null
+      imageR2Url: string | null
       currentPrice: string | null
       marketCap: string | null
       marketCapRank: number | null
@@ -6615,6 +6639,8 @@ export namespace Prisma {
     readonly name: FieldRef<"Token", 'String'>
     readonly symbol: FieldRef<"Token", 'String'>
     readonly imageUrl: FieldRef<"Token", 'String'>
+    readonly imageBase64: FieldRef<"Token", 'String'>
+    readonly imageR2Url: FieldRef<"Token", 'String'>
     readonly currentPrice: FieldRef<"Token", 'String'>
     readonly marketCap: FieldRef<"Token", 'String'>
     readonly marketCapRank: FieldRef<"Token", 'Int'>
@@ -20097,6 +20123,8 @@ export namespace Prisma {
     name: 'name',
     symbol: 'symbol',
     imageUrl: 'imageUrl',
+    imageBase64: 'imageBase64',
+    imageR2Url: 'imageR2Url',
     currentPrice: 'currentPrice',
     marketCap: 'marketCap',
     marketCapRank: 'marketCapRank',
@@ -20687,6 +20715,8 @@ export namespace Prisma {
     name?: StringFilter<"Token"> | string
     symbol?: StringFilter<"Token"> | string
     imageUrl?: StringNullableFilter<"Token"> | string | null
+    imageBase64?: StringNullableFilter<"Token"> | string | null
+    imageR2Url?: StringNullableFilter<"Token"> | string | null
     currentPrice?: StringNullableFilter<"Token"> | string | null
     marketCap?: StringNullableFilter<"Token"> | string | null
     marketCapRank?: IntNullableFilter<"Token"> | number | null
@@ -20702,6 +20732,8 @@ export namespace Prisma {
     name?: SortOrder
     symbol?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    imageBase64?: SortOrderInput | SortOrder
+    imageR2Url?: SortOrderInput | SortOrder
     currentPrice?: SortOrderInput | SortOrder
     marketCap?: SortOrderInput | SortOrder
     marketCapRank?: SortOrderInput | SortOrder
@@ -20720,6 +20752,8 @@ export namespace Prisma {
     name?: StringFilter<"Token"> | string
     symbol?: StringFilter<"Token"> | string
     imageUrl?: StringNullableFilter<"Token"> | string | null
+    imageBase64?: StringNullableFilter<"Token"> | string | null
+    imageR2Url?: StringNullableFilter<"Token"> | string | null
     currentPrice?: StringNullableFilter<"Token"> | string | null
     marketCap?: StringNullableFilter<"Token"> | string | null
     marketCapRank?: IntNullableFilter<"Token"> | number | null
@@ -20735,6 +20769,8 @@ export namespace Prisma {
     name?: SortOrder
     symbol?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    imageBase64?: SortOrderInput | SortOrder
+    imageR2Url?: SortOrderInput | SortOrder
     currentPrice?: SortOrderInput | SortOrder
     marketCap?: SortOrderInput | SortOrder
     marketCapRank?: SortOrderInput | SortOrder
@@ -20758,6 +20794,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Token"> | string
     symbol?: StringWithAggregatesFilter<"Token"> | string
     imageUrl?: StringNullableWithAggregatesFilter<"Token"> | string | null
+    imageBase64?: StringNullableWithAggregatesFilter<"Token"> | string | null
+    imageR2Url?: StringNullableWithAggregatesFilter<"Token"> | string | null
     currentPrice?: StringNullableWithAggregatesFilter<"Token"> | string | null
     marketCap?: StringNullableWithAggregatesFilter<"Token"> | string | null
     marketCapRank?: IntNullableWithAggregatesFilter<"Token"> | number | null
@@ -21970,6 +22008,8 @@ export namespace Prisma {
     name: string
     symbol: string
     imageUrl?: string | null
+    imageBase64?: string | null
+    imageR2Url?: string | null
     currentPrice?: string | null
     marketCap?: string | null
     marketCapRank?: number | null
@@ -21985,6 +22025,8 @@ export namespace Prisma {
     name: string
     symbol: string
     imageUrl?: string | null
+    imageBase64?: string | null
+    imageR2Url?: string | null
     currentPrice?: string | null
     marketCap?: string | null
     marketCapRank?: number | null
@@ -22000,6 +22042,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imageBase64?: NullableStringFieldUpdateOperationsInput | string | null
+    imageR2Url?: NullableStringFieldUpdateOperationsInput | string | null
     currentPrice?: NullableStringFieldUpdateOperationsInput | string | null
     marketCap?: NullableStringFieldUpdateOperationsInput | string | null
     marketCapRank?: NullableIntFieldUpdateOperationsInput | number | null
@@ -22015,6 +22059,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imageBase64?: NullableStringFieldUpdateOperationsInput | string | null
+    imageR2Url?: NullableStringFieldUpdateOperationsInput | string | null
     currentPrice?: NullableStringFieldUpdateOperationsInput | string | null
     marketCap?: NullableStringFieldUpdateOperationsInput | string | null
     marketCapRank?: NullableIntFieldUpdateOperationsInput | number | null
@@ -22030,6 +22076,8 @@ export namespace Prisma {
     name: string
     symbol: string
     imageUrl?: string | null
+    imageBase64?: string | null
+    imageR2Url?: string | null
     currentPrice?: string | null
     marketCap?: string | null
     marketCapRank?: number | null
@@ -22045,6 +22093,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imageBase64?: NullableStringFieldUpdateOperationsInput | string | null
+    imageR2Url?: NullableStringFieldUpdateOperationsInput | string | null
     currentPrice?: NullableStringFieldUpdateOperationsInput | string | null
     marketCap?: NullableStringFieldUpdateOperationsInput | string | null
     marketCapRank?: NullableIntFieldUpdateOperationsInput | number | null
@@ -22060,6 +22110,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    imageBase64?: NullableStringFieldUpdateOperationsInput | string | null
+    imageR2Url?: NullableStringFieldUpdateOperationsInput | string | null
     currentPrice?: NullableStringFieldUpdateOperationsInput | string | null
     marketCap?: NullableStringFieldUpdateOperationsInput | string | null
     marketCapRank?: NullableIntFieldUpdateOperationsInput | number | null
@@ -23405,6 +23457,8 @@ export namespace Prisma {
     name?: SortOrder
     symbol?: SortOrder
     imageUrl?: SortOrder
+    imageBase64?: SortOrder
+    imageR2Url?: SortOrder
     currentPrice?: SortOrder
     marketCap?: SortOrder
     marketCapRank?: SortOrder
@@ -23424,6 +23478,8 @@ export namespace Prisma {
     name?: SortOrder
     symbol?: SortOrder
     imageUrl?: SortOrder
+    imageBase64?: SortOrder
+    imageR2Url?: SortOrder
     currentPrice?: SortOrder
     marketCap?: SortOrder
     marketCapRank?: SortOrder
@@ -23439,6 +23495,8 @@ export namespace Prisma {
     name?: SortOrder
     symbol?: SortOrder
     imageUrl?: SortOrder
+    imageBase64?: SortOrder
+    imageR2Url?: SortOrder
     currentPrice?: SortOrder
     marketCap?: SortOrder
     marketCapRank?: SortOrder

@@ -61,6 +61,8 @@ model Token {
   name            String
   symbol          String
   imageUrl        String?
+  imageBase64     String?   @db.Text
+  imageR2Url      String?
   currentPrice    String?
   marketCap       String?
   marketCapRank   Int?

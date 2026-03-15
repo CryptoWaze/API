@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../infrastructure/database/prisma.service';
 
-const TOP_LIMIT = 500;
+const TOP_LIMIT = 100;
 
 export type TopTokenItem = {
   symbol: string;

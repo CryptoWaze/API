@@ -7,17 +7,17 @@ import { GetTopTokensUseCase } from '../../application/use-cases/get-top-tokens.
 export class TokensController {
   constructor(private readonly getTopTokensUseCase: GetTopTokensUseCase) {}
 
-  @Get('top-500')
+  @Get('top-100')
   @ApiOperation({
-    summary: 'Top 500 tokens',
+    summary: 'Top 100 tokens',
     description:
-      'Retorna nome e imagem dos 500 tokens com maior market cap rank no Postgres.',
+      'Retorna nome e imagem dos 100 tokens com maior market cap rank no Postgres.',
   })
   @ApiResponse({
     status: 200,
-    description: 'Lista de até 500 tokens com symbol, name e imageUrl.',
+    description: 'Lista de até 100 tokens com symbol, name e imageUrl.',
   })
-  async top500() {
+  async top100() {
     return this.getTopTokensUseCase.execute();
   }
 }

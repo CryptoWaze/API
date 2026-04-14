@@ -34,7 +34,10 @@ export class GetUserDashboardUseCase {
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
     const cases = await this.prisma.case.findMany({
-      where: { createdByUserId: userId },
+      where: {
+        createdByUserId: userId,
+        status: { not: 'FAILED' },
+      },
       orderBy: { createdAt: 'desc' },
       select: {
         id: true,

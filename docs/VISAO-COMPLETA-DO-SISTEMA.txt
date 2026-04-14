@@ -1,0 +1,982 @@
+================================================================================
+VISÃO COMPLETA DO SISTEMA — CRYPTOWAZE
+Documento de referência técnica e de produto
+Última atualização: março de 2026
+================================================================================
+
+Este documento explica o sistema de ponta a ponta: o que é, por que existe,
+como funciona internamente, quais tecnologias usa, como está estruturado o
+código, e o que está planejado para o futuro. É o documento que um novo
+desenvolvedor leria antes de abrir qualquer arquivo de código, e que um
+investidor ou parceiro leria para entender o produto em profundidade.
+
+--------------------------------------------------------------------------------
+ÍNDICE
+--------------------------------------------------------------------------------
+
+1.  O que é o produto e qual problema resolve
+2.  Conceitos fundamentais que o sistema usa
+3.  O fluxo completo de um caso — do início ao relatório
+4.  Arquitetura técnica geral
+5.  Stack de tecnologias e por que cada uma foi escolhida
+6.  Estrutura de pastas e camadas do código
+7.  Banco de dados — modelo de dados completo
+8.  O algoritmo de rastreio — como funciona de verdade
+9.  APIs externas usadas
+10. Comunicação em tempo real (WebSocket)
+11. Geração de relatórios (PDF e DOCX)
+12. Atualização de preços de tokens (cron job)
+13. Infraestrutura de blockchain — ClickHouse (em construção)
+14. Deploy e infraestrutura de produção
+15. O que está planejado para o futuro próximo
+16. Glossário de termos
+
+================================================================================
+1. O QUE É O PRODUTO E QUAL PROBLEMA RESOLVE
+================================================================================
+
+O sistema é uma plataforma de rastreio forense de criptoativos. O objetivo
+central é: dado um crime financeiro envolvendo criptomoedas (golpe, estelionato,
+fraude de investimento, sequestro relâmpago com pagamento em cripto), o produto
+reconstrói automaticamente o caminho percorrido pelo dinheiro na blockchain e
+identifica para onde os fundos foram.
+
+O público-alvo hoje são:
+- Vítimas de golpes que perderam dinheiro em criptomoedas
+- Advogados e escritórios de advocacia especializados em crimes digitais
+- Peritos judiciais que precisam de laudos técnicos para processos
+
+O produto no futuro também atenderá:
+- Exchanges e fintechs que precisam de compliance e rastreio de AML
+- Polícia Federal e Ministério Público em investigações criminais
+- Empresas de segurança e fundos de criptoativos
+
+O PROBLEMA CONCRETO QUE RESOLVEMOS:
+
+Quando alguém é vítima de um golpe em cripto, normalmente chega com isso:
+- Um ou mais hashes de transação (código alfanumérico que identifica cada
+  movimentação na blockchain)
+- O valor que perdeu
+- Prints de conversa, nome de quem aplicou o golpe, ou nada além do hash
+
+Explorers tradicionais como Etherscan e BscScan são ferramentas públicas que
+mostram transações, mas:
+- São complexos para leigos entenderem
+- Não constroem o fluxo completo automaticamente
+- Não identificam automaticamente se o destino final é uma exchange conhecida
+- Não geram documentos jurídicos
+
+O nosso sistema faz o que eles não fazem:
+- Parte dos hashes e identifica automaticamente a carteira que recebeu o dinheiro
+- Rastreia hop a hop (salto por salto) o caminho do dinheiro
+- Identifica quando os fundos chegam a uma exchange (hot wallet)
+- Armazena todo esse caminho como um caso estruturado
+- Permite editar e rotular carteiras para montar uma narrativa clara
+- Gera um relatório técnico em PDF e DOCX pronto para uso em ação judicial
+
+================================================================================
+2. CONCEITOS FUNDAMENTAIS QUE O SISTEMA USA
+================================================================================
+
+BLOCKCHAIN
+Uma blockchain é um registro público e imutável de todas as transações que
+já ocorreram em uma rede. Cada transação tem um hash único — uma espécie de
+"número de protocolo" que identifica aquela transferência para sempre.
+
+CARTEIRA (WALLET)
+Um endereço na blockchain. Começa com "0x" seguido de 40 caracteres
+hexadecimais (ex: 0x1234...abcd). Qualquer pessoa pode ter quantas carteiras
+quiser. Não são identificadas por nome — só pelo endereço.
+
+TOKEN / CRIPTOATIVO
+O que é transferido entre carteiras. Pode ser ETH (Ethereum nativo), BNB
+(BNB Chain nativo), USDT, USDC, ou qualquer outro token ERC-20/BEP-20.
+
+CHAIN (REDE)
+A rede blockchain onde a transação aconteceu. O sistema suporta:
+- eth-mainnet (Ethereum)
+- bsc-mainnet (BNB Chain / Binance Smart Chain)
+- polygon-mainnet (Polygon)
+- base-mainnet (Base)
+
+HOP (SALTO)
+Cada transferência de uma carteira para outra. Se A enviou para B, e B enviou
+para C, isso são 2 hops. O sistema rastreia vários hops em sequência.
+
+HOT WALLET DE EXCHANGE
+Exchanges de criptomoedas (Binance, Coinbase, Mercado Bitcoin, etc.) têm
+carteiras próprias na blockchain onde recebem e enviam fundos dos usuários.
+Essas carteiras são chamadas de "hot wallets". Quando o dinheiro rastreado
+chega a uma hot wallet conhecida, sabemos que foi depositado em uma exchange
+— o que é crucial juridicamente, pois a exchange tem os dados do usuário que
+fez o depósito (KYC).
+
+SEED (SEMENTE)
+O ponto de partida de um rastreio. É a transação original do crime — o hash
+da transferência onde a vítima enviou o dinheiro (ou foi enganada a enviar).
+
+FLOW (FLUXO)
+Um caminho rastreado a partir de uma seed. O sistema pode encontrar múltiplos
+flows a partir de uma mesma seed (especialmente no modo avançado).
+
+CASO
+A entidade central do sistema. Um caso agrupa: as seeds (hashes iniciais),
+os flows (caminhos rastreados), as carteiras envolvidas, e os relatórios
+gerados. É o "dossiê" digital do crime.
+
+================================================================================
+3. O FLUXO COMPLETO DE UM CASO — DO INÍCIO AO RELATÓRIO
+================================================================================
+
+Aqui está o que acontece, em ordem, quando um usuário abre um caso:
+
+PASSO 1 — O USUÁRIO CRIA O CASO
+O usuário (vítima ou advogado) faz login na plataforma e cria um caso
+fornecendo:
+- Um nome para o caso (ex: "Golpe Tio Rico - João da Silva")
+- Uma ou mais seeds: cada seed é um hash de transação + valor reportado
+- Opcionalmente, o modo de rastreio: "basic" ou "advanced"
+
+A API recebe isso e responde imediatamente com status 202 (Aceito), retornando
+um traceId e um caseId. O processamento pesado roda em background.
+
+PASSO 2 — RESOLVE TRANSACTION (identificar a seed)
+Para cada hash fornecido, o sistema consulta a blockchain (via Covalent/GoldRush)
+e busca a transação naquele hash. Como o usuário pode não saber em qual rede
+ocorreu, o sistema testa as redes conhecidas (eth-mainnet, bsc-mainnet) até
+encontrar.
+
+Dentro de uma transação pode haver várias transferências (ex: transferência de
+ETH nativo + várias transferências de tokens ERC-20). O sistema usa o valor
+reportado pelo usuário para identificar qual dessas transferências é a seed
+real — escolhendo a que mais se aproxima do valor informado.
+
+Resultado desse passo: sabe-se a chain, o endereço de origem, o endereço de
+destino, o token, e o valor exato. O endereço de destino é onde o rastreio
+começa.
+
+PASSO 3 — FOLLOW FLOW TO EXCHANGE (rastreio em si)
+A partir do endereço que recebeu o dinheiro da vítima, o algoritmo começa a
+rastrear hop a hop. Esse é o coração do produto. Ver seção 8 para detalhes
+completos do algoritmo.
+
+Em resumo:
+- O sistema busca todos os outbounds (saídas) dessa carteira
+- Verifica se alguma das carteiras de destino é uma hot wallet conhecida
+- Se sim: rastreio terminou com sucesso — encontrou a exchange
+- Se não: segue para a próxima carteira mais relevante e repete
+- Emite progresso em tempo real via WebSocket para o frontend
+
+PASSO 4 — PERSISTÊNCIA DO CASO
+Quando o rastreio termina (com ou sem sucesso), o sistema persiste:
+- O caso com status final (COMPLETED, PARTIALLY, FAILED)
+- Cada seed como CaseSeedTransaction no banco
+- Cada caminho como Flow
+- Cada transação do caminho como FlowTransaction
+- Cada aresta explorada como FlowEdge (para montar o grafo)
+- Cada carteira do caminho como FlowWallet (para edição posterior)
+
+PASSO 5 — NOTIFICAÇÃO VIA WEBSOCKET
+Quando tudo está persistido, o sistema emite o evento "case-created" no
+socket room do traceId. O frontend que estava escutando recebe o resultado
+e exibe ao usuário.
+
+PASSO 6 — O USUÁRIO VÊ E EDITA O CASO
+No frontend, o usuário vê o grafo de fluxo: carteiras representadas como nós,
+transferências como arestas, com valores e timestamps. O usuário pode:
+- Dar apelidos (nicknames) para carteiras (ex: "Carteira do suspeito")
+- Reposicionar nós no grafo
+- Remover flows ou transações irrelevantes (soft delete)
+- Renomear o caso
+
+PASSO 7 — GERAÇÃO DO RELATÓRIO
+O usuário solicita geração de relatório. O sistema:
+- Monta os dados do caso em uma estrutura de template
+- Renderiza um HTML usando Handlebars (sistema de templates)
+- Gera PDF usando Puppeteer (browser headless Chrome)
+- Gera DOCX usando html-to-docx
+- Salva ambos no Cloudflare R2 (armazenamento de arquivos)
+- Registra os relatórios no banco com chave de storage
+
+O usuário pode então baixar o PDF ou DOCX e usar como laudo técnico em ação
+judicial ou boletim de ocorrência.
+
+================================================================================
+4. ARQUITETURA TÉCNICA GERAL
+================================================================================
+
+O sistema segue Clean Architecture com Ports and Adapters (Arquitetura
+Hexagonal). Isso significa que as regras de negócio (o algoritmo de rastreio,
+o conceito de caso, flow, seed) são completamente independentes de qualquer
+framework, banco de dados ou API externa.
+
+As camadas são:
+
+DOMAIN (domínio)
+Onde deveriam viver as entidades e regras de negócio puras. Atualmente ainda
+embrionário — as entidades estão no modelo Prisma, mas a intenção de isolamento
+existe e será reforçada.
+
+APPLICATION (aplicação)
+O centro do sistema. Contém:
+- Use Cases: cada operação de negócio é um use case (CreateCase, GetCaseById,
+  FollowFlowToExchange, etc.)
+- Ports: interfaces que definem contratos com o mundo externo sem saber como
+  são implementados (IAddressTransfersFetcher, IHotWalletChecker,
+  IReportStorage, etc.)
+- Schemas: validações Zod dos dados de entrada
+- Types: tipos TypeScript das entidades de domínio
+- Constants: constantes do algoritmo de rastreio
+
+INFRASTRUCTURE (infraestrutura)
+Implementações concretas dos ports. O código que sabe falar com APIs externas,
+bancos de dados, etc:
+- Covalent: busca transações e transferências de endereços (implementa
+  IAddressTransfersFetcher e ITransactionFetcher)
+- CoinGecko: busca preços e dados de mercado de tokens
+- Alchemy: busca dados de blocos via RPC da blockchain
+- Prisma: banco de dados PostgreSQL (implementa acesso a dados)
+- ClickHouse: banco analítico para dados de blockchain
+- Auth: JWT, guards, estratégias de autenticação
+- Storage: Cloudflare R2 via SDK AWS S3
+
+PRESENTATION (apresentação)
+Controllers HTTP, gateways WebSocket, módulos NestJS. Recebe requisições,
+valida com Zod, chama use cases, retorna respostas. Não contém lógica de
+negócio.
+
+O contrato principal: use cases dependem de interfaces (ports), não de
+implementações. Se amanhã o Covalent for substituído por dados próprios do
+ClickHouse, apenas a implementação do port muda — o algoritmo de rastreio
+não precisa ser tocado.
+
+================================================================================
+5. STACK DE TECNOLOGIAS E POR QUE CADA UMA FOI ESCOLHIDA
+================================================================================
+
+NESTJS 11 (framework backend)
+Framework Node.js com injeção de dependência nativa, decorators, e estrutura
+modular. Facilita aplicar Clean Architecture com os módulos, providers e
+interfaces sendo gerenciados pelo container de DI. Versão 11 é a mais recente.
+
+TYPESCRIPT 5.7
+JavaScript com tipagem estática. Fundamental para um sistema complexo com
+muitas entidades, transformações de dados e integrações. Pega erros em tempo
+de compilação, não de produção.
+
+PRISMA 7 + POSTGRESQL (NEON)
+Prisma é o ORM (Object-Relational Mapper) que gera tipos TypeScript a partir
+do schema do banco. O PostgreSQL é hospedado no Neon — um serviço de Postgres
+serverless que escala automaticamente sem precisar gerenciar servidores.
+Ideal para MVP por zero overhead operacional.
+
+CLICKHOUSE
+Banco de dados analítico colunar. Projetado para consultas sobre bilhões de
+registros em milissegundos. Usado para armazenar dados de blockchain (blocos,
+transações, transfers, tokens) e catálogos (hot wallets, exchanges). É a base
+da futura independência do Covalent.
+
+COVALENT / GOLDRUSH API
+API de dados de blockchain. Permite buscar todas as transações e transferências
+de um endereço em várias chains sem precisar rodar nós de blockchain próprios.
+Hoje é a fonte principal de dados do algoritmo de rastreio.
+
+ALCHEMY
+Provedor de RPC de blockchain. Usado especificamente para buscar dados de
+blocos (número do bloco, timestamp) via JSON-RPC — necessário para o módulo
+de ingestion que indexa blocos no ClickHouse.
+
+COINGECKO
+API de dados de mercado de criptomoedas. Usada para buscar preços, market cap,
+imagens dos tokens a cada 10 minutos. Permite mostrar os valores em USD nas
+telas do produto.
+
+SOCKET.IO (WebSocket)
+Protocolo de comunicação bidirecional em tempo real. Usado para emitir progresso
+do rastreio enquanto ele acontece: cada passo do algoritmo emite uma mensagem
+que o frontend exibe ao vivo para o usuário. Essencial para UX — rastreios
+podem levar de segundos a minutos.
+
+HANDLEBARS + PUPPETEER
+Handlebars é um sistema de templates HTML. Puppeteer controla um Chrome
+headless (sem interface gráfica). O fluxo de geração de relatório é:
+dados do caso → template Handlebars → HTML → Puppeteer renderiza → PDF.
+
+HTML-TO-DOCX
+Biblioteca que converte HTML em DOCX (formato Word). O mesmo HTML gerado pelo
+Handlebars é convertido para DOCX além do PDF, permitindo que o usuário edite
+o documento no Word se precisar.
+
+CLOUDFLARE R2
+Armazenamento de arquivos compatible com S3 da AWS, mas sem custo de egress
+(saída de dados). Usado para guardar os PDFs e DOCXs gerados. Acessado via
+SDK oficial da AWS S3.
+
+ZOD
+Biblioteca de validação e parsing de schemas TypeScript. Todos os dados de
+entrada das APIs são validados com Zod antes de chegarem aos use cases.
+
+JWT (JSON Web Token)
+Padrão de autenticação stateless. O usuário faz login, recebe um token JWT
+assinado, e inclui esse token em todas as requisições. O backend valida a
+assinatura sem precisar consultar banco a cada request.
+
+FLY.IO
+Plataforma de deploy de aplicações em containers Docker. O servidor está
+na região GRU (São Paulo), minimizando latência para usuários brasileiros.
+Suporta escalonamento automático.
+
+================================================================================
+6. ESTRUTURA DE PASTAS E CAMADAS DO CÓDIGO
+================================================================================
+
+/
+├── src/
+│   ├── main.ts                    Ponto de entrada da aplicação
+│   ├── app.module.ts              Módulo raiz que registra todos os módulos
+│   │
+│   ├── application/               CAMADA DE APLICAÇÃO (regras de negócio)
+│   │   ├── use-cases/             Um arquivo por caso de uso
+│   │   │   ├── create-case.use-case.ts
+│   │   │   ├── get-case-by-id.use-case.ts
+│   │   │   ├── follow-flow-to-exchange.use-case.ts
+│   │   │   ├── follow-flow-to-exchange-full-history.use-case.ts
+│   │   │   ├── resolve-transaction.use-case.ts
+│   │   │   ├── generate-case-report.use-case.ts
+│   │   │   ├── edit-case.use-case.ts
+│   │   │   ├── soft-delete-flow.use-case.ts
+│   │   │   ├── soft-delete-flow-transaction.use-case.ts
+│   │   │   ├── update-flow-wallet.use-case.ts
+│   │   │   ├── get-address-top-transfers.use-case.ts
+│   │   │   └── ... (outros use cases)
+│   │   │
+│   │   ├── ports/                 Interfaces com o mundo externo
+│   │   │   ├── address-transfers-fetcher.port.ts
+│   │   │   ├── hot-wallet-checker.port.ts
+│   │   │   ├── transaction-fetcher.port.ts
+│   │   │   ├── report-storage.port.ts
+│   │   │   ├── token-price-provider.port.ts
+│   │   │   ├── flow-trace-log-writer.port.ts
+│   │   │   └── flow-trace-progress-emitter.port.ts
+│   │   │
+│   │   ├── schemas/               Validações Zod de input
+│   │   ├── types/                 Tipos TypeScript das entidades
+│   │   ├── constants/             Constantes do algoritmo
+│   │   ├── utils/                 Utilitários (normalizeAddress, etc.)
+│   │   └── reports/               Helpers para montar dados de relatório
+│   │
+│   ├── domain/                    CAMADA DE DOMÍNIO (embrionária)
+│   │   └── index.ts               Atualmente vazio — a ser desenvolvido
+│   │
+│   ├── infrastructure/            CAMADA DE INFRAESTRUTURA
+│   │   ├── auth/                  JWT, guards, decorators
+│   │   ├── blockchain/
+│   │   │   ├── alchemy/           Client RPC para buscar blocos
+│   │   │   ├── clickhouse/        Client e módulo ClickHouse
+│   │   │   ├── ingestion/         Serviços de ingestion de blocos EVM
+│   │   │   └── blockchain-data-query.service.ts
+│   │   ├── coingecko/             API de preços de tokens
+│   │   ├── covalent/              API de transações (fonte principal)
+│   │   ├── database/              PrismaService (acesso ao PostgreSQL)
+│   │   └── storage/               Cloudflare R2 (relatórios)
+│   │
+│   ├── presentation/              CAMADA DE APRESENTAÇÃO
+│   │   ├── addresses/             Endpoints de rastreio avulso
+│   │   ├── blockchain-data/       Endpoints internos de dados blockchain
+│   │   ├── cases/                 Endpoints de casos
+│   │   ├── chains/                Endpoint de listagem de chains
+│   │   ├── hello/                 Health check
+│   │   ├── socket/                WebSocket gateway e emitter
+│   │   ├── tokens/                Cron de tokens + endpoint de tokens
+│   │   ├── transactions/          Endpoint de resolve de transação
+│   │   └── users/                 Endpoints de usuários e autenticação
+│   │
+│   └── generated/
+│       └── prisma/                Types gerados pelo Prisma (não editar)
+│
+├── prisma/
+│   ├── schema.prisma              Definição completa do banco de dados
+│   ├── migrations/                Histórico de alterações no banco (17 migrations)
+│   └── seed.ts                    Script de seed inicial (chains, exchanges, hot wallets)
+│
+├── templates/
+│   └── report/
+│       └── report.hbs             Template Handlebars do relatório
+│
+├── scripts/                       Scripts utilitários (não fazem parte da API)
+│   ├── clickhouse-create-schema.ts
+│   ├── clickhouse-ingest.ts
+│   ├── clickhouse-ingest-day.ts
+│   └── catalog-sync-to-clickhouse.ts
+│
+├── tests/
+│   └── unit/                      Testes unitários (estrutura criada, em desenvolvimento)
+│
+├── docs/                          Documentação técnica e de produto
+├── Dockerfile                     Configuração de container para deploy
+├── fly.toml                       Configuração do deploy no Fly.io
+└── package.json                   Dependências e scripts
+
+================================================================================
+7. BANCO DE DADOS — MODELO DE DADOS COMPLETO
+================================================================================
+
+O banco principal é PostgreSQL, acessado via Prisma. Abaixo cada tabela:
+
+CHAIN
+Representa uma rede blockchain suportada.
+- id: identificador único (cuid)
+- slug: identificador textual da chain (ex: "eth-mainnet", "bsc-mainnet")
+- name: nome legível (ex: "Ethereum")
+- iconUrl: URL do ícone da chain para exibição no frontend
+
+EXCHANGE
+Representa uma exchange de criptomoedas (Binance, Coinbase, etc.)
+- id, name, slug, iconUrl
+- slug é único e usado para identificar a exchange
+
+HOT_WALLET
+Endereços de carteiras de exchanges (usados para identificar destino dos fundos)
+- exchangeId: referência à exchange dona dessa hot wallet
+- chainId: referência à chain onde esse endereço existe
+- address: o endereço em si (0x...)
+- label: rótulo opcional (ex: "Binance ETH Deposit 1")
+- isActive: se está ativo para consulta
+- Constraint unique: (exchangeId, chainId, address) — evita duplicatas
+
+TOKEN
+Catálogo de tokens com dados de mercado, atualizado a cada 10 minutos.
+- coingeckoId: ID único do CoinGecko (ex: "bitcoin", "ethereum")
+- name, symbol: nome e símbolo do token
+- imageUrl, imageBase64, imageR2Url: imagem em diferentes formatos
+- currentPrice, marketCap, totalVolume: dados de mercado (como String — limitação a corrigir)
+- marketCapRank: posição no ranking de market cap
+
+USER
+Usuários da plataforma.
+- email (único), name, password (hash bcrypt)
+- Relacionado com Cases (um usuário tem muitos casos)
+
+CASE
+O conceito central do produto. Agrupa todas as informações de um caso forense.
+- externalId: ID externo opcional para integração
+- name: nome dado pelo usuário ao caso
+- status: OPEN | PROCESSING | COMPLETED | PARTIALLY | FAILED
+  - OPEN: aguardando processamento
+  - PROCESSING: rastreio em andamento
+  - COMPLETED: todos os flows encontraram hot wallet
+  - PARTIALLY: alguns flows encontraram, outros não
+  - FAILED: erro interno
+- createdByUserId: dono do caso
+- totalAmountLostRaw: valor total perdido em wei/menor unidade
+- totalAmountLostDecimal: valor total perdido em formato decimal legível
+
+CASE_SEED_TRANSACTION
+Cada seed (transação inicial) de um caso.
+- caseId: o caso ao qual pertence
+- chainId: a chain onde a transação ocorreu
+- txHash: o hash da transação
+- tokenAddress: contrato do token (null se for nativo ETH/BNB)
+- tokenSymbol: símbolo do token (ex: "USDT")
+- amountRaw, amountDecimal: valor em unidade mínima e decimal
+- timestamp: quando a transação ocorreu na blockchain
+
+FLOW
+Um caminho rastreado a partir de uma seed. Um caso pode ter vários flows.
+- caseId, seedId: referências ao caso e seed
+- chainId: chain onde o rastreio ocorreu
+- tokenAddress, tokenSymbol: token rastreado
+- totalAmountRaw, totalAmountDecimal: valor inicial rastreado
+- hopsCount: quantos saltos tem o caminho
+- endpointAddress: endereço final onde o rastreio parou
+- endpointReason: por que o rastreio parou
+  - EXCHANGE_HOT_WALLET: encontrou hot wallet de exchange (sucesso)
+  - MAX_HOPS_REACHED: atingiu limite de carteiras analisadas
+  - NO_OUTGOING_ABOVE_THRESHOLD: carteira sem saídas relevantes
+  - CYCLE_DETECTED: ciclo detectado no grafo
+  - NO_OUTBOUND: carteira sem saídas
+  - EXHAUSTED_OPTIONS: todos os caminhos tentados sem sucesso
+- endpointHotWalletId: referência à hot wallet encontrada (se sucesso)
+- isEndpointExchange: booleano de conveniência
+- deletedAt: soft delete (null = ativo)
+
+FLOW_TRANSACTION
+Cada hop do caminho principal de um flow (a sequência de transferências
+que leva da carteira inicial até o endpoint).
+- flowId, chainId: referências
+- hopIndex: posição no caminho (0 = primeiro hop)
+- txHash: hash da transação desse hop
+- fromAddress, toAddress: carteiras envolvidas
+- tokenAddress, tokenSymbol, amountRaw, amountDecimal: o que foi transferido
+- timestamp: quando ocorreu
+- isEndpointHop: se é o último hop (o que chegou na exchange)
+- deletedAt: soft delete
+
+FLOW_EDGE
+O grafo completo de exploração do algoritmo — todas as arestas tentadas,
+não apenas o caminho principal de sucesso.
+- stepIndex: índice da aresta na exploração
+- fromAddress, toAddress: carteiras
+- transferSymbol, transferAmountRaw, transferAmountDecimal: dados da transferência
+- txHash: hash
+- outcome: resultado para essa aresta (SUCCESS | NO_OUTBOUND |
+  MAX_WALLETS_REACHED | EXHAUSTED_OPTIONS)
+- deletedAt: soft delete
+
+FLOW_WALLET
+Cada carteira (nó) do caminho de um flow, com dados de layout e rótulo.
+- flowId, nodeIndex: referências
+- address: endereço da carteira
+- nickname: apelido dado pelo usuário (editável)
+- position: posição no diagrama (JSON com {x, y} ou string "default")
+
+FLOW_TRACE_LOG
+Log de cada execução do algoritmo de rastreio para auditoria.
+- inputAddress, chainSlug: de onde partiu
+- status: resultado final
+- endpointAddress: onde parou (se encontrou)
+- failureAtAddress, failureReason: onde e por que falhou
+- stepsCount: quantos passos
+
+FLOW_TRACE_LOG_STEP
+Cada passo do rastreio registrado no log.
+
+CASE_REPORT
+Relatórios gerados para um caso.
+- caseId, format (PDF | DOCX)
+- generatedAt: quando foi gerado
+- storageKey: chave no R2 para download
+
+TRACE_METRIC
+Métricas de performance de cada rastreio.
+- traceId, caseId, seedIndex, mode (basic | advanced)
+- success: se encontrou exchange
+- totalDurationMs: tempo total do rastreio
+- exchangeFoundAtMs: em quantos ms encontrou a exchange
+- covalentRequestsTotal: quantas chamadas à API do Covalent foram feitas
+- flowDurationsJson, walletDurationsJson: dados detalhados por flow e carteira
+
+================================================================================
+8. O ALGORITMO DE RASTREIO — COMO FUNCIONA DE VERDADE
+================================================================================
+
+O algoritmo é o core intelectual do produto. Existem dois modos:
+
+---
+MODO BASIC (FollowFlowToExchangeUseCase)
+---
+
+Simples e direto. Dado um endereço inicial:
+
+1. Verifica se o endereço atual é uma hot wallet conhecida → se sim, termina
+2. Busca todas as transferências de saída do endereço atual
+3. Pega a MAIOR saída (por valor bruto)
+4. Move para o destino dessa maior saída
+5. Repete até encontrar hot wallet ou atingir MAX_HOPS (10)
+
+Limitação: segue apenas um caminho (o maior). Se o criminoso dividiu o dinheiro,
+o modo basic pode perder o caminho.
+
+---
+MODO ADVANCED (FollowFlowToExchangeFullHistoryUseCase)
+---
+
+Esse é o algoritmo real do produto. Usa DFS (busca em profundidade) iterativa
+com backtracking. Pode explorar múltiplos caminhos.
+
+INICIALIZAÇÃO:
+- Carrega todas as hot wallets da chain em memória (Set<string>) → verificação
+  O(1) em vez de query ao banco a cada hop
+- Carrega informações de preço de todos os tokens em memória (Map)
+- Inicia com uma pilha (stack) contendo o endereço inicial
+
+LOOP PRINCIPAL (enquanto a pilha tiver frames):
+Para cada frame na pilha:
+
+  1. VERIFICAÇÃO DE LIMITE: se path.length >= 50 (MAX_WALLETS), para esse ramo
+
+  2. VERIFICAÇÃO DE HOT WALLET: se o endereço atual está no Set de hot wallets,
+     SUCESSO — retorna o caminho atual como resultado
+
+  3. BUSCA DE OUTBOUNDS: busca o histórico completo de transferências de saída
+     do endereço atual via Covalent (paginando até 50 páginas se necessário)
+
+  4. FILTROS:
+     - Filtra somente saídas (direction = OUT)
+     - Filtra por valor mínimo (>= 0.01 token e >= $100 USD quando possível)
+     - Ordena por valor USD descendente
+     - Pega os top N (FLOW_TRACE_TOP_OUTBOUNDS_PER_WALLET = 10)
+
+  5. VERIFICAÇÃO DE HOT WALLET NOS DESTINOS: antes de ir para próxima carteira,
+     verifica se algum dos destinos já é hot wallet → shortcut: termina com sucesso
+
+  6. PUSH NA PILHA: para cada destino candidato (excluindo já visitados):
+     - Push do frame atual com outboundIndex avançado (para retomar depois)
+     - Push do novo frame com o próximo endereço como currentAddress
+     Isso implementa o backtracking: se o próximo endereço não levar a nada,
+     volta e tenta o próximo candidato do frame atual
+
+  7. EMISSÃO DE PROGRESSO: a cada passo relevante, emite mensagem via WebSocket
+
+SE NADA ENCONTRADO: retorna o último estado de falha com razão
+
+FILTRAGEM POR USD:
+O algoritmo usa os preços de token (carregados do ClickHouse/CoinGecko) para
+converter valores em USD e filtrar transferências abaixo de $100. Isso evita
+seguir transferências irrelevantes de spam ou poeira (dust attacks).
+
+TIMESTAMP MÍNIMO:
+Se a seed tem timestamp, o algoritmo só considera transferências DEPOIS daquele
+momento. Isso evita seguir transferências antigas que não têm relação com o crime.
+
+---
+MODO ADVANCED COM BRANCHING (CreateCaseUseCase)
+---
+
+Quando o modo é "advanced" e o rastreio principal teve sucesso, o sistema também
+explora ramificações alternativas a partir de cada carteira do caminho principal:
+
+Para cada carteira no caminho principal:
+1. Busca outras saídas além da que foi seguida no caminho principal
+2. Para cada saída alternativa, inicia um novo rastreio (branchTrace)
+3. Se o branch encontrou hot wallet OU toca alguma carteira do caminho principal:
+   o branch é adicionado como um Flow adicional do caso
+4. Isso cria múltiplos Flows por caso, mostrando todos os caminhos possíveis
+
+Isso é particularmente útil quando o criminoso divide os fundos entre múltiplas
+carteiras ou usa estratégias de ofuscação (peeling chains, fan-out, etc.)
+
+================================================================================
+9. APIS EXTERNAS USADAS
+================================================================================
+
+COVALENT / GOLDRUSH (principal fonte de dados)
+URL base: https://api.covalenthq.com/v1
+Autenticação: Bearer token via variável GOLDRUSH_API_KEY
+
+Endpoints usados:
+- GET /{chain}/transaction_v2/{txHash}/
+  Busca uma transação e suas transferências internas
+- GET /{chain}/address/{address}/transactions_v3/
+  Busca as últimas transações de um endereço
+- GET /{chain}/address/{address}/transactions_v3/page/{page}/
+  Busca uma página específica do histórico de transações
+
+Throttle implementado: 500ms entre requests para não violar rate limits.
+Retry automático em caso de 429 (Too Many Requests): espera 15 segundos e
+tenta novamente até 3 vezes.
+
+COINGECKO
+URL base: https://api.coingecko.com/api/v3
+Autenticação: via header x-cg-demo-api-key (plano gratuito/demo)
+
+Endpoints usados:
+- GET /coins/markets?vs_currency=usd&page={n}
+  Busca os top tokens por market cap com preços e dados de mercado
+
+Executado a cada 10 minutos via cron. Busca 20 páginas (2000 tokens).
+Delay de 6 segundos entre páginas para respeitar rate limit.
+
+ALCHEMY (acesso RPC direto à blockchain)
+URL base: https://{chain}.g.alchemy.com/v2/{API_KEY}
+
+Endpoints JSON-RPC usados:
+- eth_blockNumber: número do bloco mais recente
+- eth_getBlockByNumber: dados de um bloco específico (para timestamp)
+
+Usado pelo módulo de ingestion para fazer busca binária de qual bloco
+corresponde a um determinado timestamp histórico.
+
+================================================================================
+10. COMUNICAÇÃO EM TEMPO REAL (WEBSOCKET)
+================================================================================
+
+O sistema usa Socket.IO (WebSocket) para emitir progresso do rastreio em tempo
+real ao frontend.
+
+ARQUITETURA:
+- Quando um caso é criado, o backend retorna um traceId
+- O frontend conecta via WebSocket e envia o evento "subscribe-flow-trace"
+  com o traceId para entrar no "room" daquele rastreio
+- Durante o rastreio, o backend emite mensagens para esse room a cada passo
+- Ao final, emite o evento "case-created" com o resultado
+
+EVENTOS EMITIDOS:
+- Progresso do rastreio: mensagens descritivas em português informando qual
+  carteira está sendo analisada, quantas transferências foram encontradas,
+  qual caminho está sendo seguido
+- case-created: evento final com caseId, status, seedsCount, flowsCount
+
+HEARTBEAT:
+Se o rastreio demorar mais de 30 segundos sem progresso novo (o que pode
+acontecer em carteiras com histórico muito extenso), o sistema emite uma
+mensagem de heartbeat para o frontend não considerar que a conexão morreu.
+
+ROOMS:
+O traceId do caso é o room principal. Para múltiplas seeds, cada seed tem
+seu próprio sub-room: traceId-0, traceId-1, etc.
+
+================================================================================
+11. GERAÇÃO DE RELATÓRIOS (PDF E DOCX)
+================================================================================
+
+O relatório é um documento técnico estruturado, gerado a partir dos dados
+do caso, pronto para uso em contexto jurídico.
+
+FLUXO DE GERAÇÃO:
+1. GetCaseByIdUseCase busca todos os dados do caso no banco
+2. buildReportTemplateData transforma esses dados em estrutura para o template
+3. Template report.hbs (Handlebars) é lido do disco
+4. Handlebars.compile gera o HTML com os dados
+5. Puppeteer (Chrome headless) converte HTML → PDF
+6. HTMLtoDOCX converte o mesmo HTML → DOCX
+7. Ambos são salvos no Cloudflare R2
+8. Registros criados na tabela CaseReport com as chaves de storage
+
+O ENDPOINT É IDEMPOTENTE:
+Se o caso não foi editado desde o último relatório, retorna o existente sem
+gerar novamente. Só gera um novo relatório se o caso foi modificado (updatedAt
+maior que o generatedAt do relatório mais recente).
+
+CONTEÚDO DO RELATÓRIO:
+- Identificação do caso (nome, data, status)
+- Sumário dos valores perdidos
+- Detalhamento de cada seed (transação inicial)
+- Detalhamento de cada flow (caminho rastreado)
+- Para cada flow: carteiras envolvidas, valores, hashes, timestamps
+- Identificação da exchange de destino (quando encontrada)
+- Metadados técnicos
+
+================================================================================
+12. ATUALIZAÇÃO DE PREÇOS DE TOKENS (CRON JOB)
+================================================================================
+
+A cada 10 minutos, o TokenUpdateCronService executa:
+
+1. Busca as 20 primeiras páginas do ranking de tokens do CoinGecko
+   (aprox. 2000 tokens, os maiores por market cap)
+2. Para cada token: coingeckoId, symbol, name, image, currentPrice, marketCap,
+   totalVolume, marketCapRank, lastUpdatedAt
+3. Grava (UPSERT/INSERT) no ClickHouse na tabela blockchain_data.tokens
+4. Grava também no PostgreSQL via Prisma na tabela Token
+
+Os dados de preço são usados por:
+- O algoritmo de rastreio (para filtrar transferências abaixo de $100 USD)
+- O frontend (para mostrar valores em USD nas telas)
+- A geração de relatório (para enriquecer os dados com preços históricos)
+
+CONTROLE DE RATE LIMIT:
+- 6 segundos de delay entre páginas do CoinGecko
+- Em caso de 429, espera 65 segundos e tenta novamente (até 2 retries)
+- Se falhar em alguma página, grava o que coletou até então e para
+  (a API continua rodando normalmente — o token update não é crítico)
+
+A flag TOKEN_UPDATE_CRON_ENABLED=true precisa estar definida nas variáveis
+de ambiente para o cron rodar. Isso evita execuções indesejadas em ambiente
+de desenvolvimento.
+
+================================================================================
+13. INFRAESTRUTURA DE BLOCKCHAIN — CLICKHOUSE (EM CONSTRUÇÃO)
+================================================================================
+
+Este é o módulo mais estratégico do sistema para o futuro. Ainda está em
+fase inicial de desenvolvimento.
+
+O PROBLEMA QUE RESOLVE:
+O Covalent é uma API de terceiro com rate limits, custo por request, e sem
+controle sobre quais dados estão disponíveis. Para ser independente e escalar,
+o sistema precisa de dados próprios de blockchain.
+
+O QUE JÁ EXISTE:
+- ClickHouseClient: client configurável para conectar ao ClickHouse
+- EvmIngestionService: gerencia o estado de ingestion (qual bloco foi indexado)
+- EvmBlockIngestionService: busca blocos via Alchemy e processa
+- EvmDailyIngestionJobService: job que roda por dia de dados
+- EvmSchemaRepository: cria as tabelas no ClickHouse
+- CatalogSyncService: sincroniza dados de exchanges e hot wallets para o ClickHouse
+- BlockchainDataQueryService: API interna de consulta aos dados indexados
+
+SCHEMA DO CLICKHOUSE:
+O banco analítico tem um database chamado "blockchain_data" com tabelas para:
+- transactions: todas as transações das chains indexadas
+- transfers (ERC-20): todas as transferências de tokens
+- blocks: metadados dos blocos
+- tokens: catálogo de tokens com preços
+- chains, exchanges, hot_wallets: catálogos
+
+O PLANO DE MIGRAÇÃO:
+Hoje: Covalent serve os dados → algoritmo rastreia
+Amanhã: ClickHouse serve os dados → algoritmo rastreia
+O port IAddressTransfersFetcher faz com que essa troca seja transparente para
+o algoritmo — só muda a implementação, não o contrato.
+
+A BLOCKCHAIN DATA API INTERNA:
+Existe um módulo de apresentação chamado BlockchainDataModule que expõe
+endpoints internos (prefixo /_blockchain) para consulta dos dados indexados.
+Isso permite testar e usar os dados do ClickHouse antes de migrar o algoritmo
+completo.
+
+================================================================================
+14. DEPLOY E INFRAESTRUTURA DE PRODUÇÃO
+================================================================================
+
+PLATAFORMA: Fly.io
+REGIÃO: GRU (São Paulo, Brasil) — minimiza latência para usuários brasileiros
+CONFIGURAÇÃO: 1 CPU shared, 1GB de memória alocada
+
+DOCKERFILE:
+A aplicação é conteinerizada com Docker. O processo de build é:
+1. npm install das dependências
+2. npx prisma generate (gera o client Prisma)
+3. nest build (compila TypeScript → JavaScript em /dist)
+4. Imagem de produção apenas com o necessário
+
+VARIÁVEIS DE AMBIENTE necessárias em produção:
+- DATABASE_URL: connection string do PostgreSQL (Neon)
+- GOLDRUSH_API_KEY: API key do Covalent/GoldRush
+- JWT_SECRET: segredo para assinar os tokens JWT
+- AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY: credenciais do Cloudflare R2
+- AWS_S3_BUCKET, AWS_S3_ENDPOINT: configuração do bucket R2
+- CLICKHOUSE_URL, CLICKHOUSE_DATABASE: configuração do ClickHouse
+- TOKEN_UPDATE_CRON_ENABLED: "true" para ativar o cron de tokens
+- ALCHEMY_API_KEY: para o módulo de ingestion de blockchain
+
+BANCO DE DADOS:
+PostgreSQL hospedado no Neon (serverless). Sem necessidade de gerenciar
+servidor de banco. O Neon escala automaticamente e hiberna em inatividade.
+
+MIGRATIONS:
+Gerenciadas pelo Prisma. Atualmente 16 migrations registradas, começando em
+05/03/2026. Cada migration tem nome descritivo (ex: "add_flow_trace_log",
+"add_case_report"). Para rodar em produção: prisma migrate deploy.
+
+SEED INICIAL:
+O script prisma/seed.ts popula o banco com:
+- Chains suportadas (Ethereum, BSC, Polygon, Base)
+- Exchanges conhecidas (Binance, Coinbase, Kraken, etc.)
+- Hot wallets dessas exchanges em cada chain
+
+Esse catálogo de hot wallets é o que determina se o rastreio termina com
+sucesso. Quanto mais completo esse catálogo, mais rastreios terminam com
+"exchange encontrada".
+
+================================================================================
+15. O QUE ESTÁ PLANEJADO PARA O FUTURO PRÓXIMO
+================================================================================
+
+CURTO PRAZO (próximas semanas):
+- Fila de processamento (BullMQ ou similar) para jobs em background
+  Hoje o rastreio usa fire-and-forget (void). Com fila: retry automático,
+  visibility de jobs pendentes, casos travados em PROCESSING recuperados
+- Testes unitários do algoritmo de rastreio
+- Correção do throttle de Covalent para cenários concorrentes
+
+MÉDIO PRAZO (próximos meses):
+- Conclusão do indexador EVM próprio no ClickHouse
+  Permite substituir Covalent gradualmente, chain por chain
+- Adição de TRON e Bitcoin
+  TRON é crítico para o mercado brasileiro (maioria dos golpes usa USDT TRC-20)
+- Expansão do catálogo de hot wallets
+  Processo contínuo e curado de adição de novas exchanges e endereços
+
+PRODUTO:
+- Monitoramento de carteiras em tempo real
+  Usuário cadastra endereços para monitorar e recebe alerta quando movimentam
+- API de AML/Compliance para exchanges e fintechs
+  Serviço B2B: dado um endereço, retorna score de risco e histórico suspeito
+- Dashboard de inteligência on-chain
+  Visualizações de fluxo de fundos, whale monitoring, alertas de padrões
+
+LONGO PRAZO:
+- Banco de entidades rotuladas
+  Base de dados de endereços identificados (exchanges, fundos, suspeitos, etc.)
+- Modelo colaborativo de contribuição de labels
+  Analistas e usuários contribuem com rótulos em troca de benefícios
+- Produto institucional para Polícia Federal e Ministério Público
+- Integração com bases de sanção (OFAC, ONU)
+
+================================================================================
+16. GLOSSÁRIO DE TERMOS
+================================================================================
+
+AML
+Anti-Money Laundering. Conjunto de práticas e normas para identificar e
+prevenir lavagem de dinheiro. Relevante para exchanges que precisam monitorar
+transações suspeitas.
+
+BACKTRACKING
+Técnica algorítmica de busca que tenta um caminho e, se falhar, volta para
+tentar outro. O algoritmo de rastreio usa backtracking para explorar múltiplos
+caminhos possíveis do dinheiro.
+
+CUID
+Collision-resistant Unique Identifier. Formato de ID gerado pelo Prisma para
+as entidades do banco. Mais legível que UUID e igualmente único.
+
+DEPOSIT ADDRESS
+Endereço específico que uma exchange cria para cada cliente depositar fundos.
+Diferente da hot wallet (que é a carteira central da exchange), o deposit
+address é o "endereço de recebimento" do usuário na exchange.
+
+DFS
+Depth-First Search. Algoritmo de busca em grafos que explora um caminho até
+o final antes de tentar outro. O algoritmo de rastreio usa DFS iterativa com
+backtracking.
+
+ERC-20 / BEP-20
+Padrões de token para Ethereum e BNB Chain respectivamente. USDT, USDC, e a
+maioria dos tokens de DeFi seguem esses padrões. O sistema rastreia tanto
+transferências nativas (ETH, BNB) quanto de tokens ERC-20/BEP-20.
+
+EXHAUST / EXHAUSTED_OPTIONS
+Estado do rastreio onde todos os caminhos possíveis a partir de uma carteira
+já foram tentados sem encontrar hot wallet.
+
+HOP
+Cada salto de uma carteira para outra. O rastreio do dinheiro é medido em hops.
+
+HOT WALLET
+Carteira de uma exchange conectada à internet e usada para operações diárias
+de recebimento e envio de fundos dos usuários. Oposta à cold wallet (offline).
+
+KYC
+Know Your Customer. Processo de identificação de usuários pelas exchanges.
+Exchanges com KYC têm os dados pessoais de quem fez um depósito — crucial
+para investigações.
+
+ORM
+Object-Relational Mapper. Camada que traduz objetos do código para tabelas
+do banco de dados. O Prisma é o ORM usado neste projeto.
+
+PEELING CHAIN
+Técnica de ofuscação onde o criminoso move fundos de uma carteira para outra
+em série, "descascando" o valor ao longo do tempo para tornar o rastreio
+mais difícil.
+
+PORT (PORTA)
+No contexto de Clean Architecture / Arquitetura Hexagonal, uma porta é uma
+interface que define como o sistema se comunica com o mundo externo sem saber
+os detalhes de implementação.
+
+SEED
+A transação inicial de um crime — o hash de onde o dinheiro saiu da vítima
+(ou foi recebido pelo golpista). Ponto de partida de todo rastreio.
+
+SOFT DELETE
+Prática de "apagar" registros marcando-os com deletedAt no banco em vez de
+deletá-los fisicamente. Permite auditoria futura e reversão se necessário.
+Usado em Flows e FlowTransactions.
+
+VASP
+Virtual Asset Service Provider. Termo regulatório para empresas que prestam
+serviços com criptoativos (exchanges, custodiantes, etc.). A Lei 14.478/2022
+regulamenta VASPs no Brasil.
+
+WEI
+Menor unidade do Ether (ETH). 1 ETH = 10^18 wei. O sistema armazena valores
+em suas unidades mínimas (wei, satoshi, etc.) como String para evitar overflow
+de inteiros de ponto flutuante.
+
+================================================================================
+FIM DO DOCUMENTO
+================================================================================
